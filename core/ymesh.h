@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
+#include "../math/YBoundingBox.h"
 
 namespace core {
     struct YVertex {
@@ -45,7 +46,7 @@ namespace core {
 
         void drawPatches(GLuint shader, bool renderWithTextures) const;
 
-        // ABoundingBox getBoundingBox(void) const;
+        [[nodiscard]] math::YBoundingBox getBoundingBox() const;
 
         [[nodiscard]] const std::vector<YVertex> &getVertices() const;
 
@@ -81,7 +82,7 @@ namespace core {
                                       glm::vec2 texCoords = glm::vec2(0.0f, 0.0f));
     };
 
-    class YInstanceMesh : public YMesh {
+    class YInstanceMesh final : public YMesh {
     public:
         std::vector<glm::mat4> instanceData;
 

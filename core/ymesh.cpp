@@ -8,6 +8,7 @@
 
 // #include "../Utils/amacrohelper.hpp"
 
+
 namespace core {
     YMesh::YMesh(const std::vector<YVertex> &vertices, const std::vector<unsigned int> &indices,
                  const std::vector<YTexture> &textures)
@@ -118,26 +119,25 @@ namespace core {
         glDrawElements(GL_PATCHES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
     }
 
-    // ABoundingBox YMesh::getBoundingBox(void) const
-    // {
-    //     glm::vec3 min(+999999.0f, +999999.0f, +999999.0f);
-    //     glm::vec3 max(-999999.0f, -999999.0f, -999999.0f);
-    //
-    //     glm::vec3 position;
-    //     for(size_t i = 0; i < this->vertices.size(); i++)
-    //     {
-    //         position = this->vertices[i].Position;
-    //         min.x = std::min(min.x, position.x);
-    //         min.y = std::min(min.y, position.y);
-    //         min.z = std::min(min.z, position.z);
-    //
-    //         max.x = std::max(max.x, position.x);
-    //         max.y = std::max(max.y, position.y);
-    //         max.z = std::max(max.z, position.z);
-    //     }
-    //
-    //     return ABoundingBox(min, max);
-    // }
+    math::YBoundingBox YMesh::getBoundingBox() const
+    {
+        glm::vec3 min(+999999.0f, +999999.0f, +999999.0f);
+        glm::vec3 max(-999999.0f, -999999.0f, -999999.0f);
+
+        for(const auto &[Position, Normal, Tangent, TexCoords] : this->vertices)
+        {
+            glm::vec3 position = Position;
+            min.x = std::min(min.x, position.x);
+            min.y = std::min(min.y, position.y);
+            min.z = std::min(min.z, position.z);
+
+            max.x = std::max(max.x, position.x);
+            max.y = std::max(max.y, position.y);
+            max.z = std::max(max.z, position.z);
+        }
+
+        return {min, max};
+    }
 
     const std::vector<YVertex> &YMesh::getVertices() const {
         return this->vertices;

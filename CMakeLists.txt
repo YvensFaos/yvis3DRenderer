@@ -11,7 +11,9 @@ add_executable(yvis3Drenderer main.cpp
         core/ycamera.cpp
         core/ycamera.h
         core/ymesh.cpp
-        core/ymesh.h)
+        core/ymesh.h
+        math/YBoundingBox.cpp
+        math/YBoundingBox.h)
 
 find_package(Lua REQUIRED)
 target_include_directories(yvis3Drenderer PRIVATE ${LUA_INCLUDE_DIR})
