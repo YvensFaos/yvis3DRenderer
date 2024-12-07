@@ -1,0 +1,3 @@
+[submodule "LuaHandler"]
+	path = LuaHandler
+	url = https://github.com/YvensFaos/LuaHandler.git
