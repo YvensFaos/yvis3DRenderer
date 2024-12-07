@@ -15,7 +15,9 @@ add_executable(yvis3Drenderer main.cpp
         math/YBoundingBox.cpp
         math/YBoundingBox.h
         core/yshader.cpp
-        core/yshader.h)
+        core/yshader.h
+        core/ymodel.cpp
+        core/ymodel.h)
 
 find_package(Lua REQUIRED)
 target_include_directories(yvis3Drenderer PRIVATE ${LUA_INCLUDE_DIR})
@@ -26,3 +28,5 @@ find_package(glfw3 CONFIG REQUIRED)
 target_link_libraries(yvis3Drenderer PRIVATE glfw)
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(yvis3Drenderer PRIVATE glm::glm)
+find_package(assimp CONFIG REQUIRED)
+target_link_libraries(yvis3Drenderer PRIVATE assimp::assimp)
