@@ -5,14 +5,18 @@
 #include "YBoundingBox.h"
 
 namespace math {
-    YBoundingBox::YBoundingBox() : min(0.0f, 0.0f, 0.0f), max(0.0f, 0.0f, 0.0f) { }
+    YBoundingBox::YBoundingBox() : min(0.0f, 0.0f, 0.0f), max(0.0f, 0.0f, 0.0f) {
+    }
 
-    YBoundingBox::YBoundingBox(const glm::vec3 min, const glm::vec3 max) : min(min), max(max) { }
+    YBoundingBox::YBoundingBox(const glm::vec3 min, const glm::vec3 max) : min(min), max(max) {
+    }
 
-    YBoundingBox::YBoundingBox(const YBoundingBox& anotherBoundingBox) : min(anotherBoundingBox.getMin()), max(anotherBoundingBox.getMax()) { }
+    YBoundingBox::YBoundingBox(const YBoundingBox &anotherBoundingBox) : min(anotherBoundingBox.getMin()),
+                                                                         max(anotherBoundingBox.getMax()) {
+    }
 
-    YBoundingBox& YBoundingBox::operator=(const YBoundingBox& anotherBoundingBox) {
-        if(this != &anotherBoundingBox) {
+    YBoundingBox &YBoundingBox::operator=(const YBoundingBox &anotherBoundingBox) {
+        if (this != &anotherBoundingBox) {
             this->min = anotherBoundingBox.getMin();
             this->max = anotherBoundingBox.getMax();
         }
@@ -26,5 +30,4 @@ namespace math {
     glm::vec3 YBoundingBox::getMax() const {
         return this->max;
     }
-
 } // math

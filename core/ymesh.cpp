@@ -119,13 +119,11 @@ namespace core {
         glDrawElements(GL_PATCHES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
     }
 
-    math::YBoundingBox YMesh::getBoundingBox() const
-    {
+    math::YBoundingBox YMesh::getBoundingBox() const {
         glm::vec3 min(+999999.0f, +999999.0f, +999999.0f);
         glm::vec3 max(-999999.0f, -999999.0f, -999999.0f);
 
-        for(const auto &[Position, Normal, Tangent, TexCoords] : this->vertices)
-        {
+        for (const auto &[Position, Normal, Tangent, TexCoords]: this->vertices) {
             glm::vec3 position = Position;
             min.x = std::min(min.x, position.x);
             min.y = std::min(min.y, position.y);
