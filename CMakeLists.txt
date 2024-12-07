@@ -7,7 +7,9 @@ add_executable(yvis3Drenderer main.cpp
         LuaHandler/luahandler.hpp
         LuaHandler/luahandler.cpp
         core/yrenderer.cpp
-        core/yrenderer.h)
+        core/yrenderer.h
+        core/ycamera.cpp
+        core/ycamera.h)
 
 find_package(Lua REQUIRED)
 target_include_directories(yvis3Drenderer PRIVATE ${LUA_INCLUDE_DIR})

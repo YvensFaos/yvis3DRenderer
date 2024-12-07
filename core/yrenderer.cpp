@@ -4,21 +4,21 @@
 #include "yrenderer.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
-// #include "acamera.hpp"
+#include "ycamera.h"
 
 namespace core {
-    YRenderer::YRenderer(const float width, const float height, std::string title) : title(std::move(title)), width(width), height(height),
-                                                                                     window(nullptr), firstMouse(true),
-                                                                                     mouseIsClickingLeft(false), shiftModPower(1.0f),
-                                                                                     deltaTime(0.0f), lastX(width / 2.0f),
-                                                                                     lastY(height / 2.0f), moveForce(20.0f),
-                                                                                     mouseSensitivity(5.0f), accumulator(0.0),
-                                                                                     currentTime(0.0),
-                                                                                     finishFrameTime(0.0),
-                                                                                     titleBuffer(""), clearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
+    YRenderer::YRenderer(const float width, const float height, std::string title) : title(std::move(title)),
+        width(width), height(height),
+        window(nullptr), firstMouse(true),
+        mouseIsClickingLeft(false), shiftModPower(1.0f),
+        deltaTime(0.0f), lastX(width / 2.0f),
+        lastY(height / 2.0f), moveForce(20.0f),
+        mouseSensitivity(5.0f), accumulator(0.0),
+        currentTime(0.0),
+        finishFrameTime(0.0),
+        titleBuffer(""), clearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
         initialize();
-        // acamera = new ACamera(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        camera = new YCamera(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glfwSetWindowUserPointer(window, this);
     }
 
@@ -31,10 +31,9 @@ namespace core {
         this->clearColor.a = clearColor.a;
     }
 
-    // ACamera& YRenderer::getCamera() const
-    // {
-    //     return *acamera;
-    // }
+    YCamera &YRenderer::getCamera() const {
+        return *camera;
+    }
 
     void YRenderer::startFrame() {
         glViewport(0, 0, 2 * static_cast<GLsizei>(width), 2 * static_cast<GLsizei>(height));
@@ -141,43 +140,44 @@ namespace core {
         // // 		(*it).second->execute(action, mods);
         // // 	}
         // // }
-        //
-        // shiftModPower = 1.0f;
-        // if (mods == GLFW_MOD_SHIFT) {
-        //     shiftModPower = 2.5f;
-        // } else if (mods == GLFW_MOD_CONTROL) {
-        //     shiftModPower = 0.5f;
-        // }
-        // if ((key == GLFW_KEY_LEFT || key == GLFW_KEY_A) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->MoveSideway(shiftModPower * -moveForce * deltaTime);
-        // }
-        // if ((key == GLFW_KEY_RIGHT || key == GLFW_KEY_D) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->MoveSideway(shiftModPower * moveForce * deltaTime);
-        // }
-        // if ((key == GLFW_KEY_UP || key == GLFW_KEY_W) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->MoveForward(shiftModPower * moveForce * deltaTime);
-        // }
-        // if ((key == GLFW_KEY_DOWN || key == GLFW_KEY_S) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->MoveForward(shiftModPower *-moveForce * deltaTime);
-        // }
-        // if ((key == GLFW_KEY_R) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->MoveUp(shiftModPower * moveForce * deltaTime);
-        // }
-        // if ((key == GLFW_KEY_F) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->MoveUp(shiftModPower *-moveForce * deltaTime);
-        // }
-        // if (key == GLFW_KEY_Z && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->Zoom(5.0f);
-        // }
-        // if (key == GLFW_KEY_X && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->Zoom(-5.0f);
-        // }
-        // if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->RotateWithMouse(10, 0);
-        // }
-        // if (key == GLFW_KEY_E && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     // acamera->RotateWithMouse(-10, 0);
-        // }
+
+        shiftModPower = 1.0f;
+        if (mods == GLFW_MOD_SHIFT) {
+            shiftModPower = 2.5f;
+        } else if (mods == GLFW_MOD_CONTROL) {
+            shiftModPower = 0.5f;
+        }
+        if ((key == GLFW_KEY_LEFT || key == GLFW_KEY_A) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->MoveSideways(shiftModPower * -moveForce * deltaTime);
+        }
+        if ((key == GLFW_KEY_RIGHT || key == GLFW_KEY_D) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->MoveSideways(shiftModPower * moveForce * deltaTime);
+        }
+        if ((key == GLFW_KEY_UP || key == GLFW_KEY_W) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->MoveForward(shiftModPower * moveForce * deltaTime);
+        }
+        if ((key == GLFW_KEY_DOWN || key == GLFW_KEY_S) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->MoveForward(shiftModPower * -moveForce * deltaTime);
+        }
+        if ((key == GLFW_KEY_R) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->MoveUp(shiftModPower * moveForce * deltaTime);
+        }
+        if ((key == GLFW_KEY_F) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->MoveUp(shiftModPower * -moveForce * deltaTime);
+        }
+        if (key == GLFW_KEY_Z && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->Zoom(5.0f);
+        }
+        if (key == GLFW_KEY_X && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->Zoom(-5.0f);
+        }
+        if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->RotateWithMouse(10, 0);
+        }
+        if (key == GLFW_KEY_E && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            camera->RotateWithMouse(-10, 0);
+        }
+
         // if (key == GLFW_KEY_P && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
         //     printf("Printing Info: \n");
         //     printf("---------------\n");
@@ -196,21 +196,20 @@ namespace core {
     // ReSharper disable once CppMemberFunctionMayBeStatic
     // ReSharper disable once CppDFAUnreachableFunctionCall
     void YRenderer::mouseCallback(GLFWwindow *window, double xpos, double ypos) {
-        // if (firstMouse) {
-        //     lastX = xpos;
-        //     lastY = ypos;
-        //     firstMouse = false;
-        // }
-        //
-        // float xoffset = xpos - lastX;
-        // float yoffset = lastY - ypos;
-        //
-        // lastX = xpos;
-        // lastY = ypos;
-        //
-        // if (mouseIsClickingLeft) {
-        //     // acamera->RotateWithMouse(xoffset / mouseSensitivity, yoffset / mouseSensitivity);
-        // }
+        if (firstMouse) {
+            lastX = static_cast<float>(xpos);
+            lastY = static_cast<float>(ypos);
+            firstMouse = false;
+        }
+
+        const auto xOffset = static_cast<float>(xpos - lastX);
+        const auto yOffset = static_cast<float>(lastY - ypos);
+        lastX = static_cast<float>(xpos);
+        lastY = static_cast<float>(ypos);
+
+        if (mouseIsClickingLeft) {
+            camera->RotateWithMouse(xOffset / mouseSensitivity, yOffset / mouseSensitivity);
+        }
     }
 
     // ReSharper disable once CppMemberFunctionMayBeStatic

@@ -6,7 +6,10 @@
 #include <glm/glm.hpp>
 #include <string>
 
+#include "ycamera.h"
+
 class GLFWwindow;
+class YCamera;
 
 namespace core {
     class YRenderer final {
@@ -33,7 +36,7 @@ namespace core {
 
         char titleBuffer[196];
         glm::vec4 clearColor;
-        // ACamera* acamera;
+        YCamera *camera;
 
         // std::map<int, std::unique_ptr<AKeyBind>> keysMap;
     public:
@@ -43,7 +46,7 @@ namespace core {
 
         void changeClearColor(glm::vec4 clearColor);
 
-        // ACamera& getCamera(void) const;
+        YCamera& getCamera() const;
 
         void startFrame();
 
