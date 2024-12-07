@@ -5,8 +5,16 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(yvis3Drenderer main.cpp
         LuaHandler/luahandler.hpp
-        LuaHandler/luahandler.cpp)
+        LuaHandler/luahandler.cpp
+        core/yrenderer.cpp
+        core/yrenderer.h)
 
 find_package(Lua REQUIRED)
 target_include_directories(yvis3Drenderer PRIVATE ${LUA_INCLUDE_DIR})
 target_link_libraries(yvis3Drenderer PRIVATE ${LUA_LIBRARIES})
+find_package(GLEW REQUIRED)
+target_link_libraries(yvis3Drenderer PRIVATE GLEW::GLEW)
+find_package(glfw3 CONFIG REQUIRED)
+target_link_libraries(yvis3Drenderer PRIVATE glfw)
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(yvis3Drenderer PRIVATE glm::glm)
