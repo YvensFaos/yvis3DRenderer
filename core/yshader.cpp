@@ -2,6 +2,7 @@
 // Created by Yvens Serpa on 07/12/2024.
 //
 
+#include <vector>
 #include "yshader.h"
 
 namespace core {

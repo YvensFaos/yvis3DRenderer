@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
+#include <vector>
 #include "../math/YBoundingBox.h"
 
 namespace core {
@@ -42,7 +43,7 @@ namespace core {
 
         virtual ~YMesh() = default;
 
-        void virtual draw(GLuint shader, GLenum mode, bool renderWithTextures) const;
+        virtual void draw(GLuint shader, GLenum mode, bool renderWithTextures) const;
 
         void drawPatches(GLuint shader, bool renderWithTextures) const;
 

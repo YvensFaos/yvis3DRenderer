@@ -252,7 +252,7 @@ namespace core {
         return instanceMatrix;
     }
 
-    YInstanceMesh &YInstanceMesh::operator=(const YInstanceMesh &anotherMesh) {
+    YInstanceMesh &YInstanceMesh::operator=(const core::YInstanceMesh &anotherMesh) {
         if (this != &anotherMesh) {
             this->setVAO(anotherMesh.getVAO());
             this->setVBO(anotherMesh.getVBO());
