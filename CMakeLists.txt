@@ -17,7 +17,9 @@ add_executable(yvis3Drenderer main.cpp
         core/yshader.cpp
         core/yshader.h
         core/ymodel.cpp
-        core/ymodel.h)
+        core/ymodel.h
+        utils/yluahelper.cpp
+        utils/yluahelper.h)
 
 find_package(Lua REQUIRED)
 target_include_directories(yvis3Drenderer PRIVATE ${LUA_INCLUDE_DIR})

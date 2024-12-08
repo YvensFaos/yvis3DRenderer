@@ -60,7 +60,7 @@ namespace core {
     }
 
     void YModel::renderModels(GLuint modelMatrixUniform, GLuint programme, GLenum mode, bool renderWithTextures) const {
-        auto pointer = this->getMeshes();
+        const auto pointer = this->getMeshes();
         auto modelMatrix = this->getModelMatrix();
 
         glUniformMatrix4fv(static_cast<GLint>(modelMatrixUniform), 1, GL_FALSE, glm::value_ptr(modelMatrix));
@@ -169,7 +169,7 @@ namespace core {
             mat->GetTexture(type, i, &str);
 
             YTexture texture;
-            texture.id = YModel::TextureFromFile(str.C_Str(), directory);
+            texture.id = TextureFromFile(str.C_Str(), directory);
             texture.type = typeName;
             texture.path = std::string(str.C_Str());
             textures.push_back(texture);
