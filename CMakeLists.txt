@@ -21,8 +21,14 @@ add_executable(yvis3Drenderer main.cpp
         utils/yluahelper.cpp
         utils/yluahelper.h)
 
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data/
-        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/data/)
+add_custom_command(
+        TARGET yvis3Drenderer
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+        ARGS -E copy_directory_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/data/"
+        "${CMAKE_CURRENT_BINARY_DIR}/data/"
+        COMMENT "Copying data folder")
 
 find_package(Lua REQUIRED)
 target_include_directories(yvis3Drenderer PRIVATE ${LUA_INCLUDE_DIR})
