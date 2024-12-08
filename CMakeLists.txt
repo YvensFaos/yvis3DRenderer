@@ -21,6 +21,9 @@ add_executable(yvis3Drenderer main.cpp
         utils/yluahelper.cpp
         utils/yluahelper.h)
 
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data/
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/data/)
+
 find_package(Lua REQUIRED)
 target_include_directories(yvis3Drenderer PRIVATE ${LUA_INCLUDE_DIR})
 target_link_libraries(yvis3Drenderer PRIVATE ${LUA_LIBRARIES})
