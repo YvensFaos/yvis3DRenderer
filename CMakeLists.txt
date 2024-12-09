@@ -22,7 +22,11 @@ add_executable(yvis3Drenderer main.cpp
         utils/yluahelper.h
         elements/yfog.h
         core/ylight.cpp
-        core/ylight.h)
+        core/ylight.h
+        core/yscene.cpp
+        core/yscene.h
+        scenes/yfogscene.cpp
+        scenes/yfogscene.h)
 
 add_custom_command(
         TARGET yvis3Drenderer

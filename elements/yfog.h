@@ -16,8 +16,16 @@ namespace elements {
             color(color) {
         }
 
-        YFog(const YFog &otherFog) = delete;
+        YFog(const YFog &otherFog) : maxDist(otherFog.maxDist), minDist(otherFog.minDist), color(otherFog.color) {
+        }
 
         YFog &operator=(const YFog &otherFog) = delete;
+        //     if (this != &otherFog) {
+        //         this->maxDist = otherFog.maxDist;
+        //         this->minDist = otherFog.minDist;
+        //         this->color = otherFog.color;
+        //     }
+        //     return *this;
+        // }
     };
 }
