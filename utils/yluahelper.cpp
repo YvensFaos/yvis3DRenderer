@@ -4,9 +4,9 @@
 
 #include "yluahelper.h"
 #include "../core/ymodel.h"
-// #include "../Core/alight.hpp"
+#include "../core/ylight.h"
 #include "../core/ycamera.h"
-// #include "../Objects/afog.hpp"
+#include "../elements/yfog.h"
 #include "../LuaHandler/luahandler.hpp"
 
 namespace utils {
@@ -17,7 +17,7 @@ namespace utils {
         std::vector<core::YModel> models;
 
         for (int i = 1; i <= tableSize; i++) {
-            if(luaHandler.getTableFromTable(i)) {
+            if (luaHandler.getTableFromTable(i)) {
                 models.push_back(YLuaHelper::loadModel(luaHandler, true));
             }
         }
@@ -33,7 +33,7 @@ namespace utils {
     core::YModel YLuaHelper::loadModel(const LuaHandler &luaHandler, const bool popTable) {
         core::YModel model(luaHandler.getStringFromTable("file"));
 
-        if(luaHandler.getTableFromTable("pos")) {
+        if (luaHandler.getTableFromTable("pos")) {
             glm::vec3 translateTo;
             translateTo.x = luaHandler.getNumberFromTable(1);
             translateTo.y = luaHandler.getNumberFromTable(2);
@@ -43,7 +43,7 @@ namespace utils {
         }
 
 
-        if(luaHandler.getTableFromTable("rot")) {
+        if (luaHandler.getTableFromTable("rot")) {
             glm::vec3 rotateTo;
             rotateTo.x = luaHandler.getNumberFromTable(1);
             rotateTo.y = luaHandler.getNumberFromTable(2);
@@ -52,7 +52,7 @@ namespace utils {
             luaHandler.popTable();
         }
 
-        if(luaHandler.getTableFromTable("sca")) {
+        if (luaHandler.getTableFromTable("sca")) {
             glm::vec3 scaleTo;
             scaleTo.x = luaHandler.getNumberFromTable(1);
             scaleTo.y = luaHandler.getNumberFromTable(2);
@@ -68,19 +68,20 @@ namespace utils {
         return model;
     }
 
-    core::YInstanceMesh YLuaHelper::loadInstanceMeshFromTable(const std::string& identifier, const LuaHandler &luaHandler,
+    core::YInstanceMesh YLuaHelper::loadInstanceMeshFromTable(const std::string &identifier,
+                                                              const LuaHandler &luaHandler,
                                                               const bool popTable) {
         luaHandler.loadTable(identifier);
 
         const core::YModel model(luaHandler.getStringFromTable("file"));
-        const core::YMesh& singleMesh = model.getMeshAt(0);
+        const core::YMesh &singleMesh = model.getMeshAt(0);
 
         std::vector<glm::mat4> instanceData;
-        if(luaHandler.getTableFromTable("instanceData")) {
+        if (luaHandler.getTableFromTable("instanceData")) {
             const GLuint tableSize = luaHandler.getLength();
 
             for (int i = 1; i <= tableSize; i++) {
-                if(luaHandler.getTableFromTable(i)) {
+                if (luaHandler.getTableFromTable(i)) {
                     const glm::vec3 pos = readVec3FromTableInTable("pos", luaHandler);
                     const glm::vec3 rot = readVec3FromTableInTable("rot", luaHandler);
                     const glm::vec3 sca = readVec3FromTableInTable("sca", luaHandler);
@@ -100,126 +101,130 @@ namespace utils {
         return {singleMesh, instanceData};
     }
 
-    // std::vector<ALight> YLuaHelper::loadLightsFromTable(std::string identifier, LuaHandler &luaHandler) {
-    //     luaHandler.loadTable(identifier);
-    //     const int tableSize = luaHandler.getLength();
-    //
-    //     std::vector<ALight> vector;
-    //     vector.reserve(tableSize);
-    //     for (unsigned int i = 0; i < tableSize; i++) {
-    //         vector.push_back(YLuaHelper::loadLightFromTable(i + 1, luaHandler));
-    //     }
-    //
-    //     return vector;
-    // }
+    std::vector<core::YLight> YLuaHelper::loadLightsFromTable(const std::string &identifier, LuaHandler &luaHandler) {
+        luaHandler.loadTable(identifier);
+        const int tableSize = luaHandler.getLength();
 
-    // ALight YLuaHelper::loadLightFromTable(int index, LuaHandler &luaHandler) {
-    //     luaHandler.getTableFromTable(index);
-    //     return YLuaHelper::loadLight(luaHandler, true);
-    // }
+        std::vector<core::YLight> vector;
+        vector.reserve(tableSize);
+        for (int i = 0; i < tableSize; i++) {
+            vector.push_back(YLuaHelper::loadLightFromTable(i + 1, luaHandler));
+        }
 
-    // ALight YLuaHelper::loadLightFromTable(std::string identifier, LuaHandler &luaHandler) {
-    //     if (luaHandler.isTopOfStackATable()) {
-    //         luaHandler.getTableFromTable(identifier);
-    //     } else {
-    //         luaHandler.loadTable(identifier);
-    //     }
-    //     return YLuaHelper::loadLight(luaHandler, true);
-    // }
+        return vector;
+    }
 
-    // ALight YLuaHelper::loadLight(LuaHandler &luaHandler, bool popTable) {
-    //     glm::vec3 lightPositionValue;
-    //     glm::vec3 lightDirectionValue;
-    //     glm::vec3 lightUpValue;
-    //     glm::vec4 lightColorValue;
-    //     float lightIntensityValue;
-    //     float lightSpecularValue;
-    //     bool lightDirectionalValue;
-    //
-    //     luaHandler.getTableFromTable("pos");
-    //     lightPositionValue.x = luaHandler.getNumberFromTable(1);
-    //     lightPositionValue.y = luaHandler.getNumberFromTable(2);
-    //     lightPositionValue.z = luaHandler.getNumberFromTable(3);
-    //     luaHandler.popTable();
-    //
-    //     luaHandler.getTableFromTable("dir");
-    //     lightDirectionValue.x = luaHandler.getNumberFromTable(1);
-    //     lightDirectionValue.y = luaHandler.getNumberFromTable(2);
-    //     lightDirectionValue.z = luaHandler.getNumberFromTable(3);
-    //     luaHandler.popTable();
-    //
-    //     luaHandler.getTableFromTable("up");
-    //     lightUpValue.x = luaHandler.getNumberFromTable(1);
-    //     lightUpValue.y = luaHandler.getNumberFromTable(2);
-    //     lightUpValue.z = luaHandler.getNumberFromTable(3);
-    //     luaHandler.popTable();
-    //
-    //     luaHandler.getTableFromTable("col");
-    //     lightColorValue.x = luaHandler.getNumberFromTable(1);
-    //     lightColorValue.y = luaHandler.getNumberFromTable(2);
-    //     lightColorValue.z = luaHandler.getNumberFromTable(3);
-    //     lightColorValue.w = luaHandler.getNumberFromTable(4);
-    //     luaHandler.popTable();
-    //
-    //     lightIntensityValue = luaHandler.getNumberFromTable("intensity");
-    //     lightSpecularValue = luaHandler.getNumberFromTable("specularPower");
-    //     lightDirectionalValue = luaHandler.getBoolFromTable("directional");
-    //     luaHandler.popTable();
-    //
-    //     ALight alight(lightPositionValue, lightDirectionValue, lightColorValue, lightIntensityValue,
-    //                   lightDirectionalValue);
-    //     alight.setUp(lightUpValue);
-    //     alight.setSpecularPower(lightSpecularValue);
-    //     return alight;
-    // }
+    core::YLight YLuaHelper::loadLightFromTable(const int index, LuaHandler &luaHandler) {
+        luaHandler.getTableFromTable(index);
+        return loadLight(luaHandler);
+    }
 
-    // ALight &YLuaHelper::updateLight(LuaHandler &luaHandler, ALight &alight, std::string updateFunction,
-    //                                 float deltaTime) {
-    //     if (luaHandler.getFunction(updateFunction)) {
-    //         luaHandler.pushNumber(deltaTime);
-    //         glm::vec3 position = alight.getPosition();
-    //         luaHandler.pushNumber(position.x);
-    //         luaHandler.pushNumber(position.y);
-    //         luaHandler.pushNumber(position.z);
-    //         glm::vec3 direction = alight.getDirection();
-    //         luaHandler.pushNumber(direction.x);
-    //         luaHandler.pushNumber(direction.y);
-    //         luaHandler.pushNumber(direction.z);
-    //         glm::vec3 up = alight.getUp();
-    //         luaHandler.pushNumber(up.x);
-    //         luaHandler.pushNumber(up.y);
-    //         luaHandler.pushNumber(up.z);
-    //         glm::vec4 color = alight.getColor();
-    //         luaHandler.pushNumber(color.x);
-    //         luaHandler.pushNumber(color.y);
-    //         luaHandler.pushNumber(color.z);
-    //         luaHandler.pushNumber(color.w);
-    //         luaHandler.pushNumber(alight.getIntensity());
-    //
-    //         luaHandler.callFunctionFromStack(15, 14);
-    //
-    //         position.x = luaHandler.popNumber();
-    //         position.y = luaHandler.popNumber();
-    //         position.z = luaHandler.popNumber();
-    //         alight.setPosition(position);
-    //         direction.x = luaHandler.popNumber();
-    //         direction.y = luaHandler.popNumber();
-    //         direction.z = luaHandler.popNumber();
-    //         alight.setDirection(direction);
-    //         up.x = luaHandler.popNumber();
-    //         up.y = luaHandler.popNumber();
-    //         up.z = luaHandler.popNumber();
-    //         alight.setUp(up);
-    //         color.x = luaHandler.popNumber();
-    //         color.y = luaHandler.popNumber();
-    //         color.z = luaHandler.popNumber();
-    //         color.w = luaHandler.popNumber();
-    //         alight.setColor(color);
-    //         alight.setIntensity(luaHandler.popNumber());
-    //     }
-    //
-    //     return alight;
-    // }
+    core::YLight YLuaHelper::loadLightFromTable(const std::string& identifier, LuaHandler &luaHandler) {
+        if (luaHandler.isTopOfStackATable()) {
+            luaHandler.getTableFromTable(identifier);
+        } else {
+            luaHandler.loadTable(identifier);
+        }
+        return loadLight(luaHandler);
+    }
+
+    core::YLight YLuaHelper::loadLight(LuaHandler &luaHandler) {
+        glm::vec3 lightPositionValue;
+        glm::vec3 lightDirectionValue;
+        glm::vec3 lightUpValue;
+        glm::vec4 lightColorValue;
+        float lightIntensityValue;
+        float lightSpecularValue;
+        bool lightDirectionalValue;
+
+        if(luaHandler.getTableFromTable("pos")) {
+            lightPositionValue.x = luaHandler.getNumberFromTable(1);
+            lightPositionValue.y = luaHandler.getNumberFromTable(2);
+            lightPositionValue.z = luaHandler.getNumberFromTable(3);
+            luaHandler.popTable();
+        }
+
+        if(luaHandler.getTableFromTable("dir")) {
+            lightDirectionValue.x = luaHandler.getNumberFromTable(1);
+            lightDirectionValue.y = luaHandler.getNumberFromTable(2);
+            lightDirectionValue.z = luaHandler.getNumberFromTable(3);
+            luaHandler.popTable();
+        }
+
+        if(luaHandler.getTableFromTable("up")) {
+            lightUpValue.x = luaHandler.getNumberFromTable(1);
+            lightUpValue.y = luaHandler.getNumberFromTable(2);
+            lightUpValue.z = luaHandler.getNumberFromTable(3);
+            luaHandler.popTable();
+        }
+
+        if(luaHandler.getTableFromTable("col")) {
+            lightColorValue.x = luaHandler.getNumberFromTable(1);
+            lightColorValue.y = luaHandler.getNumberFromTable(2);
+            lightColorValue.z = luaHandler.getNumberFromTable(3);
+            lightColorValue.w = luaHandler.getNumberFromTable(4);
+            luaHandler.popTable();
+        }
+
+        lightIntensityValue = luaHandler.getNumberFromTable("intensity");
+        lightSpecularValue = luaHandler.getNumberFromTable("specularPower");
+        lightDirectionalValue = luaHandler.getBoolFromTable("directional");
+        luaHandler.popTable();
+
+        core::YLight light(lightPositionValue, lightDirectionValue, lightColorValue, lightIntensityValue,
+                      lightDirectionalValue);
+        light.setUp(lightUpValue);
+        light.setSpecularPower(lightSpecularValue);
+        return light;
+    }
+
+    core::YLight &YLuaHelper::updateLight(const LuaHandler &luaHandler, core::YLight &light, const std::string& updateFunction,
+                                          const float deltaTime) {
+        if (luaHandler.getFunction(updateFunction)) {
+            luaHandler.pushNumber(deltaTime);
+            glm::vec3 position = light.getPosition();
+            luaHandler.pushNumber(position.x);
+            luaHandler.pushNumber(position.y);
+            luaHandler.pushNumber(position.z);
+            glm::vec3 direction = light.getDirection();
+            luaHandler.pushNumber(direction.x);
+            luaHandler.pushNumber(direction.y);
+            luaHandler.pushNumber(direction.z);
+            glm::vec3 up = light.getUp();
+            luaHandler.pushNumber(up.x);
+            luaHandler.pushNumber(up.y);
+            luaHandler.pushNumber(up.z);
+            glm::vec4 color = light.getColor();
+            luaHandler.pushNumber(color.x);
+            luaHandler.pushNumber(color.y);
+            luaHandler.pushNumber(color.z);
+            luaHandler.pushNumber(color.w);
+            luaHandler.pushNumber(light.getIntensity());
+
+            luaHandler.callFunctionFromStack(15, 14);
+
+            position.x = luaHandler.popNumber();
+            position.y = luaHandler.popNumber();
+            position.z = luaHandler.popNumber();
+            light.setPosition(position);
+            direction.x = luaHandler.popNumber();
+            direction.y = luaHandler.popNumber();
+            direction.z = luaHandler.popNumber();
+            light.setDirection(direction);
+            up.x = luaHandler.popNumber();
+            up.y = luaHandler.popNumber();
+            up.z = luaHandler.popNumber();
+            light.setUp(up);
+            color.x = luaHandler.popNumber();
+            color.y = luaHandler.popNumber();
+            color.z = luaHandler.popNumber();
+            color.w = luaHandler.popNumber();
+            light.setColor(color);
+            light.setIntensity(luaHandler.popNumber());
+        }
+
+        return light;
+    }
 
     void YLuaHelper::setupCameraPosition(const std::string &cameraTable, core::YCamera &camera,
                                          const LuaHandler &luaHandler) {
@@ -230,7 +235,7 @@ namespace utils {
         glm::vec3 rightValue(1.0f, 0.0f, 0.0f);
         glm::vec2 mouseAngle(0.0f, 0.0f);
 
-        if(luaHandler.getTableFromTable("pos")) {
+        if (luaHandler.getTableFromTable("pos")) {
             positionValue.x = luaHandler.getNumberFromTable(1);
             positionValue.y = luaHandler.getNumberFromTable(2);
             positionValue.z = luaHandler.getNumberFromTable(3);
@@ -273,41 +278,40 @@ namespace utils {
         camera.setUp(upValue);
     }
 
-    // AAmbientLight YLuaHelper::loadAmbientLightFromTable(std::string identifier, LuaHandler &luaHandler) {
-    //     luaHandler.loadTable(identifier);
-    //     glm::vec4 lightColorValue;
-    //     float lightIntensityValue;
-    //
-    //     luaHandler.getTableFromTable("col");
-    //     lightColorValue.x = luaHandler.getNumberFromTable(1);
-    //     lightColorValue.y = luaHandler.getNumberFromTable(2);
-    //     lightColorValue.z = luaHandler.getNumberFromTable(3);
-    //     lightColorValue.w = luaHandler.getNumberFromTable(4);
-    //     luaHandler.popTable();
-    //
-    //     lightIntensityValue = luaHandler.getNumberFromTable("intensity");
-    //     luaHandler.popTable();
-    //
-    //     return AAmbientLight(lightColorValue, lightIntensityValue);
-    // }
+    core::YAmbientLight YLuaHelper::loadAmbientLightFromTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        luaHandler.loadTable(identifier);
+        glm::vec4 lightColorValue(0.0f, 0.0f, 0.0f, 0.0f);
 
-    // AFog YLuaHelper::loadFogFromTable(std::string identifier, LuaHandler &luaHandler) {
-    //     luaHandler.loadTable(identifier);
-    //     float maxDist = luaHandler.getNumberFromTable("maxDist");
-    //     float minDist = luaHandler.getNumberFromTable("minDist");
-    //
-    //     glm::vec4 color;
-    //     luaHandler.getTableFromTable("color");
-    //     color.x = luaHandler.getNumberFromTable(1);
-    //     color.y = luaHandler.getNumberFromTable(2);
-    //     color.z = luaHandler.getNumberFromTable(3);
-    //     color.w = luaHandler.getNumberFromTable(4);
-    //     luaHandler.popTable();
-    //
-    //     luaHandler.popTable();
-    //
-    //     return AFog(maxDist, minDist, color);
-    // }
+        if(luaHandler.getTableFromTable("col")) {
+            lightColorValue.x = luaHandler.getNumberFromTable(1);
+            lightColorValue.y = luaHandler.getNumberFromTable(2);
+            lightColorValue.z = luaHandler.getNumberFromTable(3);
+            lightColorValue.w = luaHandler.getNumberFromTable(4);
+            luaHandler.popTable();
+        }
+
+        const float lightIntensityValue = luaHandler.getNumberFromTable("intensity");
+        luaHandler.popTable();
+
+        return {lightColorValue, lightIntensityValue};
+    }
+
+    elements::YFog YLuaHelper::loadFogFromTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        luaHandler.loadTable(identifier);
+        const float maxDist = luaHandler.getNumberFromTable("maxDist");
+        const float minDist = luaHandler.getNumberFromTable("minDist");
+
+        glm::vec4 color;
+        luaHandler.getTableFromTable("color");
+        color.x = luaHandler.getNumberFromTable(1);
+        color.y = luaHandler.getNumberFromTable(2);
+        color.z = luaHandler.getNumberFromTable(3);
+        color.w = luaHandler.getNumberFromTable(4);
+        luaHandler.popTable();
+        luaHandler.popTable();
+
+        return {maxDist, minDist, color};
+    }
 
     glm::vec4 YLuaHelper::readVec4FromTable(const std::string &identifier, const LuaHandler &luaHandler) {
         luaHandler.loadTable(identifier);
@@ -332,7 +336,7 @@ namespace utils {
 
     glm::vec3 YLuaHelper::readVec3FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler) {
         glm::vec3 vec3Value(0.0f, 0.0f, 0.0f);
-        if(luaHandler.getTableFromTable(identifier)) {
+        if (luaHandler.getTableFromTable(identifier)) {
             vec3Value.x = luaHandler.getNumberFromTable(1);
             vec3Value.y = luaHandler.getNumberFromTable(2);
             vec3Value.z = luaHandler.getNumberFromTable(3);

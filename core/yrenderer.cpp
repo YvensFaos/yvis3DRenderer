@@ -178,19 +178,19 @@ namespace core {
             camera->RotateWithMouse(-10, 0);
         }
 
-        // if (key == GLFW_KEY_P && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        //     printf("Printing Info: \n");
-        //     printf("---------------\n");
-        //     printf("Del: %9f\n", deltaTime);
-        //     printf("Acc: %9f\n", accumulator);
-        //     printf("---------------\n");
-        //     // printf("pos   = {%3.3f, %3.3f, %3.3f},\n", acamera->getPos().x, acamera->getPos().y, acamera->getPos().z);
-        //     // printf("dir   = {%3.3f, %3.3f, %3.3f},\n", acamera->getDir().x, acamera->getDir().y, acamera->getDir().z);
-        //     // printf("up    = {%3.3f, %3.3f, %3.3f},\n", acamera->getUp().x, acamera->getUp().y, acamera->getUp().z);
-        //     // printf("right = {%3.3f, %3.3f, %3.3f},\n", acamera->getRight().x, acamera->getRight().y, acamera->getRight().z);
-        //     // printf("angle = {%3.3f, %3.3f}\n", acamera->getAngles().x, acamera->getAngles().y);
-        //     printf("---------------\n\n");
-        // }
+        if (key == GLFW_KEY_P && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+            printf("Printing Info: \n");
+            printf("---------------\n");
+            printf("Del: %9f\n", deltaTime);
+            printf("Acc: %9f\n", accumulator);
+            printf("---------------\n");
+            printf("pos   = {%3.3f, %3.3f, %3.3f},\n", camera->getPos().x, camera->getPos().y, camera->getPos().z);
+            printf("dir   = {%3.3f, %3.3f, %3.3f},\n", camera->getDir().x, camera->getDir().y, camera->getDir().z);
+            printf("up    = {%3.3f, %3.3f, %3.3f},\n", camera->getUp().x, camera->getUp().y, camera->getUp().z);
+            printf("right = {%3.3f, %3.3f, %3.3f},\n", camera->getRight().x, camera->getRight().y, camera->getRight().z);
+            printf("angle = {%3.3f, %3.3f}\n", camera->getAngles().x, camera->getAngles().y);
+            printf("---------------\n\n");
+        }
     }
 
     // ReSharper disable once CppMemberFunctionMayBeStatic
