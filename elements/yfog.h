@@ -20,12 +20,5 @@ namespace elements {
         }
 
         YFog &operator=(const YFog &otherFog) = delete;
-        //     if (this != &otherFog) {
-        //         this->maxDist = otherFog.maxDist;
-        //         this->minDist = otherFog.minDist;
-        //         this->color = otherFog.color;
-        //     }
-        //     return *this;
-        // }
     };
 }

@@ -26,7 +26,9 @@ add_executable(yvis3Drenderer main.cpp
         core/yscene.cpp
         core/yscene.h
         scenes/yfogscene.cpp
-        scenes/yfogscene.h)
+        scenes/yfogscene.h
+        elements/yskybox.cpp
+        elements/yskybox.h)
 
 add_custom_command(
         TARGET yvis3Drenderer
@@ -48,3 +50,5 @@ find_package(glm CONFIG REQUIRED)
 target_link_libraries(yvis3Drenderer PRIVATE glm::glm)
 find_package(assimp CONFIG REQUIRED)
 target_link_libraries(yvis3Drenderer PRIVATE assimp::assimp)
+find_package(Stb REQUIRED)
+target_include_directories(yvis3Drenderer PRIVATE ${Stb_INCLUDE_DIR})
