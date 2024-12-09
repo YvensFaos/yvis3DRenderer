@@ -6,7 +6,7 @@ int main() {
     constexpr int height = 600;
     core::YRenderer renderer(width, height, "YRenderer");
 
-    scenes::YFogScene fogScene(renderer, "data/scenes/scene_simple.lua", width, height);
+    scenes::YFogScene fogScene(renderer, "data/scenes/fog_scene.lua", width, height);
 
     do {
         fogScene.render();
