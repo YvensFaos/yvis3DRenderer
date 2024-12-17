@@ -344,4 +344,17 @@ namespace utils {
         }
         return vec3Value;
     }
+
+    std::vector<std::string> YLuaHelper::readListOfStringsFromTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        luaHandler.loadTable(identifier);
+        auto l = luaHandler.getLength();
+        std::vector<std::string> result;
+
+        for (uint i = 1; i <= l; i++) {
+            auto string = luaHandler.getStringFromTable(i);
+            result.push_back(string);
+        }
+
+        return result;
+    }
 } // utils

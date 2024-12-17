@@ -79,7 +79,7 @@ namespace elements {
             "       frag_colour = color;\n"
             "   }\n";
 
-    YSkybox::YSkybox(const std::vector<std::string> &faces) : cubemapTextureID(0), width(0),
+    YSkybox::YSkybox(const std::vector<std::string> &faces) : cubeMapTextureID(0), width(0),
                                                               height(0), channels(0), VAO(0), VBO(0), skyboxUniform(0),
                                                               faces(faces) {
         vertexShader = core::YShader::generateShader(defaultVertexShader, GL_VERTEX_SHADER);
@@ -88,8 +88,8 @@ namespace elements {
         skyboxUniform = glGetUniformLocation(programme, "skybox");
         viewProjectionUniform = glGetUniformLocation(programme, "vpMatrix");
 
-        glGenTextures(1, &cubemapTextureID);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureID);
+        glGenTextures(1, &cubeMapTextureID);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTextureID);
 
         for (GLuint i = 0; i < faces.size(); i++) {
             printf("Load Face %d: %s\n", i + 1, faces[i].c_str());
@@ -120,7 +120,7 @@ namespace elements {
         glBindVertexArray(VAO);
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureID);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTextureID);
         glUniform1i(skyboxUniform, 0);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);

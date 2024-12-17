@@ -9,7 +9,7 @@
 
 namespace elements {
     class YSkybox {
-        GLuint cubemapTextureID;
+        GLuint cubeMapTextureID;
         GLint width;
         GLint height;
         GLint channels;

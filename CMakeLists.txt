@@ -28,7 +28,9 @@ add_executable(yvis3Drenderer main.cpp
         scenes/yfogscene.cpp
         scenes/yfogscene.h
         elements/yskybox.cpp
-        elements/yskybox.h)
+        elements/yskybox.h
+        scenes/yskyboxscene.cpp
+        scenes/yskyboxscene.h)
 
 add_custom_command(
         TARGET yvis3Drenderer

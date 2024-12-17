@@ -66,5 +66,7 @@ namespace utils {
 
         ///Load a glm::vec3 from 3 consecutive values in a table by the identifier name, when inside a table.
         static glm::vec3 readVec3FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
+
+        static std::vector<std::string> readListOfStringsFromTable(const std::string &identifier, const LuaHandler &luaHandler);
     };
 } // utils
