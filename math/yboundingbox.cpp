@@ -2,7 +2,7 @@
 // Created by Yvens Serpa on 07/12/2024.
 //
 
-#include "YBoundingBox.h"
+#include "yboundingbox.h"
 
 namespace math {
     YBoundingBox::YBoundingBox() : min(0.0f, 0.0f, 0.0f), max(0.0f, 0.0f, 0.0f) {

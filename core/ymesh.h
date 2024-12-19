@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include "../math/YBoundingBox.h"
+#include "../math/yboundingbox.h"
 
 namespace core {
     struct YVertex {
@@ -47,7 +47,7 @@ namespace core {
 
         void drawPatches(GLuint shader, bool renderWithTextures) const;
 
-        [[nodiscard]] math::YBoundingBox getBoundingBox() const;
+        [[nodiscard]] math::yboundingbox getBoundingBox() const;
 
         [[nodiscard]] const std::vector<YVertex> &getVertices() const;
 

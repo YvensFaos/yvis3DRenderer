@@ -50,7 +50,7 @@ namespace core {
 
         void setPosition(glm::vec3 position);
 
-        [[nodiscard]] math::YBoundingBox getBoundingBox() const;
+        [[nodiscard]] math::yboundingbox getBoundingBox() const;
 
         YModel &operator=(const YModel &copyFrom);
 

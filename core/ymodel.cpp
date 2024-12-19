@@ -256,12 +256,12 @@ namespace core {
         this->modelMatrix[3] = glm::vec4(position, 1.0f);
     }
 
-    math::YBoundingBox YModel::getBoundingBox() const {
+    math::yboundingbox YModel::getBoundingBox() const {
         glm::vec3 min(+999999.0f, +999999.0f, +999999.0f);
         glm::vec3 max(-999999.0f, -999999.0f, -999999.0f);
 
         for (const auto &meshe: this->meshes) {
-            math::YBoundingBox abb = meshe.getBoundingBox();
+            math::yboundingbox abb = meshe.getBoundingBox();
             min.x = std::min(min.x, abb.getMin().x);
             min.y = std::min(min.y, abb.getMin().y);
             min.z = std::min(min.z, abb.getMin().z);
