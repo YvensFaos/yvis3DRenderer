@@ -1,0 +1,4 @@
+monkey.fbx filter=lfs diff=lfs merge=lfs -text
+wildtextures-stone_pebbles_seamless_normal_512.png filter=lfs diff=lfs merge=lfs -text
+wildtextures-stone_pebbles_seamless_texture_512.jpg filter=lfs diff=lfs merge=lfs -text
+wildtextures-stone_pebbles_seamless_normal_512.jpg filter=lfs diff=lfs merge=lfs -text
