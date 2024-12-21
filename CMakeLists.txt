@@ -34,7 +34,10 @@ add_executable(yvis3Drenderer main.cpp
         core/yframebuffer.cpp
         core/yframebuffer.h
         core/yrenderquad.cpp
-        core/yrenderquad.h)
+        core/yrenderquad.h
+        scenes/yedgedetectionscene.cpp
+        scenes/yedgedetectionscene.h
+)
 
 add_custom_command(
         TARGET yvis3Drenderer
