@@ -350,7 +350,7 @@ namespace utils {
         auto l = luaHandler.getLength();
         std::vector<std::string> result;
 
-        for (uint i = 1; i <= l; i++) {
+        for (int i = 1; i <= l; i++) {
             auto string = luaHandler.getStringFromTable(i);
             result.push_back(string);
         }

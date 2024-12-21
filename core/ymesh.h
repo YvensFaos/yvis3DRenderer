@@ -47,7 +47,7 @@ namespace core {
 
         void drawPatches(GLuint shader, bool renderWithTextures) const;
 
-        [[nodiscard]] math::yboundingbox getBoundingBox() const;
+        [[nodiscard]] math::YBoundingBox getBoundingBox() const;
 
         [[nodiscard]] const std::vector<YVertex> &getVertices() const;
 

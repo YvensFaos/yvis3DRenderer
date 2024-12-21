@@ -61,9 +61,9 @@ namespace core {
 
     void YModel::renderModels(GLuint modelMatrixUniform, GLuint programme, GLenum mode, bool renderWithTextures) const {
         const auto pointer = this->getMeshes();
-        auto modelMatrix = this->getModelMatrix();
+        auto matrix = this->getModelMatrix();
 
-        glUniformMatrix4fv(static_cast<GLint>(modelMatrixUniform), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+        glUniformMatrix4fv(static_cast<GLint>(modelMatrixUniform), 1, GL_FALSE, glm::value_ptr(matrix));
         for (const auto &i: pointer) {
             i.draw(programme, mode, renderWithTextures);
         }
@@ -256,12 +256,12 @@ namespace core {
         this->modelMatrix[3] = glm::vec4(position, 1.0f);
     }
 
-    math::yboundingbox YModel::getBoundingBox() const {
+    math::YBoundingBox YModel::getBoundingBox() const {
         glm::vec3 min(+999999.0f, +999999.0f, +999999.0f);
         glm::vec3 max(-999999.0f, -999999.0f, -999999.0f);
 
         for (const auto &meshe: this->meshes) {
-            math::yboundingbox abb = meshe.getBoundingBox();
+            math::YBoundingBox abb = meshe.getBoundingBox();
             min.x = std::min(min.x, abb.getMin().x);
             min.y = std::min(min.y, abb.getMin().y);
             min.z = std::min(min.z, abb.getMin().z);

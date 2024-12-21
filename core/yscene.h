@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 
 #include "yrenderer.h"
+#include <unordered_map>
 #include "../LuaHandler/luahandler.hpp"
 
 namespace core {

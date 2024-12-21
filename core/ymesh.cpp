@@ -119,7 +119,7 @@ namespace core {
         glDrawElements(GL_PATCHES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
     }
 
-    math::yboundingbox YMesh::getBoundingBox() const {
+    math::YBoundingBox YMesh::getBoundingBox() const {
         glm::vec3 min(+999999.0f, +999999.0f, +999999.0f);
         glm::vec3 max(-999999.0f, -999999.0f, -999999.0f);
 
