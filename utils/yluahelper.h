@@ -64,8 +64,16 @@ namespace utils {
         ///Load a glm::vec3 from 3 consecutive values in a table by the identifier name, when the table is in global scope.
         static glm::vec3 readVec3FromTable(const std::string &identifier, const LuaHandler &luaHandler);
 
+        static glm::vec4 readVec4FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
+
         ///Load a glm::vec3 from 3 consecutive values in a table by the identifier name, when inside a table.
         static glm::vec3 readVec3FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
+
+        static glm::vec2 readVec2FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
+
+        static glm::mat4 readMat4FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
+
+        static glm::mat3 readMat3FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
 
         static std::vector<std::string> readListOfStringsFromTable(const std::string &identifier, const LuaHandler &luaHandler);
     };

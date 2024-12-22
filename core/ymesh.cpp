@@ -12,7 +12,7 @@
 namespace core {
     YMesh::YMesh(const std::vector<YVertex> &vertices, const std::vector<unsigned int> &indices,
                  const std::vector<YTexture> &textures)
-        : vertices(vertices), indices(indices), textures(textures) {
+            : vertices(vertices), indices(indices), textures(textures) {
         this->setupMesh();
     }
 
@@ -23,7 +23,7 @@ namespace core {
     }
 
     YMesh::YMesh(const YMesh &anotherMesh, [[maybe_unused]] bool generateOwnObjects)
-        : vertices(anotherMesh.vertices), indices(anotherMesh.indices), textures(anotherMesh.textures) {
+            : vertices(anotherMesh.vertices), indices(anotherMesh.indices), textures(anotherMesh.textures) {
         this->setupMesh();
     }
 
@@ -182,7 +182,7 @@ namespace core {
 
     YInstanceMesh::YInstanceMesh(const YInstanceMesh &anotherInstanceMesh) : YMesh(anotherInstanceMesh),
                                                                              instanceData(
-                                                                                 anotherInstanceMesh.getInstanceData()),
+                                                                                     anotherInstanceMesh.getInstanceData()),
                                                                              IBO(anotherInstanceMesh.getIBO()) {
     }
 

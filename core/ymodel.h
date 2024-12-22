@@ -6,6 +6,7 @@
 
 #include <string>
 #include "ymesh.h"
+#include "ytransform.h"
 #include <assimp/matrix4x4.h>
 #include <glm/glm.hpp>
 #include <vector>
@@ -18,7 +19,7 @@ struct aiMesh;
 
 namespace core {
     class YModel {
-        glm::mat4 modelMatrix{};
+        core::YTransform transform;
         std::vector<YMesh> meshes;
         std::string directory;
 

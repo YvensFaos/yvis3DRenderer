@@ -9,16 +9,18 @@ namespace core {
     class YCamera {
         glm::vec3 cameraPos;
         glm::vec3 cameraTarget;
-        glm::vec3 cameraDirection;
+        glm::vec3 cameraDirection{};
         glm::vec3 up;
-        glm::vec3 cameraRight;
-        glm::vec3 cameraUp;
+        glm::vec3 cameraRight{};
+        glm::vec3 cameraUp{};
 
         float horizontalAngle;
         float verticalAngle;
         float zoom;
         float near;
         float far;
+
+        glm::mat4 cachedViewProjection;
 
     public:
         YCamera();
@@ -33,38 +35,44 @@ namespace core {
 
         void MoveUp(float step);
 
-        void RotateWithMouse(float horizontalAngle, float verticalAngle);
+        void RotateWithMouse(float hAngle, float vAngle);
 
-        void CalculateRotationFromDirection(const glm::vec3 direction);
+        void CalculateRotationFromDirection(glm::vec3 direction);
 
-        void Zoom(float zoom);
+        void Zoom(float newZoom);
 
-        glm::mat4 getView() const;
+        void cacheViewProjectionMatrix(float width, float height);
 
-        glm::vec3 getPos() const;
+        [[nodiscard]] glm::mat4 getCachedViewProjectionMatrix() const;
 
-        glm::vec3 getDir() const;
+        [[nodiscard]] glm::mat4 getViewProjectionMatrix(float width, float height) const;
 
-        glm::vec3 getUp() const;
+        [[nodiscard]] glm::mat4 getView() const;
 
-        glm::vec3 getRight() const;
+        [[nodiscard]] glm::vec3 getPos() const;
 
-        float getZoom() const;
+        [[nodiscard]] glm::vec3 getDir() const;
 
-        float getNear() const;
+        [[nodiscard]] glm::vec3 getUp() const;
 
-        float getFar() const;
+        [[nodiscard]] glm::vec3 getRight() const;
 
-        glm::vec2 getAngles() const;
+        [[nodiscard]] float getZoom() const;
 
-        void setPos(const glm::vec3 value);
+        [[nodiscard]] float getNear() const;
 
-        void setDir(const glm::vec3 value);
+        [[nodiscard]] float getFar() const;
 
-        void setUp(const glm::vec3 value);
+        [[nodiscard]] glm::vec2 getAngles() const;
 
-        void setRight(const glm::vec3 value);
+        void setPos(glm::vec3 value);
 
-        void setMouseAngle(const glm::vec2 value);
+        void setDir(glm::vec3 value);
+
+        void setUp(glm::vec3 value);
+
+        void setRight(glm::vec3 value);
+
+        void setMouseAngle(glm::vec2 value);
     };
 } // core

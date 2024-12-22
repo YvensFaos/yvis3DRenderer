@@ -119,7 +119,7 @@ namespace utils {
         return loadLight(luaHandler);
     }
 
-    core::YLight YLuaHelper::loadLightFromTable(const std::string& identifier, LuaHandler &luaHandler) {
+    core::YLight YLuaHelper::loadLightFromTable(const std::string &identifier, LuaHandler &luaHandler) {
         if (luaHandler.isTopOfStackATable()) {
             luaHandler.getTableFromTable(identifier);
         } else {
@@ -137,28 +137,28 @@ namespace utils {
         float lightSpecularValue;
         bool lightDirectionalValue;
 
-        if(luaHandler.getTableFromTable("pos")) {
+        if (luaHandler.getTableFromTable("pos")) {
             lightPositionValue.x = luaHandler.getNumberFromTable(1);
             lightPositionValue.y = luaHandler.getNumberFromTable(2);
             lightPositionValue.z = luaHandler.getNumberFromTable(3);
             luaHandler.popTable();
         }
 
-        if(luaHandler.getTableFromTable("dir")) {
+        if (luaHandler.getTableFromTable("dir")) {
             lightDirectionValue.x = luaHandler.getNumberFromTable(1);
             lightDirectionValue.y = luaHandler.getNumberFromTable(2);
             lightDirectionValue.z = luaHandler.getNumberFromTable(3);
             luaHandler.popTable();
         }
 
-        if(luaHandler.getTableFromTable("up")) {
+        if (luaHandler.getTableFromTable("up")) {
             lightUpValue.x = luaHandler.getNumberFromTable(1);
             lightUpValue.y = luaHandler.getNumberFromTable(2);
             lightUpValue.z = luaHandler.getNumberFromTable(3);
             luaHandler.popTable();
         }
 
-        if(luaHandler.getTableFromTable("col")) {
+        if (luaHandler.getTableFromTable("col")) {
             lightColorValue.x = luaHandler.getNumberFromTable(1);
             lightColorValue.y = luaHandler.getNumberFromTable(2);
             lightColorValue.z = luaHandler.getNumberFromTable(3);
@@ -172,14 +172,15 @@ namespace utils {
         luaHandler.popTable();
 
         core::YLight light(lightPositionValue, lightDirectionValue, lightColorValue, lightIntensityValue,
-                      lightDirectionalValue);
+                           lightDirectionalValue);
         light.setUp(lightUpValue);
         light.setSpecularPower(lightSpecularValue);
         return light;
     }
 
-    core::YLight &YLuaHelper::updateLight(const LuaHandler &luaHandler, core::YLight &light, const std::string& updateFunction,
-                                          const float deltaTime) {
+    core::YLight &
+    YLuaHelper::updateLight(const LuaHandler &luaHandler, core::YLight &light, const std::string &updateFunction,
+                            const float deltaTime) {
         if (luaHandler.getFunction(updateFunction)) {
             luaHandler.pushNumber(deltaTime);
             glm::vec3 position = light.getPosition();
@@ -278,11 +279,12 @@ namespace utils {
         camera.setUp(upValue);
     }
 
-    core::YAmbientLight YLuaHelper::loadAmbientLightFromTable(const std::string &identifier, const LuaHandler &luaHandler) {
+    core::YAmbientLight
+    YLuaHelper::loadAmbientLightFromTable(const std::string &identifier, const LuaHandler &luaHandler) {
         luaHandler.loadTable(identifier);
         glm::vec4 lightColorValue(0.0f, 0.0f, 0.0f, 0.0f);
 
-        if(luaHandler.getTableFromTable("col")) {
+        if (luaHandler.getTableFromTable("col")) {
             lightColorValue.x = luaHandler.getNumberFromTable(1);
             lightColorValue.y = luaHandler.getNumberFromTable(2);
             lightColorValue.z = luaHandler.getNumberFromTable(3);
@@ -345,7 +347,8 @@ namespace utils {
         return vec3Value;
     }
 
-    std::vector<std::string> YLuaHelper::readListOfStringsFromTable(const std::string &identifier, const LuaHandler &luaHandler) {
+    std::vector<std::string>
+    YLuaHelper::readListOfStringsFromTable(const std::string &identifier, const LuaHandler &luaHandler) {
         luaHandler.loadTable(identifier);
         auto l = luaHandler.getLength();
         std::vector<std::string> result;
@@ -356,5 +359,58 @@ namespace utils {
         }
 
         return result;
+    }
+
+    glm::vec2 YLuaHelper::readVec2FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        glm::vec2 vec2Value(0.0f, 0.0f);
+        if (luaHandler.getTableFromTable(identifier)) {
+            vec2Value.x = luaHandler.getNumberFromTable(1);
+            vec2Value.y = luaHandler.getNumberFromTable(2);
+            luaHandler.popTable();
+        }
+        return vec2Value;
+    }
+
+    glm::vec4 YLuaHelper::readVec4FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        glm::vec4 vec4Value(0.0f, 0.0f, 0.0f, 0.0f);
+        if (luaHandler.getTableFromTable(identifier)) {
+            vec4Value.x = luaHandler.getNumberFromTable(1);
+            vec4Value.y = luaHandler.getNumberFromTable(2);
+            vec4Value.z = luaHandler.getNumberFromTable(3);
+            vec4Value.w = luaHandler.getNumberFromTable(4);
+            luaHandler.popTable();
+        }
+        return vec4Value;
+    }
+
+    glm::mat3 YLuaHelper::readMat3FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        glm::mat3 mat3Value(0.0f);
+        if (luaHandler.getTableFromTable(identifier)) {
+            for (int i = 1, k = 0; i < 10; i += 3) {
+                glm::vec3 vec3Value;
+                vec3Value.x = luaHandler.getNumberFromTable(i);
+                vec3Value.y = luaHandler.getNumberFromTable(i + 1);
+                vec3Value.z = luaHandler.getNumberFromTable(i + 2);
+                mat3Value[k++] = vec3Value;
+            }
+            luaHandler.popTable();
+        }
+        return mat3Value;
+    }
+
+    glm::mat4 YLuaHelper::readMat4FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        glm::mat4 mat4Value(0.0f);
+        if (luaHandler.getTableFromTable(identifier)) {
+            for (int i = 1, k = 0; i < 17; i += 4) {
+                glm::vec4 vec4Value;
+                vec4Value.x = luaHandler.getNumberFromTable(i);
+                vec4Value.y = luaHandler.getNumberFromTable(i + 1);
+                vec4Value.z = luaHandler.getNumberFromTable(i + 2);
+                vec4Value.w = luaHandler.getNumberFromTable(i + 3);
+                mat4Value[k++] = vec4Value;
+            }
+            luaHandler.popTable();
+        }
+        return mat4Value;
     }
 } // utils

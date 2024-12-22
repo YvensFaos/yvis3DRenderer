@@ -15,11 +15,11 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 namespace core {
-    YModel::YModel(const std::string &path) : modelMatrix(glm::mat4(1.0)) {
+    YModel::YModel(const std::string &path) : transform(glm::mat4(1.0)) {
         loadModel(path);
     }
 
-    YModel::YModel(const YModel &copyFrom) : modelMatrix(copyFrom.modelMatrix) {
+    YModel::YModel(const YModel &copyFrom) : transform(copyFrom.getModelMatrix()) {
         printf("YModel is being copied.\n");
         this->meshes = copyFrom.getMeshes();
         this->directory = copyFrom.getDirectory();
@@ -64,8 +64,8 @@ namespace core {
         auto matrix = this->getModelMatrix();
 
         glUniformMatrix4fv(static_cast<GLint>(modelMatrixUniform), 1, GL_FALSE, glm::value_ptr(matrix));
-        for (const auto &i: pointer) {
-            i.draw(programme, mode, renderWithTextures);
+        for (const auto &mesh: pointer) {
+            mesh.draw(programme, mode, renderWithTextures);
         }
     }
 
@@ -231,29 +231,27 @@ namespace core {
     }
 
     void YModel::translate(const glm::vec3 translateTo) {
-        this->modelMatrix = glm::translate(this->modelMatrix, translateTo);
+        this->transform.translate(translateTo);
     }
 
     void YModel::rotate(const glm::vec3 rotateTo) {
-        this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(rotateTo.x), glm::vec3(1, 0, 0));
-        this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(rotateTo.y), glm::vec3(0, 1, 0));
-        this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(rotateTo.z), glm::vec3(0, 0, 1));
+        this->transform.rotate(rotateTo);
     }
 
     void YModel::scale(glm::vec3 scaleTo) {
-        this->modelMatrix = glm::scale(this->modelMatrix, scaleTo);
+        this->transform.scale(scaleTo);
     }
 
     glm::mat4 YModel::getModelMatrix() const {
-        return this->modelMatrix;
+        return this->transform.getModelMatrix();
     }
 
     glm::vec4 YModel::getPosition() const {
-        return this->modelMatrix[3];
+        return this->transform.getPosition();
     }
 
     void YModel::setPosition(glm::vec3 position) {
-        this->modelMatrix[3] = glm::vec4(position, 1.0f);
+        this->transform.setPosition(position);
     }
 
     math::YBoundingBox YModel::getBoundingBox() const {
@@ -309,7 +307,7 @@ namespace core {
 
     YModel &YModel::operator=(const YModel &copyFrom) {
         if (this != &copyFrom) {
-            this->modelMatrix = copyFrom.getModelMatrix();
+            this->transform.setModelMatrix(copyFrom.getModelMatrix());
             this->meshes = copyFrom.getMeshes();
             this->directory = copyFrom.getDirectory();
         }

@@ -4,26 +4,24 @@
 
 #include "ycamera.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/rotate_vector.hpp>
 
 namespace core {
     YCamera::YCamera() : cameraPos(glm::vec3()), cameraTarget(glm::vec3(0.0f, 0.0f, 1.0f)),
                          cameraDirection(glm::vec3(0.0f, 0.0f, 1.0f)), up(glm::vec3(0.0f, 1.0f, 0.0f)),
                          cameraRight(glm::vec3(1.0f, 0.0f, 0.0f)), cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)),
-                         horizontalAngle(0.0f), verticalAngle(0.0f), zoom(45.0f), near(0.1f), far(1000.0f) {
+                         horizontalAngle(0.0f), verticalAngle(0.0f), zoom(45.0f), near(0.1f), far(1000.0f), cachedViewProjection(0.0f) {
         this->RotateWithMouse(-90.0, 0.0);
     }
 
     YCamera::YCamera(glm::vec3 cameraPos, glm::vec3 cameraTarget, glm::vec3 up) : cameraPos(cameraPos),
-        cameraTarget(cameraTarget), up(up), zoom(45.0f), horizontalAngle(0.0f), verticalAngle(0.0f),
-        near(0.1f), far(1000.0f) {
+                                                                                  cameraTarget(cameraTarget), up(up),
+                                                                                  zoom(45.0f), horizontalAngle(0.0f),
+                                                                                  verticalAngle(0.0f),
+                                                                                  near(0.1f), far(1000.0f), cachedViewProjection(0.0f) {
         this->RotateWithMouse(-90.0, 0.0);
     }
 
-    YCamera::~YCamera() {
-    }
+    YCamera::~YCamera() = default;
 
     void YCamera::MoveForward(const float step) {
         const glm::vec3 forwardMovement = this->cameraDirection * step;
@@ -60,9 +58,9 @@ namespace core {
         return this->cameraRight;
     }
 
-    void YCamera::RotateWithMouse(float horizontalAngle, float verticalAngle) {
-        this->horizontalAngle += horizontalAngle;
-        this->verticalAngle += verticalAngle;
+    void YCamera::RotateWithMouse(float hAngle, float vAngle) {
+        this->horizontalAngle += hAngle;
+        this->verticalAngle += vAngle;
 
         glm::vec3 front;
         front.x = cos(glm::radians(this->horizontalAngle)) * cos(glm::radians(this->verticalAngle));
@@ -75,12 +73,12 @@ namespace core {
     }
 
     void YCamera::CalculateRotationFromDirection(const glm::vec3 direction) {
-        const float verticalAngle = glm::degrees(asin(direction.y));
+        const float vAngle = glm::degrees(asin(direction.y));
         const int sign = (direction.x < 0.0 || direction.z < 0.0) ? -1 : 1;
-        const float horizontalAngle = sign * glm::degrees(acos((direction.x) / cos(glm::radians(verticalAngle))));
+        const float hAngle = static_cast<float>(sign) * glm::degrees(acos((direction.x) / cos(glm::radians(vAngle))));
 
-        this->horizontalAngle = horizontalAngle;
-        this->verticalAngle = verticalAngle;
+        this->horizontalAngle = hAngle;
+        this->verticalAngle = vAngle;
     }
 
     void YCamera::setMouseAngle(const glm::vec2 value) {
@@ -88,10 +86,10 @@ namespace core {
         this->verticalAngle = value.y;
     }
 
-    void YCamera::Zoom(const float zoom) {
-        this->zoom += zoom;
+    void YCamera::Zoom(const float newZoom) {
+        this->zoom += newZoom;
         if (this->zoom >= 90.0 || this->zoom <= 0.0) {
-            this->zoom -= zoom;
+            this->zoom -= newZoom;
         }
     }
 
@@ -132,6 +130,27 @@ namespace core {
     }
 
     glm::vec2 YCamera::getAngles() const {
-        return glm::vec2(this->horizontalAngle, this->verticalAngle);
+        return {this->horizontalAngle, this->verticalAngle};
+    }
+
+    glm::mat4 YCamera::getViewProjectionMatrix(const float width, const float height) const {
+        const glm::mat4 view = getView();
+        const glm::mat4 projection = glm::perspective(glm::radians(getZoom()),
+                                                      width / height, near,
+                                                      far);
+        const glm::mat4 viewProjection = projection * view;
+        return viewProjection;
+    }
+
+    void YCamera::cacheViewProjectionMatrix(float width, float height) {
+        const glm::mat4 view = getView();
+        const glm::mat4 projection = glm::perspective(glm::radians(getZoom()),
+                                                      width / height, near,
+                                                      far);
+        cachedViewProjection = projection * view;
+    }
+
+    glm::mat4 YCamera::getCachedViewProjectionMatrix() const {
+        return cachedViewProjection;
     }
 } // core
