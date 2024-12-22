@@ -5,6 +5,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <string>
+#include "yuniform.h"
 
 namespace core {
     class YShader {
@@ -16,5 +17,7 @@ namespace core {
         static GLuint generateProgram(GLuint vertexShader, GLuint geometryShader, GLuint fragmentShader);
 
         static GLuint generateProgram(const std::vector<GLuint> &shaders);
+
+        static std::vector<YUniform> getUniformsFromShaderProgram(const std::string& shaderText);
     };
 } // core

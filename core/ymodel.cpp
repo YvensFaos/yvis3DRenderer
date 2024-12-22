@@ -64,8 +64,8 @@ namespace core {
         auto matrix = this->getModelMatrix();
 
         glUniformMatrix4fv(static_cast<GLint>(modelMatrixUniform), 1, GL_FALSE, glm::value_ptr(matrix));
-        for (const auto &i: pointer) {
-            i.draw(programme, mode, renderWithTextures);
+        for (const auto &mesh: pointer) {
+            mesh.draw(programme, mode, renderWithTextures);
         }
     }
 

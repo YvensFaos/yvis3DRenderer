@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <sstream>
 #include "yshader.h"
 
 namespace core {
@@ -62,5 +63,51 @@ namespace core {
         printf("Program generated:[%d] [From %lu shader programs].\n\n", shaderProgramme, shaders.size());
 
         return shaderProgramme;
+    }
+
+    std::vector<YUniform> YShader::getUniformsFromShaderProgram(const std::string& shaderText) {
+        std::vector<YUniform> uniforms;
+
+        std::istringstream inputStream(shaderText);
+        std::string line;
+
+        while (std::getline(inputStream, line)) {
+            if (line.find("uniform") == 0) {
+                std::istringstream lineStream(line);
+                std::string token;
+                std::vector<std::string> tokens;
+
+                while (lineStream >> token) {
+                    tokens.push_back(token);
+                }
+
+                printf("Uniform found: %s %s %s\n.", tokens[0].c_str(), tokens[1].c_str(), tokens[2].c_str());
+                auto type = tokens[1];
+                if(type == "mat4") {
+                    uniforms.push_back({tokens[1], YUniformType::MAT4});
+                } else if (type == "mat3") {
+                    uniforms.push_back({tokens[1], YUniformType::MAT3});
+                } else if (type == "vec4") {
+                    uniforms.push_back({tokens[1], YUniformType::VEC4});
+                } else if (type == "vec3") {
+                    uniforms.push_back({tokens[1], YUniformType::VEC3});
+                } else if (type == "vec2") {
+                    uniforms.push_back({tokens[1], YUniformType::VEC2});
+                } else if (type == "bool") {
+                    uniforms.push_back({tokens[1], YUniformType::BOOL});
+                } else if (type == "float") {
+                    uniforms.push_back({tokens[1], YUniformType::FLOAT});
+                } else if (type == "int") {
+                    uniforms.push_back({tokens[1], YUniformType::INT});
+                } else if (type == "sampler2D") {
+                    uniforms.push_back({tokens[1], YUniformType::SAMPLER2D});
+                } else {
+                    printf("Custom uniform type found: %s\n.", type.c_str());
+                    uniforms.push_back({tokens[1], YUniformType::CUSTOM});
+                }
+            }
+        }
+
+        return uniforms;
     }
 } // core
