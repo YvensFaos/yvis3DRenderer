@@ -12,12 +12,14 @@ namespace elements {
         glm::mat4 modelMatrix{};
 
     public:
-        YObject(std::string  identifier);
+        explicit YObject(std::string identifier);
+
         virtual ~YObject() = default;
 
         [[nodiscard]] glm::mat4 getModelMatrix() const;
 
         virtual void draw();
+
         virtual void update();
     };
 }

@@ -16,6 +16,7 @@ namespace core {
     public:
         std::string uniformName;
         core::YUniformType type;
+        int uniformLocation{};
 
         YUniform(std::string  uniformName, const core::YUniformType& type);
         YUniform(const YUniform &uniform) = default;

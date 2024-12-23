@@ -45,6 +45,11 @@ add_executable(yvis3Drenderer main.cpp
         core/yuniform.cpp
         elements/yobject.cpp
         elements/yobject.h
+        elements/yrenderobject.cpp
+        elements/yrenderobject.h
+        core/ymaterialinstance.cpp
+        core/ymaterialinstance.h
+        core/yuniformvalue.h
 )
 
 add_custom_command(

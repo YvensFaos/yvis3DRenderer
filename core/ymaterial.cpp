@@ -6,7 +6,7 @@
 #include "../core/yshader.h"
 
 namespace core {
-    YMaterial::YMaterial(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader) : shaderProgram(-1)
+    YMaterial::YMaterial(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader) : shaderProgram(-1), renderMode(GL_TRIANGLES)
     {
         auto vertexProgram = core::YShader::generateShader(vertexShader, GL_VERTEX_SHADER);
         auto fragmentProgram = core::YShader::generateShader(fragmentShader, GL_FRAGMENT_SHADER);
@@ -38,6 +38,24 @@ namespace core {
         });
 
         std::sort(uniforms.begin(), uniforms.end());
+
+        for (auto uniform: uniforms)
+            uniform.uniformLocation = glGetUniformLocation(shaderProgram, uniform.uniformName.c_str());
     }
 
+    void YMaterial::drawModel(const YModel &model) const {
+        model.draw(shaderProgram, renderMode);
+    }
+
+    void YMaterial::setRenderMode(const GLenum mode) {
+        renderMode = mode;
+    }
+
+    std::vector<core::YUniform>::const_iterator YMaterial::getUniformsIterator() const {
+        return uniforms.cbegin();
+    }
+
+    std::vector<core::YUniform>::const_iterator YMaterial::getUniformsEndIterator() const {
+        return uniforms.cend();
+    }
 } // core

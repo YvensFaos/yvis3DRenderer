@@ -6,23 +6,10 @@
 
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/rotate_vector.hpp>
-
 #include "../core/yshader.h"
-#include "../core/ylight.h"
 #include "../utils/yluahelper.h"
 
 namespace scenes {
-    //    monkey(
-    //     utils::YLuaHelper::loadModelFromTable(
-    //         "monkey", luaHandler)),
-    // light(
-    //     utils::YLuaHelper::loadLightFromTable(
-    //         "light", luaHandler)),
-    // fog(utils::YLuaHelper::loadFogFromTable(
-    //     "fog", luaHandler)), modelMatrix(glm::mat4(1.0f))
-
     YEdgeDetectionScene::YEdgeDetectionScene(core::YRenderer &renderer, const std::string &file, const int width,
                                              const int height) : YScene(renderer, file, width, height),
                                                                  edgeQuad(luaHandler.getGlobalString(
