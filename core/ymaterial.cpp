@@ -3,10 +3,12 @@
 //
 
 #include "ymaterial.h"
+
+#include <utility>
 #include "../core/yshader.h"
 
 namespace core {
-    YMaterial::YMaterial(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader) : shaderProgram(-1), renderMode(GL_TRIANGLES)
+    YMaterial::YMaterial(std::string  identifier, const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader) : identifier(std::move(identifier)), shaderProgram(-1), renderMode(GL_TRIANGLES)
     {
         auto vertexProgram = core::YShader::generateShader(vertexShader, GL_VERTEX_SHADER);
         auto fragmentProgram = core::YShader::generateShader(fragmentShader, GL_FRAGMENT_SHADER);
@@ -39,8 +41,11 @@ namespace core {
 
         std::sort(uniforms.begin(), uniforms.end());
 
-        for (auto uniform: uniforms)
-            uniform.uniformLocation = glGetUniformLocation(shaderProgram, uniform.uniformName.c_str());
+        for (auto uniform: uniforms) {
+            //TODO fix not working!
+            auto uniformLocation = glGetUniformLocation(shaderProgram, uniform.uniformName.c_str());
+            uniform.uniformLocation = uniformLocation;
+        }
     }
 
     void YMaterial::drawModel(const YModel &model) const {

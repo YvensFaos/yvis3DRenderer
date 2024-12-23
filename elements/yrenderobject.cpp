@@ -3,12 +3,16 @@
 //
 
 #include "yrenderobject.h"
-#include "../core/ymodel.h"
-#include "../core/ymaterial.h"
 
-elements::YRenderObject::YRenderObject(const std::string &identifier) : YObject(identifier) {}
+#include <utility>
+#include "../core/ymodel.h"
+#include "../core/ymaterialinstance.h"
+
+elements::YRenderObject::YRenderObject(const std::string &identifier, std::shared_ptr<core::YModel> model, std::shared_ptr<core::YMaterialInstance> materialInstance) : YObject(identifier), model(std::move(model)), materialInstance(std::move(materialInstance)) {}
 
 void elements::YRenderObject::draw() {
     YObject::draw();
-    material->drawModel(*model);
+
+//    material->drawModel(*model);
+//    materialInstance.dra
 }

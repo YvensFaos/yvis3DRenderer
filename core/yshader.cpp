@@ -72,7 +72,8 @@ namespace core {
         std::string line;
 
         while (std::getline(inputStream, line)) {
-            if (line.find("uniform") == 0) {
+            int index = static_cast<int>(line.find("uniform"));
+            if (index != -1) {
                 std::istringstream lineStream(line);
                 std::string token;
                 std::vector<std::string> tokens;
@@ -81,29 +82,32 @@ namespace core {
                     tokens.push_back(token);
                 }
 
-                printf("Uniform found: %s %s %s\n.", tokens[0].c_str(), tokens[1].c_str(), tokens[2].c_str());
+                std::string uniformName = tokens[2];
+                uniformName.pop_back();
+                printf("Uniform found: %s %s %s\n.", tokens[0].c_str(), tokens[1].c_str(), uniformName.c_str());
+
                 auto type = tokens[1];
                 if(type == "mat4") {
-                    uniforms.push_back({tokens[1], YUniformType::MAT4});
+                    uniforms.emplace_back(uniformName, YUniformType::MAT4);
                 } else if (type == "mat3") {
-                    uniforms.push_back({tokens[1], YUniformType::MAT3});
+                    uniforms.emplace_back(uniformName, YUniformType::MAT3);
                 } else if (type == "vec4") {
-                    uniforms.push_back({tokens[1], YUniformType::VEC4});
+                    uniforms.emplace_back(uniformName, YUniformType::VEC4);
                 } else if (type == "vec3") {
-                    uniforms.push_back({tokens[1], YUniformType::VEC3});
+                    uniforms.emplace_back(uniformName, YUniformType::VEC3);
                 } else if (type == "vec2") {
-                    uniforms.push_back({tokens[1], YUniformType::VEC2});
+                    uniforms.emplace_back(uniformName, YUniformType::VEC2);
                 } else if (type == "bool") {
-                    uniforms.push_back({tokens[1], YUniformType::BOOL});
+                    uniforms.emplace_back(uniformName, YUniformType::BOOL);
                 } else if (type == "float") {
-                    uniforms.push_back({tokens[1], YUniformType::FLOAT});
+                    uniforms.emplace_back(uniformName, YUniformType::FLOAT);
                 } else if (type == "int") {
-                    uniforms.push_back({tokens[1], YUniformType::INT});
+                    uniforms.emplace_back(uniformName, YUniformType::INT);
                 } else if (type == "sampler2D") {
-                    uniforms.push_back({tokens[1], YUniformType::SAMPLER2D});
+                    uniforms.emplace_back(uniformName, YUniformType::SAMPLER2D);
                 } else {
                     printf("Custom uniform type found: %s\n.", type.c_str());
-                    uniforms.push_back({tokens[1], YUniformType::CUSTOM});
+                    uniforms.emplace_back(uniformName, YUniformType::CUSTOM);
                 }
             }
         }

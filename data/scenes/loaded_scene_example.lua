@@ -28,36 +28,33 @@ colorFragmentShader = [[
 
 scene = {
     materials = {
-        simpleColorMaterial = {
+        {
+            name = "simpleColorMaterial",
             vertexShader = "basicVertexShader",
             fragmentShader = "colorFragmentShader"
         }
     },
     models = {
-        greenMonkey = {
+        {
+            name = "greenMonkey",
             model = "monkeyModel",
             pos = {-2.0, 0.5, -4.0},
             sca = {1.0, 1.0, 1.0},
             rot = {0.0,  0.0, 0.0},
             material = "simpleColorMaterial",
             uniforms = {
-                colour = {
-                    type = "vec4",
-                    values = {33 / 255, 217 / 255, 82 / 255, 1.0}
-                }
+                colour = {33 / 255, 217 / 255, 82 / 255, 1.0}
             }
         },
-        pinkMonkey = {
+        {
+            name = "pinkMonkey",
             model = "monkeyModel",
             pos = {2.0, 0.5, -4.0},
             sca = {1.0, 1.0, 1.0},
             rot = {0.0,  0.0, 0.0},
             material = "simpleColorMaterial",
             uniforms = {
-                colour = {
-                    type = "vec4",
-                    values = {227 / 255, 82 / 255, 210 / 255, 1.0}
-                }
+                colour = {227 / 255, 82 / 255, 210 / 255, 1.0}
             }
         }
     }

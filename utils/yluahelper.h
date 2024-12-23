@@ -71,6 +71,10 @@ namespace utils {
 
         static glm::vec2 readVec2FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
 
+        static glm::mat4 readMat4FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
+
+        static glm::mat3 readMat3FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
+
         static std::vector<std::string> readListOfStringsFromTable(const std::string &identifier, const LuaHandler &luaHandler);
     };
 } // utils

@@ -7,9 +7,9 @@
 namespace core {
     YScene::YScene(YRenderer &renderer, const std::string &file, const int width, const int height) : renderer(renderer), width(width), height(height) {
         if (luaHandler.openFile(file)) {
-            printf("Successfully loaded %s.lua\n", file.c_str());
+            printf("Successfully loaded %s\n", file.c_str());
         } else {
-            printf("Failed to load %s.lua\n", file.c_str());
+            printf("Failed to load %s\n", file.c_str());
         }
     }
 

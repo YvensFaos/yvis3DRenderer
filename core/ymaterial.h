@@ -1,6 +1,7 @@
 //
 // Created by Yvens Rebouças Serpa on 22/12/2024.
 //
+#pragma once
 
 #include <GL/glew.h>
 #include <string>
@@ -12,19 +13,23 @@ namespace core {
 
     class YMaterial {
     private:
+        const std::string identifier;
         GLuint shaderProgram;
         std::vector<core::YUniform> uniforms;
         GLenum renderMode;
 
     public:
-        YMaterial(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader = "");
+        YMaterial(std::string identifier, const std::string &vertexShader, const std::string &fragmentShader,
+                  const std::string &geometryShader = "");
+
         ~YMaterial() = default;
 
-        void drawModel(const YModel& model) const;
+        void drawModel(const YModel &model) const;
 
         void setRenderMode(GLenum mode);
 
         [[nodiscard]] std::vector<core::YUniform>::const_iterator getUniformsIterator() const;
+
         [[nodiscard]] std::vector<core::YUniform>::const_iterator getUniformsEndIterator() const;
     };
 

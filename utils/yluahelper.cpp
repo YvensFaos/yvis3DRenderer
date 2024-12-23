@@ -382,4 +382,35 @@ namespace utils {
         }
         return vec4Value;
     }
+
+    glm::mat3 YLuaHelper::readMat3FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        glm::mat3 mat3Value(0.0f);
+        if (luaHandler.getTableFromTable(identifier)) {
+            for (int i = 1, k = 0; i < 10; i += 3) {
+                glm::vec3 vec3Value;
+                vec3Value.x = luaHandler.getNumberFromTable(i);
+                vec3Value.y = luaHandler.getNumberFromTable(i + 1);
+                vec3Value.z = luaHandler.getNumberFromTable(i + 2);
+                mat3Value[k++] = vec3Value;
+            }
+            luaHandler.popTable();
+        }
+        return mat3Value;
+    }
+
+    glm::mat4 YLuaHelper::readMat4FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        glm::mat4 mat4Value(0.0f);
+        if (luaHandler.getTableFromTable(identifier)) {
+            for (int i = 1, k = 0; i < 17; i += 4) {
+                glm::vec4 vec4Value;
+                vec4Value.x = luaHandler.getNumberFromTable(i);
+                vec4Value.y = luaHandler.getNumberFromTable(i + 1);
+                vec4Value.z = luaHandler.getNumberFromTable(i + 2);
+                vec4Value.w = luaHandler.getNumberFromTable(i + 3);
+                mat4Value[k++] = vec4Value;
+            }
+            luaHandler.popTable();
+        }
+        return mat4Value;
+    }
 } // utils

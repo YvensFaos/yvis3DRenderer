@@ -9,7 +9,7 @@
 namespace core {
     class YModel;
 
-    class YMaterial;
+    class YMaterialInstance;
 }
 
 namespace elements {
@@ -17,9 +17,9 @@ namespace elements {
 
     private:
         std::shared_ptr<core::YModel> model;
-        std::shared_ptr<core::YMaterial> material;
+        std::shared_ptr<core::YMaterialInstance> materialInstance;
     public:
-        explicit YRenderObject(const std::string &identifier);
+        explicit YRenderObject(const std::string &identifier, std::shared_ptr<core::YModel> model, std::shared_ptr<core::YMaterialInstance> materialInstance);
 
         void draw() override;
     };
