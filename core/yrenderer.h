@@ -9,7 +9,6 @@
 #include "ycamera.h"
 
 class GLFWwindow;
-class YCamera;
 
 namespace core {
     class YRenderer final {
@@ -36,7 +35,7 @@ namespace core {
 
         char titleBuffer[196];
         glm::vec4 clearColor;
-        YCamera *camera;
+        core::YCamera *camera;
 
         // std::map<int, std::unique_ptr<AKeyBind>> keysMap;
     public:
@@ -44,9 +43,9 @@ namespace core {
 
         ~YRenderer();
 
-        void changeClearColor(glm::vec4 clearColor);
+        void changeClearColor(glm::vec4 newClearColor);
 
-        YCamera& getCamera() const;
+        [[nodiscard]] core::YCamera &getCamera() const;
 
         void startFrame();
 
@@ -72,8 +71,8 @@ namespace core {
 
         void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
-        void mouseCallback(GLFWwindow *window, double xpos, double ypos);
+        void mouseCallback(GLFWwindow *glfwWindow, double xpos, double ypos);
 
-        void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
+        void mouseButtonCallback(GLFWwindow *glfWwindow, int button, int action, int mods);
     };
 } // core

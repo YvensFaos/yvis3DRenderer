@@ -5,7 +5,8 @@
 #include "yscene.h"
 
 namespace core {
-    YScene::YScene(YRenderer &renderer, const std::string &file, const int width, const int height) : renderer(renderer), width(width), height(height) {
+    YScene::YScene(YRenderer &renderer, const std::string &file, const int width, const int height) : renderer(
+            renderer), width(width), height(height) {
         if (luaHandler.openFile(file)) {
             printf("Successfully loaded %s\n", file.c_str());
         } else {

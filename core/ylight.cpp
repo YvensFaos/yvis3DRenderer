@@ -8,7 +8,7 @@
 
 namespace core {
     YAmbientLight::YAmbientLight(const glm::vec4 color, const float intensity)
-        : color(color), intensity(intensity) {
+            : color(color), intensity(intensity) {
     }
 
     glm::vec4 YAmbientLight::getColor() const {
@@ -19,15 +19,15 @@ namespace core {
         return this->intensity;
     }
 
-    void YAmbientLight::setColor(const glm::vec4 color) {
-        this->color.x = color.x;
-        this->color.y = color.y;
-        this->color.z = color.z;
-        this->color.w = color.w;
+    void YAmbientLight::setColor(const glm::vec4 newColor) {
+        this->color.x = newColor.x;
+        this->color.y = newColor.y;
+        this->color.z = newColor.z;
+        this->color.w = newColor.w;
     }
 
-    void YAmbientLight::setIntensity(const float intensity) {
-        this->intensity = intensity;
+    void YAmbientLight::setIntensity(const float newIntensity) {
+        this->intensity = newIntensity;
     }
 
     void YAmbientLight::setupUniforms(const GLuint ambientLightColorUniform,
@@ -43,10 +43,9 @@ namespace core {
                                                                 const YLight &YLight) {
         return loadYLightUniformFromProgrammeWithName(shaderProgramme, lightIndex, YLight,
                                                       YLight.getDirectional()
-                                                          ? "directionalLights"
-                                                          : "pointLights");
+                                                      ? "directionalLights"
+                                                      : "pointLights");
     }
-
 
     YLightUniform YLightUniform::loadYLightUniformFromProgrammeWithName(const GLuint shaderProgramme,
                                                                         const GLuint lightIndex,
@@ -77,8 +76,8 @@ namespace core {
         getLightUniformLocation(buffer, uniformName, lightSpecularUniform, shaderProgramme, "specularPower");
 
         return {
-            lightPositionUniform, lightDirectionUniform, lightColorUniform, lightIntensityUniform,
-            lightDirectionalUniform, lightSpecularUniform
+                lightPositionUniform, lightDirectionUniform, lightColorUniform, lightIntensityUniform,
+                lightDirectionalUniform, lightSpecularUniform
         };
     }
 
@@ -86,15 +85,15 @@ namespace core {
 
     YLight::YLight(const glm::vec3 position, const glm::vec3 direction, const glm::vec4 color, const float intensity,
                    const bool directional)
-        : position(position), direction(direction), up(glm::vec3(0, 1, 0)), color(color), intensity(intensity),
-          directional(directional) {
+            : position(position), direction(direction), up(glm::vec3(0, 1, 0)), color(color), intensity(intensity),
+              directional(directional) {
     }
 
     YLight::YLight(const YLight &anotherLight)
-        : position(anotherLight.getPosition()), direction(anotherLight.getDirection()), up(anotherLight.getUp()),
-          color(anotherLight.getColor()),
-          intensity(anotherLight.getIntensity()), specularPower(anotherLight.getSpecularPower()),
-          directional(anotherLight.getDirectional()) {
+            : position(anotherLight.getPosition()), direction(anotherLight.getDirection()), up(anotherLight.getUp()),
+              color(anotherLight.getColor()),
+              intensity(anotherLight.getIntensity()), specularPower(anotherLight.getSpecularPower()),
+              directional(anotherLight.getDirectional()) {
     }
 
     void YLight::setupUniforms(const GLuint lightPositionUniform, const GLuint lightDirectionUniform,
@@ -146,31 +145,31 @@ namespace core {
         return this->specularPower;
     }
 
-    void YLight::setPosition(const glm::vec3 position) {
-        this->position.x = position.x;
-        this->position.y = position.y;
-        this->position.z = position.z;
+    void YLight::setPosition(const glm::vec3 newPosition) {
+        this->position.x = newPosition.x;
+        this->position.y = newPosition.y;
+        this->position.z = newPosition.z;
     }
 
-    void YLight::setDirection(const glm::vec3 direction) {
-        this->direction.x = direction.x;
-        this->direction.y = direction.y;
-        this->direction.z = direction.z;
+    void YLight::setDirection(const glm::vec3 newDirection) {
+        this->direction.x = newDirection.x;
+        this->direction.y = newDirection.y;
+        this->direction.z = newDirection.z;
     }
 
-    void YLight::setColor(const glm::vec4 color) {
-        this->color.x = color.x;
-        this->color.y = color.y;
-        this->color.z = color.z;
-        this->color.w = color.w;
+    void YLight::setColor(const glm::vec4 newColor) {
+        this->color.x = newColor.x;
+        this->color.y = newColor.y;
+        this->color.z = newColor.z;
+        this->color.w = newColor.w;
     }
 
-    void YLight::setIntensity(const float intensity) {
-        this->intensity = intensity;
+    void YLight::setIntensity(const float newIntensity) {
+        this->intensity = newIntensity;
     }
 
-    void YLight::setSpecularPower(const float specularPower) {
-        this->specularPower = specularPower;
+    void YLight::setSpecularPower(const float newSpecularPower) {
+        this->specularPower = newSpecularPower;
     }
 
     void YLight::setUp(const glm::vec3 up) {
@@ -180,26 +179,26 @@ namespace core {
     }
 
     YLight &YLight::operator=(const YLight &anotherLight) {
-        const glm::vec3 position = anotherLight.getPosition();
-        this->position.x = position.x;
-        this->position.y = position.y;
-        this->position.z = position.z;
+        const glm::vec3 newPosition = anotherLight.getPosition();
+        this->position.x = newPosition.x;
+        this->position.y = newPosition.y;
+        this->position.z = newPosition.z;
 
-        const glm::vec3 direction = anotherLight.getDirection();
-        this->direction.x = direction.x;
-        this->direction.y = direction.y;
-        this->direction.z = direction.z;
+        const glm::vec3 newDirection = anotherLight.getDirection();
+        this->direction.x = newDirection.x;
+        this->direction.y = newDirection.y;
+        this->direction.z = newDirection.z;
 
-        const glm::vec3 up = anotherLight.getUp();
-        this->up.x = up.x;
-        this->up.y = up.y;
-        this->up.z = up.z;
+        const glm::vec3 newUp = anotherLight.getUp();
+        this->up.x = newUp.x;
+        this->up.y = newUp.y;
+        this->up.z = newUp.z;
 
-        const glm::vec4 color = anotherLight.getColor();
-        this->color.x = color.x;
-        this->color.y = color.y;
-        this->color.z = color.z;
-        this->color.w = color.w;
+        const glm::vec4 newColor = anotherLight.getColor();
+        this->color.x = newColor.x;
+        this->color.y = newColor.y;
+        this->color.z = newColor.z;
+        this->color.w = newColor.w;
 
         this->setIntensity(anotherLight.getIntensity());
         this->setSpecularPower(anotherLight.getSpecularPower());

@@ -19,7 +19,7 @@ namespace core {
 
         std::unordered_map<std::string, GLint> uniforms;
     public:
-        explicit YScene(YRenderer &renderer, const std::string& file, int width, int height);
+        explicit YScene(YRenderer &renderer, const std::string &file, int width, int height);
 
         YScene(const YScene &scene) = delete;
 

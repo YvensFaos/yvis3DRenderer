@@ -18,18 +18,24 @@ namespace core {
         int uniformLocation{};
     public:
 
-        YUniform(std::string  uniformName, const core::YUniformType& type);
+        YUniform(std::string uniformName, const core::YUniformType &type);
+
         YUniform(const YUniform &uniform) = default;
 
-        YUniform& operator=(const YUniform& another);
-        bool operator<(const YUniform& anotherUniform) const;
+        YUniform &operator=(const YUniform &another);
+
+        bool operator<(const YUniform &anotherUniform) const;
 
         [[nodiscard]] std::string getUniformName() const;
-        core::YUniformType getType() const;
+
+        [[nodiscard]] core::YUniformType getType() const;
+
         int getUniformLocation() const;
 
         void setUniformName(std::string newUniformName);
+
         void setUniformType(core::YUniformType newType);
+
         void setUniformLocation(int newLocation);
     };
 }

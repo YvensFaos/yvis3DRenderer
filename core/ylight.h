@@ -22,9 +22,9 @@ namespace core {
 
         [[nodiscard]] float getIntensity() const;
 
-        void setColor(glm::vec4 color);
+        void setColor(glm::vec4 newColor);
 
-        void setIntensity(float intensity);
+        void setIntensity(float newIntensity);
 
         void setupUniforms(GLuint ambientLightColorUniform, GLuint ambientLightIntensityUniform) const;
     };
@@ -61,17 +61,17 @@ namespace core {
 
         [[nodiscard]] bool getDirectional() const;
 
-        void setPosition(glm::vec3 position);
+        void setPosition(glm::vec3 newPosition);
 
-        void setDirection(glm::vec3 direction);
+        void setDirection(glm::vec3 newDirection);
 
         void setUp(glm::vec3 up);
 
-        void setColor(glm::vec4 color);
+        void setColor(glm::vec4 newColor);
 
-        void setIntensity(float intensity);
+        void setIntensity(float newIntensity);
 
-        void setSpecularPower(float specularPower);
+        void setSpecularPower(float newSpecularPower);
 
         void setupUniforms(GLuint lightPositionUniform, GLuint lightDirectionUniform, GLuint lightColorUniform,
                            GLuint lightIntensityUniform, GLuint lightDirectionalUniform,

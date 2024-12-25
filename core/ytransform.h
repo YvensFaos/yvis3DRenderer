@@ -29,6 +29,7 @@ namespace core {
         [[nodiscard]] glm::vec4 getPosition() const;
 
         void setModelMatrix(glm::mat4);
+
         void setPosition(glm::vec3 position);
     };
 

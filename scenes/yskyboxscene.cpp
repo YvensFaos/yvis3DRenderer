@@ -7,17 +7,16 @@
 
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/rotate_vector.hpp>
 
 #include "../core/yshader.h"
 #include "../utils/yluahelper.h"
 
 namespace scenes {
-    YSkyBoxScene::YSkyBoxScene(core::YRenderer &renderer, const std::string &file, const std::string &skyboxTable, const int width,
+    YSkyBoxScene::YSkyBoxScene(core::YRenderer &renderer, const std::string &file, const std::string &skyboxTable,
+                               const int width,
                                const int height) : YScene(renderer, file, width, height),
                                                    skybox(utils::YLuaHelper::readListOfStringsFromTable
-                                                       (skyboxTable, luaHandler)) {
+                                                                  (skyboxTable, luaHandler)) {
         renderer.changeClearColor(glm::vec4(1.0f, 0.2f, 0.3f, 1.0f));
 
         core::YCamera &camera = renderer.getCamera();

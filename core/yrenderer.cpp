@@ -8,15 +8,20 @@
 
 namespace core {
     YRenderer::YRenderer(const float width, const float height, std::string title) : title(std::move(title)),
-        width(width), height(height),
-        window(nullptr), firstMouse(true),
-        mouseIsClickingLeft(false), shiftModPower(1.0f),
-        deltaTime(0.0f), lastX(width / 2.0f),
-        lastY(height / 2.0f), moveForce(20.0f),
-        mouseSensitivity(5.0f), accumulator(0.0),
-        currentTime(0.0),
-        finishFrameTime(0.0),
-        titleBuffer(""), clearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
+                                                                                     width(width), height(height),
+                                                                                     window(nullptr), firstMouse(true),
+                                                                                     mouseIsClickingLeft(false),
+                                                                                     shiftModPower(1.0f),
+                                                                                     deltaTime(0.0f),
+                                                                                     lastX(width / 2.0f),
+                                                                                     lastY(height / 2.0f),
+                                                                                     moveForce(20.0f),
+                                                                                     mouseSensitivity(5.0f),
+                                                                                     accumulator(0.0),
+                                                                                     currentTime(0.0),
+                                                                                     finishFrameTime(0.0),
+                                                                                     titleBuffer(""), clearColor(
+                    glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
         initialize();
         camera = new YCamera(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glfwSetWindowUserPointer(window, this);
@@ -24,11 +29,11 @@ namespace core {
 
     YRenderer::~YRenderer() = default;
 
-    void YRenderer::changeClearColor(glm::vec4 clearColor) {
-        this->clearColor.r = clearColor.r;
-        this->clearColor.g = clearColor.g;
-        this->clearColor.b = clearColor.b;
-        this->clearColor.a = clearColor.a;
+    void YRenderer::changeClearColor(glm::vec4 newClearColor) {
+        this->clearColor.r = newClearColor.r;
+        this->clearColor.g = newClearColor.g;
+        this->clearColor.b = newClearColor.b;
+        this->clearColor.a = newClearColor.a;
     }
 
     YCamera &YRenderer::getCamera() const {
@@ -88,8 +93,8 @@ namespace core {
         window = glfwCreateWindow(iwidth, iheight, title.c_str(), nullptr, nullptr);
         if (window == nullptr) {
             fprintf(
-                stderr,
-                "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
+                    stderr,
+                    "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
             glfwTerminate();
             return;
         }
@@ -187,7 +192,8 @@ namespace core {
             printf("pos   = {%3.3f, %3.3f, %3.3f},\n", camera->getPos().x, camera->getPos().y, camera->getPos().z);
             printf("dir   = {%3.3f, %3.3f, %3.3f},\n", camera->getDir().x, camera->getDir().y, camera->getDir().z);
             printf("up    = {%3.3f, %3.3f, %3.3f},\n", camera->getUp().x, camera->getUp().y, camera->getUp().z);
-            printf("right = {%3.3f, %3.3f, %3.3f},\n", camera->getRight().x, camera->getRight().y, camera->getRight().z);
+            printf("right = {%3.3f, %3.3f, %3.3f},\n", camera->getRight().x, camera->getRight().y,
+                   camera->getRight().z);
             printf("angle = {%3.3f, %3.3f}\n", camera->getAngles().x, camera->getAngles().y);
             printf("---------------\n\n");
         }
@@ -195,7 +201,7 @@ namespace core {
 
     // ReSharper disable once CppMemberFunctionMayBeStatic
     // ReSharper disable once CppDFAUnreachableFunctionCall
-    void YRenderer::mouseCallback(GLFWwindow *window, double xpos, double ypos) {
+    void YRenderer::mouseCallback(GLFWwindow *glfwWindow, double xpos, double ypos) {
         if (firstMouse) {
             lastX = static_cast<float>(xpos);
             lastY = static_cast<float>(ypos);
@@ -214,7 +220,7 @@ namespace core {
 
     // ReSharper disable once CppMemberFunctionMayBeStatic
     // ReSharper disable once CppDFAUnreachableFunctionCall
-    void YRenderer::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
+    void YRenderer::mouseButtonCallback(GLFWwindow *glfWwindow, int button, int action, int mods) {
         mouseIsClickingLeft = false;
         if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
             mouseIsClickingLeft = true;

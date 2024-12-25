@@ -13,7 +13,7 @@ core::YFrameBuffer::YFrameBuffer() : width(-1), height(-1), bufferShowFlag(std::
 core::YFrameBuffer::YFrameBuffer(const GLfloat width, const GLfloat height, const GLint internalFormat,
                                  const GLint format, const GLint type) : width(width), height(height),
                                                                          bufferShowFlag(
-                                                                             std::numeric_limits<GLuint>::max()) {
+                                                                                 std::numeric_limits<GLuint>::max()) {
     FBO = 0;
     glGenFramebuffers(1, &FBO);
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -87,8 +87,8 @@ void core::YFrameBuffer::generateRenderbuffer() {
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 }
 
-void core::YFrameBuffer::setBufferShowFlag(const GLuint bufferShowFlag) {
-    this->bufferShowFlag = bufferShowFlag;
+void core::YFrameBuffer::setBufferShowFlag(const GLuint newBufferShowFlag) {
+    this->bufferShowFlag = newBufferShowFlag;
 }
 
 void core::YFrameBuffer::changeTextureParameter(const GLint textureParameter, const GLint textureParameterValue) const {

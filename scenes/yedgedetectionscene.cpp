@@ -13,11 +13,11 @@ namespace scenes {
     YEdgeDetectionScene::YEdgeDetectionScene(core::YRenderer &renderer, const std::string &file, const int width,
                                              const int height) : YScene(renderer, file, width, height),
                                                                  edgeQuad(luaHandler.getGlobalString(
-                                                                     "edgeFragmentShader")),
+                                                                         "edgeFragmentShader")),
                                                                  edgeBuffer(static_cast<GLfloat>(width) * 2,
                                                                             static_cast<GLfloat>(height) * 2),
                                                                  light(utils::YLuaHelper::loadLightFromTable(
-                                                                     "light", luaHandler)), modelMatrix(1) {
+                                                                         "light", luaHandler)), modelMatrix(1) {
         renderer.changeClearColor(glm::vec4(1.0f, 0.2f, 0.3f, 1.0f));
 
         const auto vertexShader = luaHandler.getGlobalString("vertexShader");

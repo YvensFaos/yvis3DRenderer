@@ -8,6 +8,6 @@
 
 elements::YObject::YObject(std::string identifier) : identifier(std::move(identifier)), transform() {}
 
-void elements::YObject::draw(const core::YRenderer& renderer) {}
+void elements::YObject::draw(const core::YRenderer &renderer) {}
 
 void elements::YObject::update() {}

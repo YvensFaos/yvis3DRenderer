@@ -6,12 +6,7 @@
 
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/rotate_vector.hpp>
-
 #include "../core/yshader.h"
-#include "../core/ylight.h"
-#include "../elements/yfog.h"
 #include "../utils/yluahelper.h"
 
 namespace scenes {

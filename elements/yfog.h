@@ -13,7 +13,7 @@ namespace elements {
         const glm::vec4 color;
 
         YFog(const float maxDist, const float minDist, const glm::vec4 color) : maxDist(maxDist), minDist(minDist),
-            color(color) {
+                                                                                color(color) {
         }
 
         YFog(const YFog &otherFog) : maxDist(otherFog.maxDist), minDist(otherFog.minDist), color(otherFog.color) {

@@ -42,7 +42,7 @@ namespace core {
 
         void unbindBuffer() const;
 
-        void setBufferShowFlag(GLuint bufferShowFlag);
+        void setBufferShowFlag(GLuint newBufferShowFlag);
 
         void changeTextureParameter(GLint textureParameter, GLint textureParameterValue) const;
 

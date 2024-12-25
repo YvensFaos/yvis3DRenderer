@@ -22,7 +22,7 @@ namespace elements {
 
         virtual ~YObject() = default;
 
-        virtual void draw(const core::YRenderer& renderer);
+        virtual void draw(const core::YRenderer &renderer);
 
         virtual void update();
     };

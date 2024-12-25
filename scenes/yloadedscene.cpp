@@ -15,21 +15,24 @@ namespace scenes {
 
         luaHandler.loadTable("scene");
         //Read and generate materials
-        if(luaHandler.getTableFromTable("materials")) {
+        if (luaHandler.getTableFromTable("materials")) {
             auto numberOfMaterials = luaHandler.getLength();
             printf("Found %d materials.\n", numberOfMaterials);
 
             for (int i = 1; i <= numberOfMaterials; ++i) {
-                if(luaHandler.getTableFromTable(i)) {
+                if (luaHandler.getTableFromTable(i)) {
                     auto materialName = luaHandler.getStringFromTable("name");
                     auto vertexShaderName = luaHandler.getStringFromTable("vertexShader");
                     auto vertexShader = luaHandler.getGlobalString(vertexShaderName);
                     auto fragmentShaderName = luaHandler.getStringFromTable("fragmentShader");
                     auto fragmentShader = luaHandler.getGlobalString(fragmentShaderName);
-                    printf("%s\nVertex Shader[%s]: %s\n\nFragment Shader[%s]: %s\n\n", materialName.c_str(), vertexShaderName.c_str(), vertexShader.c_str(), fragmentShaderName.c_str(), fragmentShader.c_str());
+                    printf("%s\nVertex Shader[%s]: %s\n\nFragment Shader[%s]: %s\n\n", materialName.c_str(),
+                           vertexShaderName.c_str(), vertexShader.c_str(), fragmentShaderName.c_str(),
+                           fragmentShader.c_str());
 
-                    if(!materials.contains(materialName)) {
-                        materials.emplace(materialName,std::make_shared<core::YMaterial>(materialName, vertexShader, fragmentShader));
+                    if (!materials.contains(materialName)) {
+                        materials.emplace(materialName, std::make_shared<core::YMaterial>(materialName, vertexShader,
+                                                                                          fragmentShader));
                     }
                     luaHandler.popTable();
                 }
@@ -38,12 +41,12 @@ namespace scenes {
         }
 
         //Read and generate models
-        if(luaHandler.getTableFromTable("models")) {
+        if (luaHandler.getTableFromTable("models")) {
             auto numberOfModels = luaHandler.getLength();
             printf("Found %d models.\n", numberOfModels);
 
             for (int i = 1; i <= numberOfModels; ++i) {
-                if(luaHandler.getTableFromTable(i)) {
+                if (luaHandler.getTableFromTable(i)) {
                     auto modelName = luaHandler.getStringFromTable("name");
                     auto model = luaHandler.getStringFromTable("model");
                     printf("Loading model named %s.\n", model.c_str());
@@ -63,7 +66,8 @@ namespace scenes {
 
                     printf("Generating YVRenderObject %s...\n", modelName.c_str());
 
-                    auto materialInstance = std::make_shared<core::YMaterialInstance>(yMaterial, "uniforms", luaHandler);
+                    auto materialInstance = std::make_shared<core::YMaterialInstance>(yMaterial, "uniforms",
+                                                                                      luaHandler);
                     auto renderObject = std::make_shared<elements::YRenderObject>(modelName, yModel, materialInstance);
 
                     auto modelPosition = utils::YLuaHelper::readVec3FromTableInTable("pos", luaHandler);
@@ -91,7 +95,7 @@ namespace scenes {
 
     void YLoadedScene::renderImpl() {
         renderer.getCamera().cacheViewProjectionMatrix(static_cast<float>(width), static_cast<float>(height));
-        for (const auto& object: objects) {
+        for (const auto &object: objects) {
             object->draw(renderer);
             object->update();
         }

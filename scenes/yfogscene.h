@@ -3,6 +3,7 @@
 //
 
 #pragma once
+
 #include <GL/glew.h>
 
 #include "../core/yscene.h"
@@ -23,7 +24,7 @@ namespace scenes {
 
         YFogScene(const YFogScene &fogScene) = delete;
 
-        YFogScene& operator=(const YFogScene &fogScene) = delete;
+        YFogScene &operator=(const YFogScene &fogScene) = delete;
 
     protected:
         void renderImpl() override;
