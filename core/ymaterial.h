@@ -10,13 +10,12 @@
 #include "ymodel.h"
 
 namespace core {
-
     class YMaterial {
-    private:
         const std::string identifier;
         GLuint shaderProgram;
-        std::vector<std::shared_ptr<core::YUniform>> uniforms;
         GLenum renderMode;
+        bool supportLight;
+        std::vector<std::shared_ptr<core::YUniform> > uniforms;
 
     public:
         YMaterial(std::string identifier, const std::string &vertexShader, const std::string &fragmentShader,
@@ -30,9 +29,12 @@ namespace core {
 
         [[nodiscard]] GLuint getProgram() const;
 
-        [[nodiscard]] std::vector<std::shared_ptr<core::YUniform>>::const_iterator getUniformsIterator() const;
+        [[nodiscard]] std::vector<std::shared_ptr<core::YUniform> >::const_iterator getUniformsIterator() const;
 
-        [[nodiscard]] std::vector<std::shared_ptr<core::YUniform>>::const_iterator getUniformsEndIterator() const;
+        [[nodiscard]] std::vector<std::shared_ptr<core::YUniform> >::const_iterator getUniformsEndIterator() const;
+
+        [[nodiscard]] bool doesSupportLight() const;
+
+        void setSupportLight(bool newSupportLight);
     };
-
 } // core

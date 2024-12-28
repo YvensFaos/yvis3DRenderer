@@ -13,17 +13,28 @@ namespace core {
     struct YBaseUniformValue;
 
     class YMaterialInstance {
-    private:
         GLuint modelUniformLocation;
         GLuint viewProjectionUniformLocation;
+        GLuint numberPointLightsLocation;
+        GLuint numberDirectionLightsLocation;
+        int numberPointLights;
+        int numberDirectionLights;
         std::shared_ptr<core::YMaterial> material;
-        std::vector<std::shared_ptr<YBaseUniformValue>> uniformValues;
+        std::vector<std::shared_ptr<YBaseUniformValue> > uniformValues;
+
     public:
-        explicit YMaterialInstance(std::shared_ptr<YMaterial>& material, const std::string& materialTableName, LuaHandler& luaHandler);
+        explicit YMaterialInstance(const std::shared_ptr<YMaterial> &material, const std::string &materialTableName,
+                                   const LuaHandler &luaHandler);
 
-        void drawModel(const glm::mat4& modelMatrix, const std::shared_ptr<YModel>& model, const glm::mat4& viewProjection) const;
-        void drawModel(const std::shared_ptr<YModel>& model, const glm::mat4& viewProjection) const;
+        void drawModel(const glm::mat4 &modelMatrix, const std::shared_ptr<YModel> &model,
+                       const glm::mat4 &viewProjection) const;
+
+        void drawModel(const std::shared_ptr<YModel> &model, const glm::mat4 &viewProjection) const;
+
+        void addUniformValue(const std::shared_ptr<YBaseUniformValue>& uniformValue);
+
+        bool doesSupportLight() const;
+
+        void updateNumberOfLights(int numberPointLights, int numberDirectionalLights);
     };
-
 } // core
-

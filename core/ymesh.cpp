@@ -6,13 +6,10 @@
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-// #include "../Utils/amacrohelper.hpp"
-
-
 namespace core {
     YMesh::YMesh(const std::vector<YVertex> &vertices, const std::vector<unsigned int> &indices,
                  const std::vector<YTexture> &textures)
-            : vertices(vertices), indices(indices), textures(textures) {
+        : vertices(vertices), indices(indices), textures(textures) {
         this->setupMesh();
     }
 
@@ -23,7 +20,7 @@ namespace core {
     }
 
     YMesh::YMesh(const YMesh &anotherMesh, [[maybe_unused]] bool generateOwnObjects)
-            : vertices(anotherMesh.vertices), indices(anotherMesh.indices), textures(anotherMesh.textures) {
+        : vertices(anotherMesh.vertices), indices(anotherMesh.indices), textures(anotherMesh.textures) {
         this->setupMesh();
     }
 
@@ -99,11 +96,11 @@ namespace core {
         this->VBO = VBO;
     }
 
-    void YMesh::setEBO(GLuint EBO) {
+    void YMesh::setEBO(const GLuint EBO) {
         this->EBO = EBO;
     }
 
-    void YMesh::draw(GLuint shader, GLenum mode, bool renderWithTextures) const {
+    void YMesh::draw(const GLuint shader, const GLenum mode, const bool renderWithTextures) const {
         if (renderWithTextures) {
             this->bindTextures(shader);
         }
@@ -111,7 +108,7 @@ namespace core {
         glDrawElements(mode, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
     }
 
-    void YMesh::drawPatches(GLuint shader, bool renderWithTextures) const {
+    void YMesh::drawPatches(const GLuint shader, const bool renderWithTextures) const {
         if (renderWithTextures) {
             this->bindTextures(shader);
         }
@@ -182,7 +179,7 @@ namespace core {
 
     YInstanceMesh::YInstanceMesh(const YInstanceMesh &anotherInstanceMesh) : YMesh(anotherInstanceMesh),
                                                                              instanceData(
-                                                                                     anotherInstanceMesh.getInstanceData()),
+                                                                                 anotherInstanceMesh.getInstanceData()),
                                                                              IBO(anotherInstanceMesh.getIBO()) {
     }
 

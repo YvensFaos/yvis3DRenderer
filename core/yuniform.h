@@ -5,7 +5,6 @@
 #pragma once
 
 #include <string>
-#include <utility>
 
 namespace core {
     enum YUniformType {
@@ -30,7 +29,7 @@ namespace core {
 
         [[nodiscard]] core::YUniformType getType() const;
 
-        int getUniformLocation() const;
+        [[nodiscard]] int getUniformLocation() const;
 
         void setUniformName(std::string newUniformName);
 

@@ -39,7 +39,7 @@ namespace core {
 
     //##### A LIGHT UNIFORM
 
-    YLightUniform YLightUniform::loadYLightUniformFromProgramme(const GLuint shaderProgramme, const GLuint lightIndex,
+    YYLightUniform YYLightUniform::loadYLightUniformFromProgramme(const GLuint shaderProgramme, const GLuint lightIndex,
                                                                 const YLight &YLight) {
         return loadYLightUniformFromProgrammeWithName(shaderProgramme, lightIndex, YLight,
                                                       YLight.getDirectional()
@@ -47,7 +47,7 @@ namespace core {
                                                       : "pointLights");
     }
 
-    YLightUniform YLightUniform::loadYLightUniformFromProgrammeWithName(const GLuint shaderProgramme,
+    YYLightUniform YYLightUniform::loadYLightUniformFromProgrammeWithName(const GLuint shaderProgramme,
                                                                         const GLuint lightIndex,
                                                                         const YLight &YLight, const std::string &name) {
         GLuint lightPositionUniform = -1;
@@ -108,13 +108,17 @@ namespace core {
         glUniform1f(static_cast<GLint>(lightSpecularUniform), specularPower);
     }
 
-    void YLight::setupUniforms(const YLightUniform &lightUniform) const {
+    void YLight::setupUniforms(const YYLightUniform &lightUniform) const {
         glUniform3f(static_cast<GLint>(lightUniform.lightPositionUniform), position.x, position.y, position.z);
         glUniform3f(static_cast<GLint>(lightUniform.lightDirectionUniform), direction.x, direction.y, direction.z);
         glUniform4f(static_cast<GLint>(lightUniform.lightColorUniform), color.x, color.y, color.z, color.w);
         glUniform1f(static_cast<GLint>(lightUniform.lightIntensityUniform), intensity);
         glUniform1i(static_cast<GLint>(lightUniform.lightDirectionalUniform), directional);
         glUniform1f(static_cast<GLint>(lightUniform.lightSpecularUniform), specularPower);
+    }
+
+    int YLight::getIndex() const {
+        return index;
     }
 
     glm::vec3 YLight::getPosition() const {
@@ -139,6 +143,10 @@ namespace core {
 
     bool YLight::getDirectional() const {
         return this->directional;
+    }
+
+    void YLight::setIndex(const int index) {
+        this->index = index;
     }
 
     float YLight::getSpecularPower() const {

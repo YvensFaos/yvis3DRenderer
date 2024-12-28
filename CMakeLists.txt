@@ -52,6 +52,11 @@ add_executable(yvis3Drenderer main.cpp
         core/yuniformvalue.h
         core/ytransform.cpp
         core/ytransform.h
+        utils/yglhelper.h
+        core/ylightuniform.cpp
+        core/ylightuniform.h
+        core/ybaseuniformvalue.h
+        core/ybaseuniform.cpp
 )
 
 add_custom_command(

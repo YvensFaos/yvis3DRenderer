@@ -4,17 +4,16 @@
 
 #include "ymaterial.h"
 
-#include <utility>
 #include "../core/yshader.h"
 
 namespace core {
     YMaterial::YMaterial(std::string identifier, const std::string &vertexShader, const std::string &fragmentShader,
                          const std::string &geometryShader) : identifier(std::move(identifier)), shaderProgram(-1),
                                                               renderMode(GL_TRIANGLES) {
-        auto vertexProgram = core::YShader::generateShader(vertexShader, GL_VERTEX_SHADER);
-        auto fragmentProgram = core::YShader::generateShader(fragmentShader, GL_FRAGMENT_SHADER);
+        const auto vertexProgram = core::YShader::generateShader(vertexShader, GL_VERTEX_SHADER);
+        const auto fragmentProgram = core::YShader::generateShader(fragmentShader, GL_FRAGMENT_SHADER);
 
-        auto hasGeometryShader = !geometryShader.empty();
+        const auto hasGeometryShader = !geometryShader.empty();
 
         if (!hasGeometryShader) {
             shaderProgram = core::YShader::generateProgram(vertexProgram, fragmentProgram);
@@ -34,19 +33,17 @@ namespace core {
             uniforms.insert(uniforms.end(), geometryShaderUniforms.begin(), geometryShaderUniforms.end());
         }
 
-        std::sort(uniforms.begin(), uniforms.end());
-
-        auto last = std::unique(uniforms.begin(), uniforms.end(), [](const std::shared_ptr<YUniform> &uniformA,
-                                                                     const std::shared_ptr<YUniform> &uniformB) {
+        std::ranges::sort(uniforms);
+        const auto last = std::ranges::unique(uniforms, [](const std::shared_ptr<YUniform> &uniformA,
+                                                           const std::shared_ptr<YUniform> &uniformB) {
             return uniformA->uniformName == uniformB->uniformName;
-        });
-
-        std::sort(uniforms.begin(), uniforms.end());
+        }).begin();
+        uniforms.erase(last, uniforms.end());
+        std::ranges::sort(uniforms);
 
         for (const auto &uniform: uniforms) {
-            GLuint uniformLocation = glGetUniformLocation(shaderProgram, uniform->uniformName.c_str());
-            GLenum error = glGetError();
-            if (error != GL_NO_ERROR) {
+            const GLuint uniformLocation = glGetUniformLocation(shaderProgram, uniform->uniformName.c_str());
+            if (const GLenum error = glGetError(); error != GL_NO_ERROR) {
                 printf("Error: %d!\n", error);
             }
 
@@ -68,6 +65,14 @@ namespace core {
 
     std::vector<std::shared_ptr<core::YUniform>>::const_iterator YMaterial::getUniformsEndIterator() const {
         return uniforms.cend();
+    }
+
+    bool YMaterial::doesSupportLight() const {
+        return supportLight;
+    }
+
+    void YMaterial::setSupportLight(bool newSupportLight) {
+        supportLight = newSupportLight;
     }
 
     GLuint YMaterial::getProgram() const {

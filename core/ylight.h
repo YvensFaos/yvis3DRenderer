@@ -9,6 +9,8 @@
 #include <string>
 
 namespace core {
+    struct YYLightUniform;
+
     class YAmbientLight {
         glm::vec4 color;
         float intensity;
@@ -29,15 +31,16 @@ namespace core {
         void setupUniforms(GLuint ambientLightColorUniform, GLuint ambientLightIntensityUniform) const;
     };
 
-    struct YLightUniform;
+    struct YYLightUniform;
 
     class YLight {
+        int index;
         glm::vec3 position;
         glm::vec3 direction;
         glm::vec3 up;
         glm::vec4 color;
         float intensity;
-        float specularPower{};
+        float specularPower;
         bool directional;
 
     public:
@@ -46,6 +49,8 @@ namespace core {
         YLight(const YLight &anotherLight);
 
         ~YLight() = default;
+
+        [[nodiscard]] int getIndex() const;
 
         [[nodiscard]] glm::vec3 getPosition() const;
 
@@ -60,6 +65,8 @@ namespace core {
         [[nodiscard]] float getSpecularPower() const;
 
         [[nodiscard]] bool getDirectional() const;
+
+        void setIndex(int index);
 
         void setPosition(glm::vec3 newPosition);
 
@@ -77,14 +84,15 @@ namespace core {
                            GLuint lightIntensityUniform, GLuint lightDirectionalUniform,
                            GLuint lightSpecularUniform = -1) const;
 
-        void setupUniforms(const YLightUniform &lightUniform) const;
+        void setupUniforms(const YYLightUniform &lightUniform) const;
 
         YLight &operator=(const YLight &anotherLight);
 
         void log() const;
     };
 
-    struct YLightUniform {
+    //Deprecated
+    struct YYLightUniform {
         GLuint lightPositionUniform;
         GLuint lightDirectionUniform;
         GLuint lightColorUniform;
@@ -92,7 +100,7 @@ namespace core {
         GLuint lightSpecularUniform;
         GLuint lightDirectionalUniform;
 
-        YLightUniform(const GLuint lightPositionUniform, const GLuint lightDirectionUniform, const GLuint lightColorUniform,
+        YYLightUniform(const GLuint lightPositionUniform, const GLuint lightDirectionUniform, const GLuint lightColorUniform,
                       const GLuint lightIntensityUniform, const GLuint lightDirectionalUniform,
                       const GLuint lightSpecularUniform = -1) : lightPositionUniform(lightPositionUniform),
                                                                 lightDirectionUniform(lightDirectionUniform),
@@ -102,7 +110,7 @@ namespace core {
                                                                 lightDirectionalUniform(lightDirectionalUniform) {
         }
 
-        YLightUniform(const YLightUniform &copyFrom) {
+        YYLightUniform(const YYLightUniform &copyFrom) {
             this->lightPositionUniform = copyFrom.lightPositionUniform;
             this->lightDirectionUniform = copyFrom.lightDirectionUniform;
             this->lightColorUniform = copyFrom.lightColorUniform;
@@ -111,9 +119,9 @@ namespace core {
             this->lightSpecularUniform = copyFrom.lightSpecularUniform;
         }
 
-        ~YLightUniform() = default;
+        ~YYLightUniform() = default;
 
-        YLightUniform &operator=(const YLightUniform &copyFrom) {
+        YYLightUniform &operator=(const YYLightUniform &copyFrom) {
             if (this != &copyFrom) {
                 this->lightPositionUniform = copyFrom.lightPositionUniform;
                 this->lightDirectionUniform = copyFrom.lightDirectionUniform;
@@ -125,10 +133,10 @@ namespace core {
             return *this;
         }
 
-        static YLightUniform loadYLightUniformFromProgramme(GLuint shaderProgramme, GLuint lightIndex,
+        static YYLightUniform loadYLightUniformFromProgramme(GLuint shaderProgramme, GLuint lightIndex,
                                                             const YLight &YLight);
 
-        static YLightUniform loadYLightUniformFromProgrammeWithName(GLuint shaderProgramme, GLuint lightIndex,
+        static YYLightUniform loadYLightUniformFromProgrammeWithName(GLuint shaderProgramme, GLuint lightIndex,
                                                                     const YLight &YLight, const std::string& name);
     };
 }
