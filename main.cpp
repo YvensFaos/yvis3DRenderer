@@ -17,7 +17,10 @@ int main() {
     // scenes::YEdgeDetectionScene edgeScene(renderer, "data/scenes/edge_detection_scene.lua", width, height);
     scenes::YLoadedScene loadedScene(renderer, "data/scenes/loaded_scene_example.lua", width, height);
 
+
+    // ImGui_ImplGlfw_InitForOpenGL(window, true);
     do {
         loadedScene.render();
     } while (renderer.isRunning());
+    renderer.closeRenderer();
 }

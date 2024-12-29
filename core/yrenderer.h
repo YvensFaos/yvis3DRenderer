@@ -51,6 +51,8 @@ namespace core {
 
         void finishFrame();
 
+        void closeRenderer() const;
+
         [[nodiscard]] float getDeltaTime() const;
 
         [[nodiscard]] double getAccumulator() const;

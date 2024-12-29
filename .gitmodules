@@ -1,3 +1,6 @@
 [submodule "LuaHandler"]
 	path = LuaHandler
 	url = https://github.com/YvensFaos/LuaHandler.git
+[submodule "imgui"]
+	path = imgui
+	url = https://github.com/ocornut/imgui.git

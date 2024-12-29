@@ -5,6 +5,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "ycamera.h"
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 
 namespace core {
     YRenderer::YRenderer(const float width, const float height, std::string title) : title(std::move(title)),
@@ -41,6 +44,18 @@ namespace core {
     }
 
     void YRenderer::startFrame() {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // Create ImGui UI
+        ImGui::Begin("Hello, ImGui!");
+        ImGui::Text("This is a simple example.");
+        ImGui::End();
+
+        // Render
+        ImGui::Render();
+
         glViewport(0, 0, 2 * static_cast<GLsizei>(width), 2 * static_cast<GLsizei>(height));
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
@@ -50,6 +65,8 @@ namespace core {
     }
 
     void YRenderer::finishFrame() {
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwSwapBuffers(window);
         glfwPollEvents();
 
@@ -59,8 +76,16 @@ namespace core {
         accumulator += deltaTime;
 
         //Fix
-        // sprintf(titleBuffer, "%s - FPS: %4.2f", title.c_str(), 1.0f / (float) deltaTime);
-        // glfwSetWindowTitle(window, titleBuffer);
+        snprintf(titleBuffer, 196, "%s - FPS: %4.2f", title.c_str(), 1.0f / (float) deltaTime);
+        glfwSetWindowTitle(window, titleBuffer);
+    }
+
+    void YRenderer::closeRenderer() const {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+        glfwDestroyWindow(window);
+        glfwTerminate();
     }
 
     float YRenderer::getDeltaTime() const {
@@ -87,10 +112,10 @@ namespace core {
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        auto iwidth = static_cast<GLsizei>(width);
-        auto iheight = static_cast<GLsizei>(height);
+        const auto intWidth = static_cast<GLsizei>(width);
+        const auto intHeight = static_cast<GLsizei>(height);
 
-        window = glfwCreateWindow(iwidth, iheight, title.c_str(), nullptr, nullptr);
+        window = glfwCreateWindow(intWidth, intHeight, title.c_str(), nullptr, nullptr);
         if (window == nullptr) {
             fprintf(
                     stderr,
@@ -121,6 +146,14 @@ namespace core {
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        ImGui::StyleColorsDark();
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+        ImGui_ImplOpenGL3_Init("#version 400");
     }
 
     void YRenderer::setCullFaces(const bool activate) {

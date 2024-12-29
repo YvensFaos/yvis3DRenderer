@@ -3,6 +3,19 @@ project(yvis3Drenderer)
 
 set(CMAKE_CXX_STANDARD 20)
 
+include_directories(imgui imgui/backends)
+
+# Add source files for ImGui
+set(IMGUI_SOURCES
+        imgui/imgui.cpp
+        imgui/imgui_draw.cpp
+        imgui/imgui_demo.cpp
+        imgui/imgui_tables.cpp
+        imgui/imgui_widgets.cpp
+        imgui/backends/imgui_impl_glfw.cpp
+        imgui/backends/imgui_impl_opengl3.cpp
+)
+
 add_executable(yvis3Drenderer main.cpp
         LuaHandler/luahandler.hpp
         LuaHandler/luahandler.cpp
@@ -57,6 +70,7 @@ add_executable(yvis3Drenderer main.cpp
         core/ylightuniform.h
         core/ybaseuniformvalue.h
         core/ybaseuniform.cpp
+        ${IMGUI_SOURCES}
 )
 
 add_custom_command(
