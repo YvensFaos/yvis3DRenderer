@@ -18,8 +18,9 @@ namespace core {
         std::vector<float> frames;
         int maxFrames;
         int currentFramesIndex;
+
     public:
-        YApplication(float width, float height, std::string title);
+        YApplication(float width, float height, const std::string& title);
 
         YApplication(const YApplication &) = delete;
 

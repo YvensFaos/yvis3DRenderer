@@ -16,11 +16,12 @@
 #include "backends/imgui_impl_opengl3.h"
 
 namespace core {
-    YApplication::YApplication(float width, float height, std::string title) : maxFrames(100) {
+    YApplication::YApplication(float width, float height, const std::string &title) : maxFrames(100),
+        currentFramesIndex(0) {
         renderer = std::make_unique<YRenderer>(width, height, title);
 
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
+        ImGuiIO &io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(renderer->getWindow().get(), true);
@@ -51,30 +52,31 @@ namespace core {
             auto sceneTextName = currentScene != nullptr ? std::string(sceneName) : "No scene loaded.";
             ImGui::Text("%s", sceneTextName.c_str());
             ImGui::InputTextWithHint("Scene", "", sceneName, IM_ARRAYSIZE(sceneName));
-            if(ImGui::Button("Load Example Scene")) {
-                currentScene = std::make_shared<scenes::YLoadedScene>(*renderer.get(), sceneName, renderer->getWidth(), renderer->getHeight());
-                if(!currentScene->isLoaded()) {
+            if (ImGui::Button("Load Example Scene")) {
+                currentScene = std::make_shared<scenes::YLoadedScene>(*renderer, sceneName, renderer->getWidth(),
+                                                                      renderer->getHeight());
+                if (!currentScene->isLoaded()) {
                     currentScene = nullptr;
                 }
             }
             ImGui::End();
             const bool loadedScene = currentScene != nullptr;
 
-            if(loadedScene) {
+            if (loadedScene) {
                 ImGui::Begin("Camera");
                 const auto camera = renderer->getCamera();
                 auto pos = camera.getPos();
                 auto dir = camera.getDir();
                 ImGui::InputFloat3("Pos", glm::value_ptr(pos));
                 ImGui::InputFloat3("Dir", glm::value_ptr(dir));
-                if(ImGui::Button("Print to Console")) {
+                if (ImGui::Button("Print to Console")) {
                     camera.logToConsole();
                 }
                 ImGui::End();
             }
 
             ImGui::Render();
-            if(loadedScene) {
+            if (loadedScene) {
                 currentScene->render();
             } else {
                 renderer->startFrame();
@@ -88,6 +90,6 @@ namespace core {
     }
 
     void YApplication::setCurrentScene(std::shared_ptr<YScene> scene) {
-        currentScene = scene;
+        currentScene = std::move(scene);
     }
 } // core
