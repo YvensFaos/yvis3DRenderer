@@ -65,12 +65,12 @@ namespace core {
             if (loadedScene) {
                 ImGui::Begin("Camera");
                 const auto camera = renderer->getCamera();
-                auto pos = camera.getPos();
-                auto dir = camera.getDir();
+                auto pos = camera->getPos();
+                auto dir = camera->getDir();
                 ImGui::InputFloat3("Pos", glm::value_ptr(pos));
                 ImGui::InputFloat3("Dir", glm::value_ptr(dir));
                 if (ImGui::Button("Print to Console")) {
-                    camera.logToConsole();
+                    camera->logToConsole();
                 }
                 ImGui::End();
             }

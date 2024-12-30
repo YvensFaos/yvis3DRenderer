@@ -227,7 +227,7 @@ namespace utils {
         return light;
     }
 
-    void YLuaHelper::setupCameraPosition(const std::string &cameraTable, core::YCamera &camera,
+    void YLuaHelper::setupCameraPosition(const std::string &cameraTable, std::shared_ptr<core::YCamera> camera,
                                          const LuaHandler &luaHandler) {
         luaHandler.loadTable(cameraTable);
         glm::vec3 positionValue(0.0f, 0.0f, 0.0f);
@@ -267,16 +267,16 @@ namespace utils {
             mouseAngle.x = luaHandler.getNumberFromTable(1);
             mouseAngle.y = luaHandler.getNumberFromTable(2);
             luaHandler.popTable();
-            camera.setMouseAngle(mouseAngle);
+            camera->setMouseAngle(mouseAngle);
         } else {
-            camera.CalculateRotationFromDirection(directionValue);
+            camera->CalculateRotationFromDirection(directionValue);
         }
         luaHandler.popTable();
 
-        camera.setPos(positionValue);
-        camera.setDir(directionValue);
-        camera.setRight(rightValue);
-        camera.setUp(upValue);
+        camera->setPos(positionValue);
+        camera->setDir(directionValue);
+        camera->setRight(rightValue);
+        camera->setUp(upValue);
     }
 
     core::YAmbientLight

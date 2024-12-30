@@ -36,7 +36,7 @@ namespace core {
 
         char titleBuffer[196];
         glm::vec4 clearColor;
-        core::YCamera *camera;
+        std::shared_ptr<YCamera> camera;
 
         // std::map<int, std::unique_ptr<AKeyBind>> keysMap;
     public:
@@ -46,7 +46,7 @@ namespace core {
 
         void changeClearColor(glm::vec4 newClearColor);
 
-        [[nodiscard]] core::YCamera &getCamera() const;
+        [[nodiscard]] std::shared_ptr<YCamera> getCamera() const;
 
         void startFrame();
 

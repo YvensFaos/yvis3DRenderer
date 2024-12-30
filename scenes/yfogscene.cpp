@@ -28,7 +28,7 @@ namespace scenes {
         const auto fragmentProgram = core::YShader::generateShader(fragmentShader, GL_FRAGMENT_SHADER);
         shaderProgram = core::YShader::generateProgram(vertexProgram, fragmentProgram);
 
-        core::YCamera &camera = renderer.getCamera();
+        const auto camera = renderer.getCamera();
         utils::YLuaHelper::setupCameraPosition("cameraPosition", camera, luaHandler);
 
         uniforms.emplace("modelMatrixUniform", glGetUniformLocation(shaderProgram, "model"));
@@ -48,8 +48,8 @@ namespace scenes {
         glUseProgram(shaderProgram);
 
         const auto camera = renderer.getCamera();
-        const glm::mat4 view = camera.getView();
-        const glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()),
+        const glm::mat4 view = camera->getView();
+        const glm::mat4 projection = glm::perspective(glm::radians(camera->getZoom()),
                                                       static_cast<float>(width) / static_cast<float>(height), 0.1f,
                                                       1000.0f);
         const glm::mat4 viewProjection = projection * view;
@@ -59,12 +59,12 @@ namespace scenes {
         glUniformMatrix4fv(uniforms["vpMatrixUniform"], 1, GL_FALSE, glm::value_ptr(viewProjection));
         glUniformMatrix4fv(static_cast<GLint>(uniforms["modelMatrixUniform"]), 1, GL_FALSE,
                            glm::value_ptr(modelMatrix));
-        glUniform3f(uniforms["cameraPositionUniform"], camera.getPos().x, camera.getPos().y, camera.getPos().z);
-        auto lightPosition = light.getPosition();
+        glUniform3f(uniforms["cameraPositionUniform"], camera->getPos().x, camera->getPos().y, camera->getPos().z);
+        const auto lightPosition = light.getPosition();
         glUniform3f(uniforms["lightPositionUniform"], lightPosition.x, lightPosition.y, lightPosition.z);
-        auto lightDirection = light.getDirection();
+        const auto lightDirection = light.getDirection();
         glUniform3f(uniforms["lightDirectionUniform"], lightDirection.x, lightDirection.y, lightDirection.z);
-        auto lightColor = light.getColor();
+        const auto lightColor = light.getColor();
         glUniform4f(uniforms["lightColorUniform"], lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         glUniform1f(uniforms["lightIntensityUniform"], light.getIntensity());
         glUniform1i(uniforms["lightDirectionalUniform"], light.getDirectional());

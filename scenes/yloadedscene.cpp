@@ -9,9 +9,9 @@
 
 namespace scenes {
     YLoadedScene::YLoadedScene(core::YRenderer &renderer, const std::string &file, const int width,
-                               const int height) : YScene(renderer, file, width, height) {
-
-        if(!loaded) {
+                               const int height) : YScene(renderer, file, width, height), numPointLights(0),
+                                                   numDirectionalLights(0) {
+        if (!loaded) {
             return;
         }
 
@@ -94,63 +94,64 @@ namespace scenes {
                         auto model = luaHandler.getStringFromTable("model");
                         printf("Loading model named %s.\n", model.c_str());
 
-                        luaHandler.loadTable(model);
-                        auto modelFile = luaHandler.getStringFromTable("file");
-                        luaHandler.popTable();
+                        if (luaHandler.loadTable(model)) {
+                            auto modelFile = luaHandler.getStringFromTable("file");
+                            luaHandler.popTable();
 
-                        if (!models.contains(modelFile)) {
-                            models.emplace(modelFile, std::make_shared<core::YModel>(modelFile));
-                        }
-
-                        auto yModel = models[modelFile];
-
-                        auto materialName = luaHandler.getStringFromTable("material");
-                        auto yMaterial = materials[materialName];
-
-                        printf("Generating YVRenderObject %s...\n", modelName.c_str());
-
-                        auto materialInstance = std::make_shared<core::YMaterialInstance>(yMaterial, "uniforms",
-                            luaHandler);
-                        if (materialInstance->doesSupportLight()) {
-                            printf("Generating light uniforms...");
-
-                            char buffer[64];
-                            for (auto &light: lights) {
-                                int index = light->getIndex();
-                                snprintf(buffer, 64, "%s[%d]",
-                                         light->getDirectional() ? "directionalLights" : "pointLights", index);
-
-                                auto yLightUniform = std::make_shared<core::YLightUniform>(
-                                    index, yMaterial->getProgram(), light,
-                                    std::make_shared<core::YUniform>(buffer, core::YUniformType::CUSTOM));
-                                materialInstance->addUniformValue(yLightUniform);
+                            if (!models.contains(modelFile)) {
+                                models.emplace(modelFile, std::make_shared<core::YModel>(modelFile));
                             }
 
-                            materialInstance->updateNumberOfLights(numPointLights, numDirectionalLights);
+                            auto yModel = models[modelFile];
+
+                            auto materialName = luaHandler.getStringFromTable("material");
+                            auto yMaterial = materials[materialName];
+
+                            printf("Generating YVRenderObject %s...\n", modelName.c_str());
+
+                            auto materialInstance = std::make_shared<core::YMaterialInstance>(yMaterial, "uniforms",
+                                luaHandler);
+                            if (materialInstance->doesSupportLight()) {
+                                printf("Generating light uniforms...");
+
+                                char buffer[64];
+                                for (auto &light: lights) {
+                                    int index = light->getIndex();
+                                    snprintf(buffer, 64, "%s[%d]",
+                                             light->getDirectional() ? "directionalLights" : "pointLights", index);
+
+                                    auto yLightUniform = std::make_shared<core::YLightUniform>(
+                                        index, yMaterial->getProgram(), light,
+                                        std::make_shared<core::YUniform>(buffer, core::YUniformType::CUSTOM));
+                                    materialInstance->addUniformValue(yLightUniform);
+                                }
+
+                                materialInstance->updateNumberOfLights(numPointLights, numDirectionalLights);
+                                printf("Complete!\n");
+                            }
+
+                            auto renderObject = std::make_shared<elements::YRenderObject>(
+                                modelName, yModel, materialInstance);
+
+                            auto modelPosition = utils::YLuaHelper::readVec3FromTableInTable("pos", luaHandler);
+                            auto modelScale = utils::YLuaHelper::readVec3FromTableInTable("sca", luaHandler);
+                            auto modelRotation = utils::YLuaHelper::readVec3FromTableInTable("rot", luaHandler);
+
+                            renderObject->transform.setPosition(modelPosition);
+                            renderObject->transform.scale(modelScale);
+                            renderObject->transform.rotate(modelRotation);
+
                             printf("Complete!\n");
+
+                            objects.push_back(renderObject);
+                            luaHandler.popTable();
                         }
-
-                        auto renderObject = std::make_shared<elements::YRenderObject>(
-                            modelName, yModel, materialInstance);
-
-                        auto modelPosition = utils::YLuaHelper::readVec3FromTableInTable("pos", luaHandler);
-                        auto modelScale = utils::YLuaHelper::readVec3FromTableInTable("sca", luaHandler);
-                        auto modelRotation = utils::YLuaHelper::readVec3FromTableInTable("rot", luaHandler);
-
-                        renderObject->transform.setPosition(modelPosition);
-                        renderObject->transform.scale(modelScale);
-                        renderObject->transform.rotate(modelRotation);
-
-                        printf("Complete!\n");
-
-                        objects.push_back(renderObject);
-                        luaHandler.popTable();
                     }
                 }
             }
             luaHandler.popTable();
 
-            core::YCamera &camera = renderer.getCamera();
+            auto camera = renderer.getCamera();
             printf("Loading camera information...");
             utils::YLuaHelper::setupCameraPosition("camera", camera, luaHandler);
             printf(" complete!\n");
@@ -162,7 +163,7 @@ namespace scenes {
     }
 
     void YLoadedScene::renderImpl() {
-        renderer.getCamera().cacheViewProjectionMatrix(static_cast<float>(width), static_cast<float>(height));
+        renderer.getCamera()->cacheViewProjectionMatrix(static_cast<float>(width), static_cast<float>(height));
         for (const auto &object: objects) {
             object->draw(renderer);
             object->update();

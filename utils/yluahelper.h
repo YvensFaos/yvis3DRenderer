@@ -63,7 +63,7 @@ namespace utils {
 
         ///Load camera position, up and right parameters from the cameraTable and set it to the camera pointer.
         static void
-        setupCameraPosition(const std::string &cameraTable, core::YCamera &camera, const LuaHandler &luaHandler);
+        setupCameraPosition(const std::string &cameraTable, std::shared_ptr<core::YCamera> camera, const LuaHandler &luaHandler);
 
         ///Load a AAmbientLight from a table, popping it out of the stack after it finishes reading it.
         static core::YAmbientLight

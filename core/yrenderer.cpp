@@ -21,7 +21,7 @@ namespace core {
         titleBuffer(""), clearColor(
             glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
         initialize();
-        camera = new YCamera(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        camera = std::make_shared<YCamera>(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glfwSetWindowUserPointer(window.get(), this);
     }
 
@@ -36,8 +36,8 @@ namespace core {
         this->clearColor.a = newClearColor.a;
     }
 
-    YCamera &YRenderer::getCamera() const {
-        return *camera;
+    std::shared_ptr<YCamera> YRenderer::getCamera() const {
+        return camera;
     }
 
     void YRenderer::startFrame() {
