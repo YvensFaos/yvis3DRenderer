@@ -17,6 +17,5 @@ namespace core {
     void YScene::render() {
         renderer.startFrame();
         renderImpl();
-        renderer.finishFrame();
     }
 } // core

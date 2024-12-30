@@ -70,6 +70,8 @@ add_executable(yvis3Drenderer main.cpp
         core/ylightuniform.h
         core/ybaseuniformvalue.h
         core/ybaseuniform.cpp
+        core/yapplication.cpp
+        core/yapplication.h
         ${IMGUI_SOURCES}
 )
 

@@ -4,11 +4,11 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <string>
 
 #include "ycamera.h"
-
-class GLFWwindow;
 
 namespace core {
     class YRenderer final {
@@ -18,7 +18,7 @@ namespace core {
         float height;
 
     private:
-        GLFWwindow *window;
+        std::shared_ptr<GLFWwindow> window;
         bool firstMouse;
         bool mouseIsClickingLeft;
 
@@ -58,6 +58,11 @@ namespace core {
         [[nodiscard]] double getAccumulator() const;
 
         [[nodiscard]] bool isRunning() const;
+
+        [[nodiscard]] std::shared_ptr<GLFWwindow> getWindow() const;
+
+        int getWidth() const;
+        int getHeight() const;
 
         static void setCullFaces(bool activate);
 

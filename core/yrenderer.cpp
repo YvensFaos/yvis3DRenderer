@@ -2,35 +2,32 @@
 // Created by Yvens Serpa on 07/12/2024.
 //
 #include "yrenderer.h"
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "ycamera.h"
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
 
 namespace core {
     YRenderer::YRenderer(const float width, const float height, std::string title) : title(std::move(title)),
-                                                                                     width(width), height(height),
-                                                                                     window(nullptr), firstMouse(true),
-                                                                                     mouseIsClickingLeft(false),
-                                                                                     shiftModPower(1.0f),
-                                                                                     deltaTime(0.0f),
-                                                                                     lastX(width / 2.0f),
-                                                                                     lastY(height / 2.0f),
-                                                                                     moveForce(20.0f),
-                                                                                     mouseSensitivity(5.0f),
-                                                                                     accumulator(0.0),
-                                                                                     currentTime(0.0),
-                                                                                     finishFrameTime(0.0),
-                                                                                     titleBuffer(""), clearColor(
-                    glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
+        width(width), height(height),
+        window(nullptr), firstMouse(true),
+        mouseIsClickingLeft(false),
+        shiftModPower(1.0f),
+        deltaTime(0.0f),
+        lastX(width / 2.0f),
+        lastY(height / 2.0f),
+        moveForce(20.0f),
+        mouseSensitivity(5.0f),
+        accumulator(0.0),
+        currentTime(0.0),
+        finishFrameTime(0.0),
+        titleBuffer(""), clearColor(
+            glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
         initialize();
         camera = new YCamera(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        glfwSetWindowUserPointer(window, this);
+        glfwSetWindowUserPointer(window.get(), this);
     }
 
-    YRenderer::~YRenderer() = default;
+    YRenderer::~YRenderer() {
+        closeRenderer();
+    }
 
     void YRenderer::changeClearColor(glm::vec4 newClearColor) {
         this->clearColor.r = newClearColor.r;
@@ -44,18 +41,6 @@ namespace core {
     }
 
     void YRenderer::startFrame() {
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        // Create ImGui UI
-        ImGui::Begin("Hello, ImGui!");
-        ImGui::Text("This is a simple example.");
-        ImGui::End();
-
-        // Render
-        ImGui::Render();
-
         glViewport(0, 0, 2 * static_cast<GLsizei>(width), 2 * static_cast<GLsizei>(height));
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
@@ -65,9 +50,7 @@ namespace core {
     }
 
     void YRenderer::finishFrame() {
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(window.get());
         glfwPollEvents();
 
         finishFrameTime = glfwGetTime();
@@ -75,16 +58,12 @@ namespace core {
         currentTime = finishFrameTime;
         accumulator += deltaTime;
 
-        //Fix
         snprintf(titleBuffer, 196, "%s - FPS: %4.2f", title.c_str(), 1.0f / (float) deltaTime);
-        glfwSetWindowTitle(window, titleBuffer);
+        glfwSetWindowTitle(window.get(), titleBuffer);
     }
 
     void YRenderer::closeRenderer() const {
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-        glfwDestroyWindow(window);
+        glfwDestroyWindow(window.get());
         glfwTerminate();
     }
 
@@ -97,7 +76,7 @@ namespace core {
     }
 
     bool YRenderer::isRunning() const {
-        return glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0;
+        return glfwGetKey(window.get(), GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window.get()) == 0;
     }
 
     void YRenderer::initialize() {
@@ -115,29 +94,34 @@ namespace core {
         const auto intWidth = static_cast<GLsizei>(width);
         const auto intHeight = static_cast<GLsizei>(height);
 
-        window = glfwCreateWindow(intWidth, intHeight, title.c_str(), nullptr, nullptr);
-        if (window == nullptr) {
+        const auto rawWindow = glfwCreateWindow(intWidth, intHeight, title.c_str(), nullptr, nullptr);
+        if (rawWindow == nullptr) {
             fprintf(
-                    stderr,
-                    "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
+                stderr,
+                "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
             glfwTerminate();
             return;
         }
 
-        glfwMakeContextCurrent(window);
+        glfwMakeContextCurrent(rawWindow);
         if (glewInit() != GLEW_OK) {
             fprintf(stderr, "Failed to initialize GLEW\n");
             return;
         }
 
+        window = std::shared_ptr<GLFWwindow>(rawWindow, [](GLFWwindow *deleteWindow) {
+            glfwDestroyWindow(deleteWindow);
+            glfwTerminate();
+        });
+
         GLint MaxPatchVertices = 0;
         glGetIntegerv(GL_MAX_PATCH_VERTICES, &MaxPatchVertices);
         printf("Max supported patch vertices %d\n", MaxPatchVertices);
 
-        glfwSetKeyCallback(window, YRenderer::staticKeyCallback);
-        glfwSetCursorPosCallback(window, YRenderer::staticMouseCallback);
-        glfwSetMouseButtonCallback(window, YRenderer::staticMouseButtonCallback);
-        glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+        glfwSetKeyCallback(window.get(), YRenderer::staticKeyCallback);
+        glfwSetCursorPosCallback(window.get(), YRenderer::staticMouseCallback);
+        glfwSetMouseButtonCallback(window.get(), YRenderer::staticMouseButtonCallback);
+        glfwSetInputMode(window.get(), GLFW_STICKY_KEYS, GL_TRUE);
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
@@ -146,14 +130,6 @@ namespace core {
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-        ImGui::StyleColorsDark();
-        ImGui_ImplGlfw_InitForOpenGL(window, true);
-        ImGui_ImplOpenGL3_Init("#version 400");
     }
 
     void YRenderer::setCullFaces(const bool activate) {
@@ -162,6 +138,18 @@ namespace core {
         } else {
             glDisable(GL_CULL_FACE);
         }
+    }
+
+    std::shared_ptr<GLFWwindow> YRenderer::getWindow() const {
+        return std::shared_ptr<GLFWwindow>(window);
+    }
+
+    int YRenderer::getWidth() const {
+        return width;
+    }
+
+    int YRenderer::getHeight() const {
+        return height;
     }
 
     // void YRenderer::addKeybind(AKeyBind akeyBind)
