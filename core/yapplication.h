@@ -9,12 +9,17 @@
 namespace core {
     class YScene;
     class YRenderer;
+    class YRenderQuad;
+    class YFrameBuffer;
+
 }
 
 namespace core {
     class YApplication {
         std::shared_ptr<YRenderer> renderer;
         std::shared_ptr<YScene> currentScene;
+        std::shared_ptr<YFrameBuffer> sceneFrameBuffer;
+        std::shared_ptr<YRenderQuad> sceneRenderQuad;
         std::vector<float> frames;
         int maxFrames;
         int currentFramesIndex;

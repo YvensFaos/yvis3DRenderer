@@ -28,7 +28,7 @@ namespace core {
 
         virtual ~YScene() = default;
 
-        void render();
+        void render(GLuint fbo = 0);
 
         bool isLoaded() const;
 

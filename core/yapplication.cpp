@@ -11,6 +11,8 @@
 #include "yrenderer.h"
 #include "yscene.h"
 #include "imgui.h"
+#include "yframebuffer.h"
+#include "yrenderquad.h"
 #include "../scenes/yloadedscene.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -18,7 +20,9 @@
 namespace core {
     YApplication::YApplication(float width, float height, const std::string &title) : maxFrames(100),
         currentFramesIndex(0) {
-        renderer = std::make_unique<YRenderer>(width, height, title);
+        renderer = std::make_shared<YRenderer>(width, height, title);
+        sceneFrameBuffer = std::make_shared<YFrameBuffer>(width * 2, height * 2);
+        sceneRenderQuad = std::make_shared<YRenderQuad>();
 
         ImGui::CreateContext();
         ImGuiIO &io = ImGui::GetIO();
@@ -76,11 +80,26 @@ namespace core {
             }
 
             ImGui::Render();
+
             if (loadedScene) {
-                currentScene->render();
+                // currentScene->render();
+                glEnable(GL_DEPTH_TEST);
+                sceneFrameBuffer->setViewport();
+                glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                glEnable(GL_CULL_FACE);
+                currentScene->render(sceneFrameBuffer->getFBO());
+                sceneFrameBuffer->unbindBuffer();
+
+                glDisable(GL_DEPTH_TEST);
+                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT);
+                glDisable(GL_CULL_FACE);
+                sceneRenderQuad->render(sceneFrameBuffer->getFramebufferTexture());
             } else {
                 renderer->startFrame();
             }
+
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             renderer->finishFrame();
             frames[currentFramesIndex] = renderer->getFPS();

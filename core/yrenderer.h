@@ -34,7 +34,7 @@ namespace core {
         double currentTime;
         double finishFrameTime;
 
-        char titleBuffer[196];
+        char titleBuffer[256];
         glm::vec4 clearColor;
         std::shared_ptr<YCamera> camera;
 
@@ -48,7 +48,7 @@ namespace core {
 
         [[nodiscard]] std::shared_ptr<YCamera> getCamera() const;
 
-        void startFrame();
+        void startFrame(GLuint fbo = 0);
 
         void finishFrame();
 

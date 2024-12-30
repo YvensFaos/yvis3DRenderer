@@ -8,12 +8,6 @@
 namespace utils {
     class YGLHelper {
     public:
-        static void checkGLError(const std::string &message);
+        static void checkGLError(const std::string &message = "No Message");
     };
-
-    void YGLHelper::checkGLError(const std::string &message = "No Message") {
-        if (const GLenum error = glGetError(); error != GL_NO_ERROR) {
-            printf("Error: %d! [%s]\n", error, message.c_str());
-        }
-    }
 }

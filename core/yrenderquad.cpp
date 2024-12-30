@@ -8,7 +8,6 @@
 
 #include "yshader.h"
 
-
 float quadVertices[] = {
     -1.0f, 1.0f, 0.0f, 0.0f,
     1.0f, -1.0f, -1.0f, 0.0f,
@@ -36,7 +35,7 @@ std::string core::YRenderQuad::defaultFragmentShader =
         "   void main()\n"
         "   {\n"
         "       vec4 value = texture(textureUniform, vuv);\n"
-        "       frag_colour = vec4(vec3(value), 1.0);\n"
+        "       frag_colour = vec4(value.x, value.y, value.z + 0.3, 0.5);\n"
         "   }\n";
 
 core::YRenderQuad::YRenderQuad() : fragmentShader(0) {

@@ -13,7 +13,7 @@ core::YFrameBuffer::YFrameBuffer() : width(-1), height(-1), bufferShowFlag(std::
 core::YFrameBuffer::YFrameBuffer(const GLfloat width, const GLfloat height, const GLint internalFormat,
                                  const GLint format, const GLint type) : width(width), height(height),
                                                                          bufferShowFlag(
-                                                                                 std::numeric_limits<GLuint>::max()) {
+                                                                             std::numeric_limits<GLuint>::max()) {
     FBO = 0;
     glGenFramebuffers(1, &FBO);
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -29,14 +29,17 @@ core::YFrameBuffer::YFrameBuffer(const GLfloat width, const GLfloat height, cons
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
-    GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+    constexpr GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
     glDrawBuffers(1, drawBuffers);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebufferTexture, 0);
     generateRenderbuffer();
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebufferTexture, 0);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         printf("Error creating FrameBuffer!\n");
+    }else {
+        printf("FrameBuffer created!\n");
     }
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

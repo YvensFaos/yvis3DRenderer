@@ -28,7 +28,7 @@ namespace core {
 
         YRenderQuad(const std::string &vertexShaderText, const std::string &fragmentShaderText);
 
-        virtual ~YRenderQuad();
+        ~YRenderQuad();
 
         void render(GLuint texture, bool setupProgramme = true) const;
 

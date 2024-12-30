@@ -16,8 +16,8 @@ namespace core {
         }
     }
 
-    void YScene::render() {
-        renderer.startFrame();
+    void YScene::render(const GLuint fbo) {
+        renderer.startFrame(fbo);
         renderImpl();
     }
 

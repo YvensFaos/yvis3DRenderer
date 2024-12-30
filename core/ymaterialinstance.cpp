@@ -8,10 +8,11 @@
 #include "../utils/yglhelper.h"
 
 namespace core {
-    YMaterialInstance::YMaterialInstance(const std::shared_ptr<YMaterial> &material, const std::string &materialTableName,
+    YMaterialInstance::YMaterialInstance(const std::shared_ptr<YMaterial> &material,
+                                         const std::string &materialTableName,
                                          const LuaHandler &luaHandler) : material(material) {
         auto uniformsIterator = material->getUniformsIterator();
-        if(!luaHandler.getTableFromTable(materialTableName)) {
+        if (!luaHandler.getTableFromTable(materialTableName)) {
             printf("Error while reading material table %s. Aborting.\n", materialTableName.c_str());
             return;
         }
@@ -42,7 +43,7 @@ namespace core {
                 printf("Skipping uniform value generation for the [%s] numberPointLights.\n",
                        identifier.c_str());
                 numberPointLightsLocation = glGetUniformLocation(material->getProgram(),
-                                                            identifier.c_str());
+                                                                 identifier.c_str());
                 utils::YGLHelper::checkGLError();
                 ++uniformsIterator;
                 continue;
@@ -51,7 +52,7 @@ namespace core {
                 printf("Skipping uniform value generation for the [%s] numberDirectionLights.\n",
                        identifier.c_str());
                 numberDirectionLightsLocation = glGetUniformLocation(material->getProgram(),
-                                                            identifier.c_str());
+                                                                     identifier.c_str());
                 utils::YGLHelper::checkGLError();
                 ++uniformsIterator;
                 continue;
@@ -61,59 +62,59 @@ namespace core {
             switch (type) {
                 case INT: {
                     auto value = luaHandler.getIntegerFromTable(identifier);
-                    uniformValues.push_back(std::make_shared<YUniformValue<int>>(*uniformsIterator, value));
+                    uniformValues.push_back(std::make_shared<YUniformValue<int> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case FLOAT: {
                     auto value = luaHandler.getNumberFromTable(identifier);
-                    uniformValues.push_back(std::make_shared<YUniformValue<float>>(*uniformsIterator, value));
+                    uniformValues.push_back(std::make_shared<YUniformValue<float> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case VEC2: {
                     auto value = utils::YLuaHelper::readVec2FromTableInTable(identifier,
                                                                              luaHandler);
-                    uniformValues.push_back(std::make_shared<YUniformValue<glm::vec2>>(*uniformsIterator, value));
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::vec2> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case VEC3: {
                     auto value = utils::YLuaHelper::readVec3FromTableInTable(identifier,
                                                                              luaHandler);
-                    uniformValues.push_back(std::make_shared<YUniformValue<glm::vec3>>(*uniformsIterator, value));
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::vec3> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case VEC4: {
                     auto value = utils::YLuaHelper::readVec4FromTableInTable(identifier,
                                                                              luaHandler);
-                    uniformValues.push_back(std::make_shared<YUniformValue<glm::vec4>>(*uniformsIterator, value));
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::vec4> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case MAT3: {
                     auto value = utils::YLuaHelper::readMat3FromTableInTable(identifier,
                                                                              luaHandler);
-                    uniformValues.push_back(std::make_shared<YUniformValue<glm::mat3>>(*uniformsIterator, value));
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::mat3> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case MAT4: {
                     auto value = utils::YLuaHelper::readMat4FromTableInTable(identifier,
                                                                              luaHandler);
-                    uniformValues.push_back(std::make_shared<YUniformValue<glm::mat4>>(*uniformsIterator, value));
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::mat4> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case BOOL: {
                     const auto value = luaHandler.getIntegerFromTable(identifier);
-                    uniformValues.push_back(std::make_shared<YUniformValue<bool>>(*uniformsIterator, value != 0));
+                    uniformValues.push_back(std::make_shared<YUniformValue<bool> >(*uniformsIterator, value != 0));
                 }
-                    break;
+                break;
                 case SAMPLER2D: {
                     auto value = luaHandler.getIntegerFromTable(identifier);
-                    uniformValues.push_back(std::make_shared<YUniformValue<int>>(*uniformsIterator, value));
+                    uniformValues.push_back(std::make_shared<YUniformValue<int> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case CUSTOM: {
-                    printf("Custom uniform found: %s. Skip Uniform Value generation.\n",
+                    printf("Custom uniform found: %s.\nSkip Uniform Value generation.\n",
                            identifier.c_str());
                 }
-                    break;
+                break;
             }
             ++uniformsIterator;
         }
@@ -125,7 +126,7 @@ namespace core {
         drawModel(model->getModelMatrix(), model, viewProjection);
     }
 
-    void YMaterialInstance::addUniformValue(const std::shared_ptr<YBaseUniformValue>& uniformValue) {
+    void YMaterialInstance::addUniformValue(const std::shared_ptr<YBaseUniformValue> &uniformValue) {
         uniformValues.push_back(uniformValue);
     }
 
@@ -147,7 +148,7 @@ namespace core {
         glUniformMatrix4fv(static_cast<int>(viewProjectionUniformLocation), 1, GL_FALSE,
                            glm::value_ptr(viewProjection));
 
-        if(material->doesSupportLight()) {
+        if (material->doesSupportLight()) {
             glUniform1i(static_cast<int>(numberPointLightsLocation), numberPointLights);
             glUniform1i(static_cast<int>(numberDirectionLightsLocation), numberDirectionLights);
         }

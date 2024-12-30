@@ -3,6 +3,7 @@
 //
 #include "yrenderer.h"
 #include "ycamera.h"
+#include "../utils/yglhelper.h"
 
 namespace core {
     YRenderer::YRenderer(const float width, const float height, std::string title) : title(std::move(title)),
@@ -40,9 +41,9 @@ namespace core {
         return camera;
     }
 
-    void YRenderer::startFrame() {
+    void YRenderer::startFrame(const GLuint fbo) {
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         glViewport(0, 0, 2 * static_cast<GLsizei>(width), 2 * static_cast<GLsizei>(height));
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         currentTime = glfwGetTime();
@@ -53,13 +54,15 @@ namespace core {
         glfwSwapBuffers(window.get());
         glfwPollEvents();
 
+        utils::YGLHelper::checkGLError();
+
         finishFrameTime = glfwGetTime();
         deltaTime = static_cast<float>(finishFrameTime - currentTime);
         currentTime = finishFrameTime;
         accumulator += deltaTime;
         fps = 1.0f / (float) deltaTime;
 
-        snprintf(titleBuffer, 196, "%s - FPS: %6.3f", title.c_str(), fps);
+        snprintf(titleBuffer, 256, "%s - FPS: %6.3f", title.c_str(), fps);
         glfwSetWindowTitle(window.get(), titleBuffer);
     }
 

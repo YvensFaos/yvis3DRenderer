@@ -14,6 +14,7 @@ set(IMGUI_SOURCES
         imgui/imgui_widgets.cpp
         imgui/backends/imgui_impl_glfw.cpp
         imgui/backends/imgui_impl_opengl3.cpp
+        utils/yglhelper.cpp
 )
 
 add_executable(yvis3Drenderer main.cpp
