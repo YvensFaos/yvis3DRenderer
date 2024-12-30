@@ -75,5 +75,7 @@ namespace core {
         void setRight(glm::vec3 value);
 
         void setMouseAngle(glm::vec2 value);
+
+        void logToConsole() const;
     };
 } // core

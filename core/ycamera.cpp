@@ -3,21 +3,24 @@
 //
 
 #include "ycamera.h"
+
+#include <cstdio>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace core {
     YCamera::YCamera() : cameraPos(glm::vec3()), cameraTarget(glm::vec3(0.0f, 0.0f, 1.0f)),
                          cameraDirection(glm::vec3(0.0f, 0.0f, 1.0f)), up(glm::vec3(0.0f, 1.0f, 0.0f)),
                          cameraRight(glm::vec3(1.0f, 0.0f, 0.0f)), cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)),
-                         horizontalAngle(0.0f), verticalAngle(0.0f), zoom(45.0f), near(0.1f), far(1000.0f), cachedViewProjection(0.0f) {
+                         horizontalAngle(0.0f), verticalAngle(0.0f), zoom(45.0f), near(0.1f), far(1000.0f),
+                         cachedViewProjection(0.0f) {
         this->RotateWithMouse(-90.0, 0.0);
     }
 
     YCamera::YCamera(glm::vec3 cameraPos, glm::vec3 cameraTarget, glm::vec3 up) : cameraPos(cameraPos),
-                                                                                  cameraTarget(cameraTarget), up(up),
-                                                                                  zoom(45.0f), horizontalAngle(0.0f),
-                                                                                  verticalAngle(0.0f),
-                                                                                  near(0.1f), far(1000.0f), cachedViewProjection(0.0f) {
+        cameraTarget(cameraTarget), up(up),
+        zoom(45.0f), horizontalAngle(0.0f),
+        verticalAngle(0.0f),
+        near(0.1f), far(1000.0f), cachedViewProjection(0.0f) {
         this->RotateWithMouse(-90.0, 0.0);
     }
 
@@ -84,6 +87,14 @@ namespace core {
     void YCamera::setMouseAngle(const glm::vec2 value) {
         this->horizontalAngle = value.x;
         this->verticalAngle = value.y;
+    }
+
+    void YCamera::logToConsole() const {
+        printf("pos   = {%3.3f, %3.3f, %3.3f},\n", cameraPos.x, cameraPos.y, cameraPos.z);
+        printf("dir   = {%3.3f, %3.3f, %3.3f},\n", cameraDirection.x, cameraDirection.y, cameraDirection.z);
+        printf("up    = {%3.3f, %3.3f, %3.3f},\n", cameraUp.x, cameraUp.y, cameraUp.z);
+        printf("right = {%3.3f, %3.3f, %3.3f},\n", cameraRight.x, cameraRight.y, cameraRight.z);
+        printf("angle = {%3.3f, %3.3f}\n", horizontalAngle, verticalAngle);
     }
 
     void YCamera::Zoom(const float newZoom) {

@@ -5,6 +5,8 @@
 #include "yapplication.h"
 
 #include <string>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "yrenderer.h"
 #include "yscene.h"
@@ -33,6 +35,7 @@ namespace core {
 
     void YApplication::run() {
         // Render
+
         do {
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -50,9 +53,23 @@ namespace core {
                 }
             }
             ImGui::End();
+            const bool loadedScene = currentScene != nullptr;
+
+            if(loadedScene) {
+                ImGui::Begin("Camera");
+                const auto camera = renderer->getCamera();
+                auto pos = camera.getPos();
+                auto dir = camera.getDir();
+                ImGui::InputFloat3("Pos", glm::value_ptr(pos));
+                ImGui::InputFloat3("Dir", glm::value_ptr(dir));
+                if(ImGui::Button("Print to Console")) {
+                    camera.logToConsole();
+                }
+                ImGui::End();
+            }
 
             ImGui::Render();
-            if(currentScene != nullptr) {
+            if(loadedScene) {
                 currentScene->render();
             } else {
                 renderer->startFrame();

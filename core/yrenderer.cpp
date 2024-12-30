@@ -210,12 +210,7 @@ namespace core {
             printf("Del: %9f\n", deltaTime);
             printf("Acc: %9f\n", accumulator);
             printf("---------------\n");
-            printf("pos   = {%3.3f, %3.3f, %3.3f},\n", camera->getPos().x, camera->getPos().y, camera->getPos().z);
-            printf("dir   = {%3.3f, %3.3f, %3.3f},\n", camera->getDir().x, camera->getDir().y, camera->getDir().z);
-            printf("up    = {%3.3f, %3.3f, %3.3f},\n", camera->getUp().x, camera->getUp().y, camera->getUp().z);
-            printf("right = {%3.3f, %3.3f, %3.3f},\n", camera->getRight().x, camera->getRight().y,
-                   camera->getRight().z);
-            printf("angle = {%3.3f, %3.3f}\n", camera->getAngles().x, camera->getAngles().y);
+           camera->logToConsole();
             printf("---------------\n\n");
         }
     }
