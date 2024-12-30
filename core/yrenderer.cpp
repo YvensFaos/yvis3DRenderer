@@ -57,8 +57,9 @@ namespace core {
         deltaTime = static_cast<float>(finishFrameTime - currentTime);
         currentTime = finishFrameTime;
         accumulator += deltaTime;
+        fps = 1.0f / (float) deltaTime;
 
-        snprintf(titleBuffer, 196, "%s - FPS: %4.2f", title.c_str(), 1.0f / (float) deltaTime);
+        snprintf(titleBuffer, 196, "%s - FPS: %6.3f", title.c_str(), fps);
         glfwSetWindowTitle(window.get(), titleBuffer);
     }
 
@@ -150,6 +151,10 @@ namespace core {
 
     int YRenderer::getHeight() const {
         return height;
+    }
+
+    float YRenderer::getFPS() const {
+        return fps;
     }
 
     // void YRenderer::addKeybind(AKeyBind akeyBind)

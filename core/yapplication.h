@@ -4,6 +4,7 @@
 
 #pragma once
 #include <memory>
+#include <vector>
 
 namespace core {
     class YScene;
@@ -14,6 +15,9 @@ namespace core {
     class YApplication {
         std::shared_ptr<YRenderer> renderer;
         std::shared_ptr<YScene> currentScene;
+        std::vector<float> frames;
+        int maxFrames;
+        int currentFramesIndex;
     public:
         YApplication(float width, float height, std::string title);
 

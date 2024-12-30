@@ -24,6 +24,7 @@ namespace core {
 
         float shiftModPower;
         float deltaTime;
+        float fps;
         float lastX;
         float lastY;
         float moveForce;
@@ -62,7 +63,10 @@ namespace core {
         [[nodiscard]] std::shared_ptr<GLFWwindow> getWindow() const;
 
         int getWidth() const;
+
         int getHeight() const;
+
+        float getFPS() const;
 
         static void setCullFaces(bool activate);
 
