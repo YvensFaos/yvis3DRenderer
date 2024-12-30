@@ -9,13 +9,19 @@ namespace core {
             renderer), width(width), height(height) {
         if (luaHandler.openFile(file)) {
             printf("Successfully loaded %s\n", file.c_str());
+            loaded = true;
         } else {
             printf("Failed to load %s\n", file.c_str());
+            loaded = false;
         }
     }
 
     void YScene::render() {
         renderer.startFrame();
         renderImpl();
+    }
+
+    bool YScene::isLoaded() const {
+        return loaded;
     }
 } // core

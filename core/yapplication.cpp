@@ -45,8 +45,10 @@ namespace core {
             ImGui::InputTextWithHint("Scene to be loaded:", "", sceneName, IM_ARRAYSIZE(sceneName));
             if(ImGui::Button("Load Example Scene")) {
                 currentScene = std::make_shared<scenes::YLoadedScene>(*renderer.get(), sceneName, renderer->getWidth(), renderer->getHeight());
+                if(!currentScene->isLoaded()) {
+                    currentScene = nullptr;
+                }
             }
-
             ImGui::End();
 
             ImGui::Render();

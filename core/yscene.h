@@ -16,6 +16,7 @@ namespace core {
         LuaHandler luaHandler;
         int width;
         int height;
+        bool loaded;
 
         std::unordered_map<std::string, GLint> uniforms;
     public:
@@ -28,6 +29,8 @@ namespace core {
         virtual ~YScene() = default;
 
         void render();
+
+        bool isLoaded() const;
 
     protected:
         virtual void renderImpl() = 0;

@@ -141,7 +141,7 @@ namespace core {
     }
 
     std::shared_ptr<GLFWwindow> YRenderer::getWindow() const {
-        return std::shared_ptr<GLFWwindow>(window);
+        return std::shared_ptr(window);
     }
 
     int YRenderer::getWidth() const {
