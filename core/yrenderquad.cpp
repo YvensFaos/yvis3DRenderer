@@ -35,7 +35,7 @@ std::string core::YRenderQuad::defaultFragmentShader =
         "   void main()\n"
         "   {\n"
         "       vec4 value = texture(textureUniform, vuv);\n"
-        "       frag_colour = vec4(value.x, value.y, value.z + 0.3, 0.5);\n"
+        "       frag_colour = vec4(value.x, value.y, value.z, 1.0);\n"
         "   }\n";
 
 core::YRenderQuad::YRenderQuad() : fragmentShader(0) {
