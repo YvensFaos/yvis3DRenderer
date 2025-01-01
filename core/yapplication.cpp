@@ -9,7 +9,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "yrenderer.h"
-#include "yscene.h"
 #include "imgui.h"
 #include "yframebuffer.h"
 #include "yrenderquad.h"
@@ -108,7 +107,7 @@ namespace core {
         renderer->closeRenderer();
     }
 
-    void YApplication::setCurrentScene(std::shared_ptr<YScene> scene) {
+    void YApplication::setCurrentScene(std::shared_ptr<scenes::YLoadedScene> scene) {
         currentScene = std::move(scene);
     }
 } // core

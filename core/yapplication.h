@@ -7,17 +7,20 @@
 #include <vector>
 
 namespace core {
-    class YScene;
     class YRenderer;
     class YRenderQuad;
     class YFrameBuffer;
 
 }
 
+namespace scenes {
+    class YLoadedScene;
+}
+
 namespace core {
     class YApplication {
         std::shared_ptr<YRenderer> renderer;
-        std::shared_ptr<YScene> currentScene;
+        std::shared_ptr<scenes::YLoadedScene> currentScene;
         std::shared_ptr<YFrameBuffer> sceneFrameBuffer;
         std::shared_ptr<YRenderQuad> sceneRenderQuad;
         std::vector<float> frames;
@@ -36,6 +39,6 @@ namespace core {
         void run();
 
     private:
-        void setCurrentScene(std::shared_ptr<YScene> scene);
+        void setCurrentScene(std::shared_ptr<scenes::YLoadedScene> scene);
     };
 } // core
