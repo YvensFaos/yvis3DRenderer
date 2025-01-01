@@ -13,6 +13,7 @@
 #include "yframebuffer.h"
 #include "yrenderquad.h"
 #include "../scenes/yloadedscene.h"
+#include "../view/YObjectUI.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
@@ -60,13 +61,31 @@ namespace core {
                                                                       renderer->getHeight());
                 if (!currentScene->isLoaded()) {
                     currentScene = nullptr;
+                } else {
+                    viewObjects.clear();
+                    auto iterator = currentScene->objectsIterator();
+                    auto endIterator = currentScene->objectsEnd();
+
+                    while(iterator != endIterator) {
+                        viewObjects.push_back(std::make_shared<view::YObjectUI>(*iterator));
+                        ++iterator;
+                    }
                 }
             }
+
             ImGui::End();
             const bool loadedScene = currentScene != nullptr;
 
             if (loadedScene) {
-                ImGui::Begin("Camera");
+                ImGui::Begin(currentScene->getFileName().c_str());
+
+                for(const auto viewObject : viewObjects) {
+                    ImGui::PushID(viewObject->getIdentifier().c_str());
+                    viewObject->render();
+                    ImGui::PopID();
+                }
+
+                ImGui::SeparatorText("Camera");
                 const auto camera = renderer->getCamera();
                 auto pos = camera->getPos();
                 auto dir = camera->getDir();

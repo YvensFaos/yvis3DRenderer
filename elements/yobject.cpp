@@ -4,10 +4,16 @@
 
 #include "yobject.h"
 
-#include <utility>
-
-elements::YObject::YObject(std::string identifier) : identifier(std::move(identifier)), transform() {}
+elements::YObject::YObject(std::string identifier) : identifier(std::move(identifier)) {}
 
 void elements::YObject::draw(const core::YRenderer &renderer) {}
 
 void elements::YObject::update() {}
+
+std::string elements::YObject::getIdentifier() const {
+    return identifier;
+}
+
+core::YTransform& elements::YObject::getTransform() {
+    return transform;
+}

@@ -1,9 +1,7 @@
 //
 // Created by Yvens Rebouças Serpa on 22/12/2024.
 //
-#include <glm/glm.hpp>
 #include <string>
-#include <utility>
 #include "../core/ytransform.h"
 
 namespace core {
@@ -25,5 +23,9 @@ namespace elements {
         virtual void draw(const core::YRenderer &renderer);
 
         virtual void update();
+
+        std::string getIdentifier() const;
+
+        core::YTransform& getTransform();
     };
 }

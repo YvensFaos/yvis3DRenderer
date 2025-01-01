@@ -12,6 +12,7 @@
 namespace core {
     class YScene {
     protected:
+        const std::string fileName;
         YRenderer &renderer;
         LuaHandler luaHandler;
         int width;
@@ -31,6 +32,8 @@ namespace core {
         void render(GLuint fbo = 0);
 
         bool isLoaded() const;
+
+        std::string getFileName() const;
 
     protected:
         virtual void renderImpl() = 0;

@@ -6,7 +6,7 @@
 
 namespace core {
     YScene::YScene(YRenderer &renderer, const std::string &file, const int width, const int height) : renderer(
-            renderer), width(width), height(height) {
+            renderer), width(width), height(height), fileName(file) {
         if (luaHandler.openFile(file)) {
             printf("Successfully loaded %s\n", file.c_str());
             loaded = true;
@@ -23,5 +23,9 @@ namespace core {
 
     bool YScene::isLoaded() const {
         return loaded;
+    }
+
+    std::string YScene::getFileName() const {
+        return fileName;
     }
 } // core

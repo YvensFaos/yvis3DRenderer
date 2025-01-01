@@ -28,6 +28,8 @@ namespace scenes {
 
         ~YLoadedScene() override = default;
 
+        std::vector<std::shared_ptr<elements::YObject>>::iterator objectsIterator();
+        std::vector<std::shared_ptr<elements::YObject>>::iterator objectsEnd();
     protected:
         void renderImpl() override;
     };

@@ -162,6 +162,14 @@ namespace scenes {
         }
     }
 
+    std::vector<std::shared_ptr<elements::YObject>>::iterator YLoadedScene::objectsIterator() {
+        return objects.begin();
+    }
+
+    std::vector<std::shared_ptr<elements::YObject>>::iterator YLoadedScene::objectsEnd() {
+        return objects.end();
+    }
+
     void YLoadedScene::renderImpl() {
         renderer.getCamera()->cacheViewProjectionMatrix(static_cast<float>(width), static_cast<float>(height));
         for (const auto &object: objects) {
