@@ -162,12 +162,20 @@ namespace scenes {
         }
     }
 
-    std::vector<std::shared_ptr<elements::YObject>>::iterator YLoadedScene::objectsIterator() {
+    std::vector<std::shared_ptr<elements::YObject> >::iterator YLoadedScene::objectsIterator() {
         return objects.begin();
     }
 
-    std::vector<std::shared_ptr<elements::YObject>>::iterator YLoadedScene::objectsEnd() {
+    std::vector<std::shared_ptr<elements::YObject> >::iterator YLoadedScene::objectsEnd() {
         return objects.end();
+    }
+
+    std::vector<std::shared_ptr<core::YLight> >::iterator YLoadedScene::lightsIterator() {
+        return lights.begin();
+    }
+
+    std::vector<std::shared_ptr<core::YLight> >::iterator YLoadedScene::lightsEnd() {
+        return lights.end();
     }
 
     void YLoadedScene::renderImpl() {

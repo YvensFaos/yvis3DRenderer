@@ -32,6 +32,10 @@ namespace scenes {
 
         std::vector<std::shared_ptr<elements::YObject> >::iterator objectsEnd();
 
+        std::vector<std::shared_ptr<core::YLight> >::iterator lightsIterator();
+
+        std::vector<std::shared_ptr<core::YLight> >::iterator lightsEnd();
+
     protected:
         void renderImpl() override;
     };

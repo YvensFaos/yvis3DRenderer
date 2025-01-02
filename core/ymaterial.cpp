@@ -67,6 +67,13 @@ namespace core {
         return uniforms.cend();
     }
 
+    std::shared_ptr<core::YUniform> YMaterial::getUniform(const std::string &uniformName) const {
+        const auto found = std::ranges::find_if(uniforms, [&](const std::shared_ptr<YUniform> &uniform)-> bool {
+            return uniform->uniformName == uniformName;
+        });
+        return *found;
+    }
+
     bool YMaterial::doesSupportLight() const {
         return supportLight;
     }

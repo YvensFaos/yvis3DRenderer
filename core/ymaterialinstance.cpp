@@ -16,8 +16,51 @@ namespace core {
             if (getModelUniformLocation(material, uniformsIterator, identifier)) continue;
             if (getViewProjectionUniformLocation(material, uniformsIterator, identifier)) continue;
             if (getNumberPointLightsUniformLocation(material, uniformsIterator, identifier)) continue;
-            if (getNumberDirectionLightsUniformLocation(material, uniformsIterator, identifier))
-                ;
+            if (getNumberDirectionLightsUniformLocation(material, uniformsIterator, identifier)) continue;
+            switch ((*uniformsIterator)->getType()) {
+                case INT: {
+                    uniformValues.push_back(std::make_shared<YUniformValue<int> >(*uniformsIterator, 0));
+                }
+                break;
+                case FLOAT: {
+                    uniformValues.push_back(std::make_shared<YUniformValue<float> >(*uniformsIterator, 0.0f));
+                }
+                break;
+                case VEC2: {
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::vec2> >(*uniformsIterator, glm::vec2(0.0f)));
+                }
+                break;
+                case VEC3: {
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::vec3> >(*uniformsIterator, glm::vec3(0.0f)));
+                }
+                break;
+                case VEC4: {
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::vec4> >(*uniformsIterator, glm::vec4(0.0f)));
+                }
+                break;
+                case MAT3: {
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::mat3> >(*uniformsIterator, glm::mat3(0.0f)));
+                }
+                break;
+                case MAT4: {
+                    uniformValues.push_back(std::make_shared<YUniformValue<glm::mat4> >(*uniformsIterator, glm::mat4(0.0f)));
+                }
+                break;
+                case BOOL: {
+                    uniformValues.push_back(std::make_shared<YUniformValue<bool> >(*uniformsIterator, false));
+                }
+                break;
+                case SAMPLER2D: {
+                    uniformValues.push_back(std::make_shared<YUniformValue<int> >(*uniformsIterator, -1));
+                }
+                break;
+                case CUSTOM: {
+                    printf("Custom uniform found: %s.\nSkip Uniform Value generation.\n",
+                           identifier.c_str());
+                }
+                break;
+            }
+            ++uniformsIterator;
         }
     }
 
@@ -112,13 +155,13 @@ namespace core {
     }
 
     void YMaterialInstance::updateUniformValue(const std::string &uniformName,
-        const std::shared_ptr<YBaseUniformValue> &uniformValue) {
-
-        //Try to find the uniform with the given name
-        auto found = std::find(uniformValues.begin(), uniformValues.end(), uniformName);
-        if(found != uniformValues.end()) {
-
-            // dynamic_cast found->
+                                               const std::shared_ptr<YBaseUniformValue> &uniformValue) {
+        const auto found = std::ranges::find_if(uniformValues,
+                                                [&uniformName](const std::shared_ptr<YBaseUniformValue> &v)-> bool {
+                                                    return v->getUniformName() == uniformName;
+                                                });
+        if (found != uniformValues.end()) {
+            found->get()->updateValue(*uniformValue);
         }
     }
 
@@ -151,7 +194,9 @@ namespace core {
         model->draw(program);
     }
 
-     bool YMaterialInstance::getModelUniformLocation(const std::shared_ptr<YMaterial> &material, std::vector<std::shared_ptr<core::YUniform>>::const_iterator &uniformsIterator, const std::string& identifier) {
+    bool YMaterialInstance::getModelUniformLocation(const std::shared_ptr<YMaterial> &material,
+                                                    std::vector<std::shared_ptr<core::YUniform> >::const_iterator &
+                                                    uniformsIterator, const std::string &identifier) {
         if (identifier == "model") {
             printf("Skipping uniform value generation for the [%s] matrix.\n",
                    identifier.c_str());
@@ -164,7 +209,10 @@ namespace core {
         return false;
     }
 
-    bool YMaterialInstance::getViewProjectionUniformLocation(const std::shared_ptr<YMaterial> &material, std::vector<std::shared_ptr<core::YUniform>>::const_iterator &uniformsIterator, const std::string& identifier) {
+    bool YMaterialInstance::getViewProjectionUniformLocation(const std::shared_ptr<YMaterial> &material,
+                                                             std::vector<std::shared_ptr<
+                                                                 core::YUniform> >::const_iterator &uniformsIterator,
+                                                             const std::string &identifier) {
         if (identifier == "viewProjection") {
             printf("Skipping uniform value generation for the [%s] matrix.\n",
                    identifier.c_str());
@@ -177,7 +225,10 @@ namespace core {
         return false;
     }
 
-    bool YMaterialInstance::getNumberPointLightsUniformLocation(const std::shared_ptr<YMaterial> &material, std::vector<std::shared_ptr<core::YUniform>>::const_iterator &uniformsIterator, const std::string& identifier) {
+    bool YMaterialInstance::getNumberPointLightsUniformLocation(const std::shared_ptr<YMaterial> &material,
+                                                                std::vector<std::shared_ptr<
+                                                                    core::YUniform> >::const_iterator &uniformsIterator,
+                                                                const std::string &identifier) {
         if (identifier == "numberPointLights") {
             printf("Skipping uniform value generation for the [%s] numberPointLights.\n",
                    identifier.c_str());
@@ -190,7 +241,10 @@ namespace core {
         return false;
     }
 
-    bool YMaterialInstance::getNumberDirectionLightsUniformLocation(const std::shared_ptr<YMaterial> &material, std::vector<std::shared_ptr<core::YUniform>>::const_iterator &uniformsIterator, const std::string& identifier) {
+    bool YMaterialInstance::getNumberDirectionLightsUniformLocation(const std::shared_ptr<YMaterial> &material,
+                                                                    std::vector<std::shared_ptr<
+                                                                        core::YUniform> >::const_iterator &
+                                                                    uniformsIterator, const std::string &identifier) {
         if (identifier == "numberDirectionLights") {
             printf("Skipping uniform value generation for the [%s] numberDirectionLights.\n",
                    identifier.c_str());
@@ -202,5 +256,4 @@ namespace core {
         }
         return false;
     }
-
 } // core

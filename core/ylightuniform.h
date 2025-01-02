@@ -28,6 +28,8 @@ struct YLightUniform final : YBaseUniformValue {
     void stream() const override;
 
     void updateValue(const YBaseUniformValue & another) override;
+
+    std::shared_ptr<core::YLight> getLight() const;
 };
 
 } // core

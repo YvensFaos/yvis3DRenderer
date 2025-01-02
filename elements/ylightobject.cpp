@@ -7,6 +7,7 @@
 #include "../core/ylight.h"
 #include "../core/ymaterial.h"
 #include "../core/ymaterialinstance.h"
+#include "../core/yuniformvalue.h"
 
 namespace elements {
 #pragma region YLight Default Shaders
@@ -83,23 +84,29 @@ namespace elements {
 
     const std::string YLightObject::defaultLightModelPath = "data/models/tetrahedron.fbx";
 
-    std::shared_ptr<core::YMaterial> YLightObject::defaultLightObjectMaterial = std::make_shared<core::YMaterial>("defaultLightObjectMaterial",
-                                                                       defaultVertexShader, defaultFragmentShader,
-                                                                       defaultGeometryShader);
-
     YLightObject::YLightObject(const std::string &identifier,
                                const std::shared_ptr<core::YLight> &light) : YObject(identifier), light(light),
                                                                              lightModel(std::make_shared<core::YModel>(
                                                                                  defaultLightModelPath)) {
-        materialInstance = std::make_shared<core::YMaterialInstance>(YLightObject::defaultLightObjectMaterial);
-        // materialInstance->
+        materialInstance = std::make_shared<core::YMaterialInstance>(YLightObject::getDefaultMaterial());
+
+        // Uniform found: uniform vec4 lightColor.
+        // Uniform found: uniform vec3 lightDirection.
+
+        auto lightColorUniform = YLightObject::getDefaultMaterial()->getUniform("lightColor");
+        materialInstance->updateUniformValue("lightColor", std::make_shared<core::YUniformValue<glm::vec4>>(lightColorUniform, light->getColor()));
+        auto lightDirectionUniform = YLightObject::getDefaultMaterial()->getUniform("lightDirection");
+        materialInstance->updateUniformValue("lightDirection", std::make_shared<core::YUniformValue<glm::vec3>>(lightColorUniform, light->getDirection()));
+        
         transform.setPosition(light->getPosition());
     }
 
     void YLightObject::draw(const core::YRenderer &renderer) {
     }
 
-    bool YLightObject::checkDefaultMaterial() {
-        return defaultLightObjectMaterial != nullptr;
+    std::shared_ptr<core::YMaterial> YLightObject::getDefaultMaterial() {
+        static auto defaultLightObjectMaterial = std::make_shared<core::YMaterial>("defaultLightObjectModel", defaultVertexShader, defaultFragmentShader,
+                                                                                   defaultGeometryShader);
+        return defaultLightObjectMaterial;
     }
 } // elements

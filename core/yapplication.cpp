@@ -16,6 +16,7 @@
 #include "../view/YObjectUI.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "../elements/ylightobject.h"
 
 namespace core {
     YApplication::YApplication(float width, float height, const std::string &title) : maxFrames(100),
@@ -69,6 +70,14 @@ namespace core {
                     while (iterator != endIterator) {
                         viewObjects.push_back(std::make_shared<view::YObjectUI>(*iterator));
                         ++iterator;
+                    }
+
+                    auto lightIterator = currentScene->lightsIterator();
+                    auto lightEndIterator = currentScene->lightsEnd();
+
+                    while(lightIterator != lightEndIterator) {
+                        auto l = std::make_shared<elements::YLightObject>("lightObject", *lightIterator);
+                        ++lightIterator;
                     }
                 }
             }

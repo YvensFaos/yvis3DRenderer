@@ -47,9 +47,12 @@ namespace core {
     }
 
     void YLightUniform::updateValue(const YBaseUniformValue &another) {
-        const YLightUniform* derived = dynamic_cast<const YLightUniform*>(&another);
-        if (derived) {
-
+        if (const auto derived = dynamic_cast<const YLightUniform*>(&another)) {
+            light = derived->getLight();
         }
+    }
+
+    std::shared_ptr<core::YLight> YLightUniform::getLight() const {
+        return light;
     }
 } // core

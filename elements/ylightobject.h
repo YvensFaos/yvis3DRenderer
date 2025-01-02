@@ -29,13 +29,12 @@ class YLightObject final : public YObject {
     static const std::string defaultVertexShader;
     static const std::string defaultGeometryShader;
     static const std::string defaultFragmentShader;
-    static std::shared_ptr<core::YMaterial> defaultLightObjectMaterial;
 public:
     explicit YLightObject(const std::string &identifier, const std::shared_ptr<core::YLight> &light);
 
     void draw(const core::YRenderer &renderer) override;
-private:
-    static bool checkDefaultMaterial();
+
+    static std::shared_ptr<core::YMaterial> getDefaultMaterial();
 };
 
 } // elements

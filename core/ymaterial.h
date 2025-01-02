@@ -33,6 +33,8 @@ namespace core {
 
         [[nodiscard]] std::vector<std::shared_ptr<core::YUniform> >::const_iterator getUniformsEndIterator() const;
 
+        std::shared_ptr<core::YUniform> getUniform(const std::string &uniformName) const;
+
         [[nodiscard]] bool doesSupportLight() const;
 
         void setSupportLight(bool newSupportLight);
