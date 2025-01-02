@@ -66,7 +66,7 @@ namespace core {
                     auto iterator = currentScene->objectsIterator();
                     auto endIterator = currentScene->objectsEnd();
 
-                    while(iterator != endIterator) {
+                    while (iterator != endIterator) {
                         viewObjects.push_back(std::make_shared<view::YObjectUI>(*iterator));
                         ++iterator;
                     }
@@ -79,7 +79,7 @@ namespace core {
             if (loadedScene) {
                 ImGui::Begin(currentScene->getFileName().c_str());
 
-                for(const auto viewObject : viewObjects) {
+                for (const auto viewObject: viewObjects) {
                     ImGui::PushID(viewObject->getIdentifier().c_str());
                     viewObject->render();
                     ImGui::PopID();

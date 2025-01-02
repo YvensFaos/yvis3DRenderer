@@ -4,25 +4,26 @@
 
 #pragma once
 #include <memory>
+#include <glm/vec4.hpp>
 
 namespace elements {
     class YObject;
 }
 
 namespace view {
+    class YObjectUI {
+        std::shared_ptr<elements::YObject> selfObject;
+        glm::vec4 objectPosition;
 
-class YObjectUI {
-    std::shared_ptr<elements::YObject> selfObject;
+    public:
+        explicit YObjectUI(std::shared_ptr<elements::YObject> object);
 
-public:
-    explicit YObjectUI(std::shared_ptr<elements::YObject> object);
-    ~YObjectUI() = default;
-    YObjectUI(const YObjectUI&) = default;
+        ~YObjectUI() = default;
 
-    void render() const;
+        YObjectUI(const YObjectUI &) = default;
 
-    std::string getIdentifier() const;
-};
+        void render();
 
+        std::string getIdentifier() const;
+    };
 } // view
-

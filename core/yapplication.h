@@ -14,7 +14,6 @@ namespace core {
     class YRenderer;
     class YRenderQuad;
     class YFrameBuffer;
-
 }
 
 namespace scenes {
@@ -30,9 +29,10 @@ namespace core {
         std::vector<float> frames;
         int maxFrames;
         int currentFramesIndex;
-        std::vector<std::shared_ptr<view::YObjectUI>> viewObjects;
+        std::vector<std::shared_ptr<view::YObjectUI> > viewObjects;
+
     public:
-        YApplication(float width, float height, const std::string& title);
+        YApplication(float width, float height, const std::string &title);
 
         YApplication(const YApplication &) = delete;
 

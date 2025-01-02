@@ -10,13 +10,16 @@
 #include "../elements/yobject.h"
 
 namespace view {
-    YObjectUI::YObjectUI(std::shared_ptr<elements::YObject> object) : selfObject(std::move(object)) { }
+    YObjectUI::YObjectUI(std::shared_ptr<elements::YObject> object) : selfObject(std::move(object)),
+                                                                      objectPosition(
+                                                                          selfObject->getTransform().getPosition()) {
+    }
 
-    void YObjectUI::render() const {
+    void YObjectUI::render() {
         ImGui::SeparatorText(selfObject->getIdentifier().c_str());
-        const auto transform = selfObject->getTransform();
-        auto position = transform.getPosition();
-        ImGui::InputFloat4("Pos", glm::value_ptr(position));
+        if (ImGui::InputFloat4("Pos", glm::value_ptr(objectPosition))) {
+            selfObject->getTransform().setPosition(objectPosition);
+        }
     }
 
     std::string YObjectUI::getIdentifier() const {
