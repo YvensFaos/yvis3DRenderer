@@ -18,7 +18,7 @@ namespace core {
         if (!hasGeometryShader) {
             shaderProgram = core::YShader::generateProgram(vertexProgram, fragmentProgram);
         } else {
-            auto geometryProgram = core::YShader::generateShader(geometryShader, GL_GEOMETRY_SHADER);
+            const auto geometryProgram = core::YShader::generateShader(geometryShader, GL_GEOMETRY_SHADER);
             shaderProgram = core::YShader::generateProgram(vertexProgram, geometryProgram, fragmentProgram);
         }
 

@@ -17,5 +17,9 @@ namespace core {
         virtual ~YBaseUniformValue() = default;
 
         virtual void stream() const = 0;
+        virtual void updateValue(const YBaseUniformValue & another) = 0;
+
+        bool operator==(const std::string& uniformName) const;
+        bool operator!=(const std::string& uniformName) const;
     };
 }

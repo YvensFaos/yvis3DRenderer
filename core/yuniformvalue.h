@@ -37,6 +37,17 @@ namespace core {
             this->value = newValue;
         }
 
+        T get() const {
+            return value;
+        }
+
+        void updateValue(const YBaseUniformValue & another) override {
+            const YUniformValue* derived = dynamic_cast<const YUniformValue*>(&another);
+            if (derived) {
+                set(derived->get());
+            }
+        }
+
         void stream() const override {
             streamUniformValue();
         }

@@ -5,7 +5,6 @@
 #pragma once
 
 #include "yobject.h"
-#include "../core/ytransform.h"
 
 namespace core {
     class YModel;

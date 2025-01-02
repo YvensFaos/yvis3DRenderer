@@ -76,6 +76,8 @@ add_executable(yvis3Drenderer main.cpp
         core/yapplication.cpp
         core/yapplication.h
         ${IMGUI_SOURCES}
+        elements/ylightobject.cpp
+        elements/ylightobject.h
 )
 
 add_custom_command(

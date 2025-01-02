@@ -8,6 +8,19 @@
 #include "../utils/yglhelper.h"
 
 namespace core {
+    YMaterialInstance::YMaterialInstance(const std::shared_ptr<YMaterial> &material) : material(material) {
+        auto uniformsIterator = material->getUniformsIterator();
+
+        while (uniformsIterator != material->getUniformsEndIterator()) {
+            const auto identifier = (*uniformsIterator)->getUniformName();
+            if (getModelUniformLocation(material, uniformsIterator, identifier)) continue;
+            if (getViewProjectionUniformLocation(material, uniformsIterator, identifier)) continue;
+            if (getNumberPointLightsUniformLocation(material, uniformsIterator, identifier)) continue;
+            if (getNumberDirectionLightsUniformLocation(material, uniformsIterator, identifier))
+                ;
+        }
+    }
+
     YMaterialInstance::YMaterialInstance(const std::shared_ptr<YMaterial> &material,
                                          const std::string &materialTableName,
                                          const LuaHandler &luaHandler) : material(material) {
@@ -21,42 +34,10 @@ namespace core {
             const auto type = (*uniformsIterator)->getType();
             auto identifier = (*uniformsIterator)->getUniformName();
 #pragma region unique identifiers
-            if (identifier == "model") {
-                printf("Skipping uniform value generation for the [%s] matrix.\n",
-                       identifier.c_str());
-                modelUniformLocation = glGetUniformLocation(material->getProgram(),
-                                                            identifier.c_str());
-                utils::YGLHelper::checkGLError();
-                ++uniformsIterator;
-                continue;
-            }
-            if (identifier == "viewProjection") {
-                printf("Skipping uniform value generation for the [%s] matrix.\n",
-                       identifier.c_str());
-                viewProjectionUniformLocation = glGetUniformLocation(material->getProgram(),
-                                                                     identifier.c_str());
-                utils::YGLHelper::checkGLError();
-                ++uniformsIterator;
-                continue;
-            }
-            if (identifier == "numberPointLights") {
-                printf("Skipping uniform value generation for the [%s] numberPointLights.\n",
-                       identifier.c_str());
-                numberPointLightsLocation = glGetUniformLocation(material->getProgram(),
-                                                                 identifier.c_str());
-                utils::YGLHelper::checkGLError();
-                ++uniformsIterator;
-                continue;
-            }
-            if (identifier == "numberDirectionLights") {
-                printf("Skipping uniform value generation for the [%s] numberDirectionLights.\n",
-                       identifier.c_str());
-                numberDirectionLightsLocation = glGetUniformLocation(material->getProgram(),
-                                                                     identifier.c_str());
-                utils::YGLHelper::checkGLError();
-                ++uniformsIterator;
-                continue;
-            }
+            if (getModelUniformLocation(material, uniformsIterator, identifier)) continue;
+            if (getViewProjectionUniformLocation(material, uniformsIterator, identifier)) continue;
+            if (getNumberPointLightsUniformLocation(material, uniformsIterator, identifier)) continue;
+            if (getNumberDirectionLightsUniformLocation(material, uniformsIterator, identifier)) continue;
 #pragma endregion
 
             switch (type) {
@@ -130,6 +111,17 @@ namespace core {
         uniformValues.push_back(uniformValue);
     }
 
+    void YMaterialInstance::updateUniformValue(const std::string &uniformName,
+        const std::shared_ptr<YBaseUniformValue> &uniformValue) {
+
+        //Try to find the uniform with the given name
+        auto found = std::find(uniformValues.begin(), uniformValues.end(), uniformName);
+        if(found != uniformValues.end()) {
+
+            // dynamic_cast found->
+        }
+    }
+
     bool YMaterialInstance::doesSupportLight() const {
         return material->doesSupportLight();
     }
@@ -158,4 +150,57 @@ namespace core {
         }
         model->draw(program);
     }
+
+     bool YMaterialInstance::getModelUniformLocation(const std::shared_ptr<YMaterial> &material, std::vector<std::shared_ptr<core::YUniform>>::const_iterator &uniformsIterator, const std::string& identifier) {
+        if (identifier == "model") {
+            printf("Skipping uniform value generation for the [%s] matrix.\n",
+                   identifier.c_str());
+            modelUniformLocation = glGetUniformLocation(material->getProgram(),
+                                                        identifier.c_str());
+            utils::YGLHelper::checkGLError();
+            ++uniformsIterator;
+            return true;
+        }
+        return false;
+    }
+
+    bool YMaterialInstance::getViewProjectionUniformLocation(const std::shared_ptr<YMaterial> &material, std::vector<std::shared_ptr<core::YUniform>>::const_iterator &uniformsIterator, const std::string& identifier) {
+        if (identifier == "viewProjection") {
+            printf("Skipping uniform value generation for the [%s] matrix.\n",
+                   identifier.c_str());
+            viewProjectionUniformLocation = glGetUniformLocation(material->getProgram(),
+                                                                 identifier.c_str());
+            utils::YGLHelper::checkGLError();
+            ++uniformsIterator;
+            return true;
+        }
+        return false;
+    }
+
+    bool YMaterialInstance::getNumberPointLightsUniformLocation(const std::shared_ptr<YMaterial> &material, std::vector<std::shared_ptr<core::YUniform>>::const_iterator &uniformsIterator, const std::string& identifier) {
+        if (identifier == "numberPointLights") {
+            printf("Skipping uniform value generation for the [%s] numberPointLights.\n",
+                   identifier.c_str());
+            numberPointLightsLocation = glGetUniformLocation(material->getProgram(),
+                                                             identifier.c_str());
+            utils::YGLHelper::checkGLError();
+            ++uniformsIterator;
+            return true;
+        }
+        return false;
+    }
+
+    bool YMaterialInstance::getNumberDirectionLightsUniformLocation(const std::shared_ptr<YMaterial> &material, std::vector<std::shared_ptr<core::YUniform>>::const_iterator &uniformsIterator, const std::string& identifier) {
+        if (identifier == "numberDirectionLights") {
+            printf("Skipping uniform value generation for the [%s] numberDirectionLights.\n",
+                   identifier.c_str());
+            numberDirectionLightsLocation = glGetUniformLocation(material->getProgram(),
+                                                                 identifier.c_str());
+            utils::YGLHelper::checkGLError();
+            ++uniformsIterator;
+            return true;
+        }
+        return false;
+    }
+
 } // core
