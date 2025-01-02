@@ -1,6 +1,8 @@
 //
 // Created by Yvens Rebouças Serpa on 22/12/2024.
 //
+#pragma once
+
 #include <string>
 #include "../core/ytransform.h"
 

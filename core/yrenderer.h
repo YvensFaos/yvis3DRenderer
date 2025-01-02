@@ -24,7 +24,7 @@ namespace core {
 
         float shiftModPower;
         float deltaTime;
-        float fps;
+        float fps{};
         float lastX;
         float lastY;
         float moveForce;

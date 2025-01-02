@@ -5,6 +5,7 @@
 #include "yrenderobject.h"
 #include "../core/ymodel.h"
 #include "../core/ymaterialinstance.h"
+#include "../core/ymaterial.h"
 #include "../core/yrenderer.h"
 
 elements::YRenderObject::YRenderObject(const std::string &identifier, std::shared_ptr<core::YModel> model,

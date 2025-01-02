@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.29)
 project(yvis3Drenderer)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(imgui imgui/backends)
 
@@ -76,6 +77,9 @@ add_executable(yvis3Drenderer main.cpp
         core/yapplication.cpp
         core/yapplication.h
         ${IMGUI_SOURCES}
+        elements/ylightobject.cpp
+        elements/ylightobject.h
+        core/yuniformvalues.cpp
 )
 
 add_custom_command(

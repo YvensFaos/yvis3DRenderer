@@ -22,7 +22,7 @@ namespace scenes {
             //Read and generate lights
             if (luaHandler.getTableFromTable("lights")) {
                 auto numberOfLights = luaHandler.getLength();
-                printf("Found %d lights.\n", numberOfLights);
+                printf("\n\nFound %d lights.\n", numberOfLights);
 
                 for (int i = 1; i <= numberOfLights; ++i) {
                     if (luaHandler.getTableFromTable(i)) {
@@ -34,7 +34,7 @@ namespace scenes {
                         auto specularPower = luaHandler.getNumberFromTable("specularPower");
                         auto directional = luaHandler.getBoolFromTable("directional");
 
-                        printf("Generate new light %d...", i);
+                        printf("\nGenerate new light %d...", i);
                         auto newLight = std::make_shared<core::YLight>(position, direction, colour, intensity,
                                                                        directional);
                         newLight->setUp(up);
@@ -57,7 +57,7 @@ namespace scenes {
             //Read and generate materials
             if (luaHandler.getTableFromTable("materials")) {
                 auto numberOfMaterials = luaHandler.getLength();
-                printf("Found %d materials.\n", numberOfMaterials);
+                printf("\n\nFound %d materials.\n", numberOfMaterials);
 
                 for (int i = 1; i <= numberOfMaterials; ++i) {
                     if (luaHandler.getTableFromTable(i)) {
@@ -86,13 +86,13 @@ namespace scenes {
             //Read and generate models
             if (luaHandler.getTableFromTable("models")) {
                 auto numberOfModels = luaHandler.getLength();
-                printf("Found %d models.\n", numberOfModels);
+                printf("\n\nFound %d models.\n", numberOfModels);
 
                 for (int i = 1; i <= numberOfModels; ++i) {
                     if (luaHandler.getTableFromTable(i)) {
                         auto modelName = luaHandler.getStringFromTable("name");
                         auto model = luaHandler.getStringFromTable("model");
-                        printf("Loading model named %s.\n", model.c_str());
+                        printf("\nLoading model named %s.\n", model.c_str());
 
                         if (luaHandler.loadTable(model)) {
                             auto modelFile = luaHandler.getStringFromTable("file");
@@ -106,13 +106,18 @@ namespace scenes {
 
                             auto materialName = luaHandler.getStringFromTable("material");
                             auto yMaterial = materials[materialName];
+                            if(yMaterial == nullptr) {
+                                printf("Error! Material %s not found!\n\n", materialName.c_str());
+                                luaHandler.popTable();
+                                continue;
+                            }
 
-                            printf("Generating YVRenderObject %s...\n", modelName.c_str());
+                            printf("\n\nGenerating YVRenderObject %s...\n", modelName.c_str());
 
                             auto materialInstance = std::make_shared<core::YMaterialInstance>(yMaterial, "uniforms",
                                 luaHandler);
                             if (materialInstance->doesSupportLight()) {
-                                printf("Generating light uniforms...");
+                                printf("\nGenerating light uniforms...");
 
                                 char buffer[64];
                                 for (auto &light: lights) {
@@ -152,7 +157,7 @@ namespace scenes {
             luaHandler.popTable();
 
             auto camera = renderer.getCamera();
-            printf("Loading camera information...");
+            printf("\n\nLoading camera information...");
             utils::YLuaHelper::setupCameraPosition("camera", camera, luaHandler);
             printf(" complete!\n");
 
@@ -162,16 +167,23 @@ namespace scenes {
         }
     }
 
-    std::vector<std::shared_ptr<elements::YObject>>::iterator YLoadedScene::objectsIterator() {
+    std::vector<std::shared_ptr<elements::YObject> >::iterator YLoadedScene::objectsIterator() {
         return objects.begin();
     }
 
-    std::vector<std::shared_ptr<elements::YObject>>::iterator YLoadedScene::objectsEnd() {
+    std::vector<std::shared_ptr<elements::YObject> >::iterator YLoadedScene::objectsEnd() {
         return objects.end();
     }
 
+    std::vector<std::shared_ptr<core::YLight> >::iterator YLoadedScene::lightsIterator() {
+        return lights.begin();
+    }
+
+    std::vector<std::shared_ptr<core::YLight> >::iterator YLoadedScene::lightsEnd() {
+        return lights.end();
+    }
+
     void YLoadedScene::renderImpl() {
-        renderer.getCamera()->cacheViewProjectionMatrix(static_cast<float>(width), static_cast<float>(height));
         for (const auto &object: objects) {
             object->draw(renderer);
             object->update();

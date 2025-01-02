@@ -3,7 +3,7 @@
 //
 
 #include "ymaterial.h"
-
+#include <algorithm>
 #include "../core/yshader.h"
 
 namespace core {
@@ -18,7 +18,7 @@ namespace core {
         if (!hasGeometryShader) {
             shaderProgram = core::YShader::generateProgram(vertexProgram, fragmentProgram);
         } else {
-            auto geometryProgram = core::YShader::generateShader(geometryShader, GL_GEOMETRY_SHADER);
+            const auto geometryProgram = core::YShader::generateShader(geometryShader, GL_GEOMETRY_SHADER);
             shaderProgram = core::YShader::generateProgram(vertexProgram, geometryProgram, fragmentProgram);
         }
 
@@ -33,13 +33,14 @@ namespace core {
             uniforms.insert(uniforms.end(), geometryShaderUniforms.begin(), geometryShaderUniforms.end());
         }
 
-        std::ranges::sort(uniforms);
-        const auto last = std::ranges::unique(uniforms, [](const std::shared_ptr<YUniform> &uniformA,
+        std::sort(uniforms.begin(), uniforms.end());
+
+        const auto last = std::unique(uniforms.begin(), uniforms.end(),[](const std::shared_ptr<YUniform> &uniformA,
                                                            const std::shared_ptr<YUniform> &uniformB) {
             return uniformA->uniformName == uniformB->uniformName;
-        }).begin();
+        });
         uniforms.erase(last, uniforms.end());
-        std::ranges::sort(uniforms);
+        std::sort(uniforms.begin(), uniforms.end());
 
         for (const auto &uniform: uniforms) {
             const GLuint uniformLocation = glGetUniformLocation(shaderProgram, uniform->uniformName.c_str());
@@ -67,6 +68,17 @@ namespace core {
         return uniforms.cend();
     }
 
+    core::YUniform* YMaterial::getUniform(const std::string &uniformName) const {
+        const auto found = std::find_if(uniforms.begin(), uniforms.end(), [&](const std::shared_ptr<YUniform> &uniform)-> bool {
+            return uniform->uniformName == uniformName;
+        });
+
+        if(found != uniforms.end()) {
+            return found->get();
+        }
+        return nullptr;
+    }
+
     bool YMaterial::doesSupportLight() const {
         return supportLight;
     }
@@ -77,5 +89,9 @@ namespace core {
 
     GLuint YMaterial::getProgram() const {
         return shaderProgram;
+    }
+
+    GLenum YMaterial::getRenderMode() const {
+        return renderMode;
     }
 } // core

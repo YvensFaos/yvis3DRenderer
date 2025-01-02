@@ -45,4 +45,14 @@ namespace core {
         glUniform1i(static_cast<GLint>(lightDirectionalUniform), directional);
         glUniform1f(static_cast<GLint>(lightSpecularUniform), specularPower);
     }
+
+    void YLightUniform::updateValue(const YBaseUniformValue &another) {
+        if (const auto derived = dynamic_cast<const YLightUniform*>(&another)) {
+            light = derived->getLight();
+        }
+    }
+
+    std::shared_ptr<core::YLight> YLightUniform::getLight() const {
+        return light;
+    }
 } // core

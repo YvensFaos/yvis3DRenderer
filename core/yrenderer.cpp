@@ -18,6 +18,7 @@ namespace core {
         mouseSensitivity(5.0f),
         accumulator(0.0),
         currentTime(0.0),
+        fps(0.0f),
         finishFrameTime(0.0),
         titleBuffer(""), clearColor(
             glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) {
@@ -48,6 +49,8 @@ namespace core {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         currentTime = glfwGetTime();
         finishFrameTime = 0.0;
+
+        camera->cacheViewProjectionMatrix(width, height);
     }
 
     void YRenderer::finishFrame() {
@@ -149,11 +152,11 @@ namespace core {
     }
 
     int YRenderer::getWidth() const {
-        return width;
+        return static_cast<int>(width);
     }
 
     int YRenderer::getHeight() const {
-        return height;
+        return static_cast<int>(height);
     }
 
     float YRenderer::getFPS() const {

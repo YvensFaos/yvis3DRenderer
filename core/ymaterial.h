@@ -14,7 +14,7 @@ namespace core {
         const std::string identifier;
         GLuint shaderProgram;
         GLenum renderMode;
-        bool supportLight;
+        bool supportLight{};
         std::vector<std::shared_ptr<core::YUniform> > uniforms;
 
     public:
@@ -25,6 +25,8 @@ namespace core {
 
         void drawModel(const YModel &model) const;
 
+        GLenum getRenderMode() const;
+
         void setRenderMode(GLenum mode);
 
         [[nodiscard]] GLuint getProgram() const;
@@ -32,6 +34,8 @@ namespace core {
         [[nodiscard]] std::vector<std::shared_ptr<core::YUniform> >::const_iterator getUniformsIterator() const;
 
         [[nodiscard]] std::vector<std::shared_ptr<core::YUniform> >::const_iterator getUniformsEndIterator() const;
+
+        [[nodiscard]] core::YUniform* getUniform(const std::string &uniformName) const;
 
         [[nodiscard]] bool doesSupportLight() const;
 

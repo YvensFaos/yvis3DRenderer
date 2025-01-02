@@ -6,6 +6,10 @@
 #include <memory>
 #include <vector>
 
+namespace elements {
+    class YObject;
+}
+
 namespace view {
     class YObjectUI;
 }
@@ -30,6 +34,7 @@ namespace core {
         int maxFrames;
         int currentFramesIndex;
         std::vector<std::shared_ptr<view::YObjectUI> > viewObjects;
+        std::vector<std::shared_ptr<elements::YObject> > applicationObjects;
 
     public:
         YApplication(float width, float height, const std::string &title);

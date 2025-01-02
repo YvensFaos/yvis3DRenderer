@@ -26,6 +26,10 @@ struct YLightUniform final : YBaseUniformValue {
     explicit YLightUniform(int lightIndex, GLuint shaderProgramme, const std::shared_ptr<core::YLight>& light, const std::shared_ptr<core::YUniform>& uniform);
 
     void stream() const override;
+
+    void updateValue(const YBaseUniformValue & another) override;
+
+    std::shared_ptr<core::YLight> getLight() const;
 };
 
 } // core

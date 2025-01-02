@@ -5,7 +5,6 @@
 #include "yapplication.h"
 
 #include <string>
-#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "yrenderer.h"
@@ -16,6 +15,7 @@
 #include "../view/YObjectUI.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "../elements/ylightobject.h"
 
 namespace core {
     YApplication::YApplication(float width, float height, const std::string &title) : maxFrames(100),
@@ -42,7 +42,6 @@ namespace core {
 
     void YApplication::run() {
         // Render
-
         do {
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -70,6 +69,16 @@ namespace core {
                         viewObjects.push_back(std::make_shared<view::YObjectUI>(*iterator));
                         ++iterator;
                     }
+                    auto lightIterator = currentScene->lightsIterator();
+                    auto lightEndIterator = currentScene->lightsEnd();
+
+                    auto index = 1;
+                    char lightObjectLabel[32];
+                    while(lightIterator != lightEndIterator) {
+                        snprintf(lightObjectLabel, 32, "lightObject[%i]", index++);
+                        applicationObjects.push_back(std::make_shared<elements::YLightObject>(lightObjectLabel, *lightIterator));
+                        ++lightIterator;
+                    }
                 }
             }
 
@@ -79,7 +88,7 @@ namespace core {
             if (loadedScene) {
                 ImGui::Begin(currentScene->getFileName().c_str());
 
-                for (const auto viewObject: viewObjects) {
+                for (const auto& viewObject: viewObjects) {
                     ImGui::PushID(viewObject->getIdentifier().c_str());
                     viewObject->render();
                     ImGui::PopID();
@@ -100,20 +109,24 @@ namespace core {
             ImGui::Render();
 
             if (loadedScene) {
-                // currentScene->render();
                 glEnable(GL_DEPTH_TEST);
-                sceneFrameBuffer->setViewport();
-                glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glEnable(GL_CULL_FACE);
-                currentScene->render(sceneFrameBuffer->getFBO());
-                sceneFrameBuffer->unbindBuffer();
 
-                glDisable(GL_DEPTH_TEST);
-                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-                glClear(GL_COLOR_BUFFER_BIT);
-                glDisable(GL_CULL_FACE);
-                sceneRenderQuad->render(sceneFrameBuffer->getFramebufferTexture());
+                //sceneFrameBuffer->getFBO()
+                currentScene->render();
+
+                for(const auto& applicationObject : applicationObjects) {
+                    applicationObject->update();
+                    applicationObject->draw(*renderer);
+                }
+                // sceneFrameBuffer->unbindBuffer();
+
+                // glDisable(GL_DEPTH_TEST);
+                // glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+                // glClear(GL_COLOR_BUFFER_BIT);
+                // glDisable(GL_CULL_FACE);
+
+                // sceneRenderQuad->render(sceneFrameBuffer->getFramebufferTexture());
             } else {
                 renderer->startFrame();
             }

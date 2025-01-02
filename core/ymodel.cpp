@@ -50,7 +50,7 @@ namespace core {
         }
     }
 
-    void YModel::draw(GLuint programme, GLenum mode, bool renderWithTextures) const {
+    void YModel::draw(const GLuint programme, const GLenum mode, const bool renderWithTextures) const {
         for (const auto &mesh: meshes) {
             mesh.draw(programme, mode, renderWithTextures);
         }

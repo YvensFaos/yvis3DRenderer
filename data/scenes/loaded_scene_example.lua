@@ -26,6 +26,23 @@ basicVertexShader = [[
     }
 ]]
 
+lightVertexShader = [[
+   #version 400
+   layout (location = 0) in vec3 vertex;
+
+    out vectorOut {
+        vec3 vPosition;
+    } vectorOut;
+
+   uniform mat4 model;
+   uniform mat4 viewProjection;
+   void main() {
+       vectorOut.vPosition = vec3(model * vec4(vertex, 1.0));
+       vec4 vecOut = vec4(vectorOut.vPosition, 1.0);
+       gl_Position = viewProjection * vecOut;
+   }
+]]
+
 colorFragmentShader = [[
     #version 400
 
@@ -35,6 +52,18 @@ colorFragmentShader = [[
     void main()
     {
         frag_colour = colour;
+    }
+]]
+
+lightObjectFragmentShader = [[
+    #version 400
+
+    uniform vec4 lightColor;
+    out vec4 frag_colour;
+
+    void main()
+    {
+      frag_colour = lightColor;
     }
 ]]
 
@@ -133,6 +162,12 @@ scene = {
             vertexShader = "basicVertexShader",
             fragmentShader = "lightFragmentShader",
             supportLight = true
+        },
+        {
+            name = "lightObjectMaterial",
+            vertexShader = "lightVertexShader",
+            fragmentShader = "lightObjectFragmentShader",
+            supportLight = false
         }
     },
     models = {
@@ -141,12 +176,13 @@ scene = {
             model = "monkeyModel",
             pos = { -2.0, 0.5, -4.0 },
             sca = { 1.0, 1.0, 1.0 },
-            rot = { 0.0, 0.0, 0.0 },
+            rot = { 20.0, 0.0, 0.0 },
             material = "simpleColorMaterial",
             uniforms = {
                 colour = { 33.0 / 255, 217.0 / 255, 82.0 / 255, 1.0 }
             }
-        },
+        }
+        ,
         {
             name = "pinkMonkey",
             model = "monkeyModel",
@@ -169,6 +205,29 @@ scene = {
             sca = { 1.0, 1.0, 1.0 },
             rot = { 0.0, 0.0, 0.0 },
         }
+        ,
+        {
+            name = "lightModelTest_1",
+            model = "lightModel",
+            material = "lightObjectMaterial",
+            uniforms = {
+                lightColor = { 1.0, 0.0, 0.0, 1.0 }
+            },
+            pos = { 0.0, 0.0, 4.0 },
+            sca = { 0.01, 0.01, 0.01 },
+            rot = { 0.0, 0.0, 0.0 },
+        },
+        {
+            name = "lightModelTest_2",
+            model = "lightModel",
+            material = "lightObjectMaterial",
+            uniforms = {
+                lightColor = { 0.1, 0.4, 0.3, 1.0 },
+            },
+            pos = { 2.0, 0.5, -1.0 },
+            sca = { 0.01, 0.01, 0.01 },
+            rot = { 0.0, 0.0, 0.0 },
+        }
     },
     lights = {
         {
@@ -179,7 +238,8 @@ scene = {
             intensity = 100.0,
             specularPower = 128.0,
             directional = true
-        },
+        }
+        ,
         {
             pos = { 2.0, 0.5, -2.0 },
             dir = { 0.0, 0.0, -1.0 },
@@ -189,6 +249,16 @@ scene = {
             specularPower = 32.0,
             directional = false
         }
+        ,
+        {
+            pos = { 0.0, 2.0, 0.0 },
+            dir = { 0.0, -1.0, 0.0 },
+            up = { 0.0, 0.0, 1.0 },
+            colour = { 0.9, 0.82, 0.0, 1.0 },
+            intensity = 600.0,
+            specularPower = 1024.0,
+            directional = true
+        }
     }
 }
 
@@ -196,10 +266,14 @@ monkeyModel = {
     file = "data/models/monkey.fbx"
 }
 
+lightModel = {
+    file = "data/models/tetrahedron_.fbx"
+}
+
 camera = {
-    pos = { -3.562, 0.107, 3.416 },
-    dir = { 0.412, 0.144, -0.900 },
-    up = { -0.060, 0.990, 0.131 },
-    right = { 0.909, -0.000, 0.416 },
-    angle = { -65.417, 8.255 }
+    pos = { -9.998, 4.372, 16.406 },
+    dir = { 0.384, -0.222, -0.896 },
+    up = { 0.088, 0.975, -0.204 },
+    right = { 0.919, -0.000, 0.394 },
+    angle = { -66.793, -12.836 }
 }
