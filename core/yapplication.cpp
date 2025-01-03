@@ -75,8 +75,11 @@ namespace core {
                     auto lightIterator = currentScene->lightsIterator();
                     auto lightEndIterator = currentScene->lightsEnd();
 
+                    auto index = 1;
+                    char lightObjectLabel[32];
                     while(lightIterator != lightEndIterator) {
-                        auto l = std::make_shared<elements::YLightObject>("lightObject", *lightIterator);
+                        snprintf(lightObjectLabel, 32, "lightObject[%i]", index++);
+                        applicationObjects.push_back(std::make_shared<elements::YLightObject>(lightObjectLabel, *lightIterator));
                         ++lightIterator;
                     }
                 }
@@ -116,6 +119,12 @@ namespace core {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glEnable(GL_CULL_FACE);
                 currentScene->render(sceneFrameBuffer->getFBO());
+
+                for(const auto& applicationObject : applicationObjects) {
+                    applicationObject->update();
+                    applicationObject->draw(*renderer);
+                }
+
                 sceneFrameBuffer->unbindBuffer();
 
                 glDisable(GL_DEPTH_TEST);

@@ -3,6 +3,10 @@
 //
 
 #include "ymaterialinstance.h"
+
+#include <glm/gtc/type_ptr.hpp>
+
+#include "ymaterial.h"
 #include "yuniformvalue.h"
 #include "../utils/yluahelper.h"
 #include "../utils/yglhelper.h"

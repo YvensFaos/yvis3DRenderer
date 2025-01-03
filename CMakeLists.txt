@@ -78,6 +78,7 @@ add_executable(yvis3Drenderer main.cpp
         ${IMGUI_SOURCES}
         elements/ylightobject.cpp
         elements/ylightobject.h
+        core/yuniformvalues.cpp
 )
 
 add_custom_command(

@@ -4,13 +4,16 @@
 
 #pragma once
 
-#include "ymaterial.h"
+#include <GL/glew.h>
+#include <glm/fwd.hpp>
+
 #include "../LuaHandler/luahandler.hpp"
 
 namespace core {
     class YModel;
-
+    class YMaterial;
     struct YBaseUniformValue;
+    struct YUniform;
 
     class YMaterialInstance {
         GLuint modelUniformLocation;
@@ -20,7 +23,7 @@ namespace core {
         int numberPointLights;
         int numberDirectionLights;
         std::shared_ptr<core::YMaterial> material;
-        std::vector<std::shared_ptr<YBaseUniformValue> > uniformValues;
+        std::vector<std::shared_ptr<core::YBaseUniformValue> > uniformValues;
 
     public:
         explicit YMaterialInstance(const std::shared_ptr<YMaterial> &material);

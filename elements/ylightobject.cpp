@@ -8,6 +8,7 @@
 #include "../core/ymaterial.h"
 #include "../core/ymaterialinstance.h"
 #include "../core/yuniformvalue.h"
+#include "../core/yrenderer.h"
 
 namespace elements {
 #pragma region YLight Default Shaders
@@ -90,18 +91,21 @@ namespace elements {
                                                                                  defaultLightModelPath)) {
         materialInstance = std::make_shared<core::YMaterialInstance>(YLightObject::getDefaultMaterial());
 
-        // Uniform found: uniform vec4 lightColor.
-        // Uniform found: uniform vec3 lightDirection.
+        const auto uniformLightColorName = "lightColor";
+        const auto uniformLightDirectionName = "lightDirection";
 
-        auto lightColorUniform = YLightObject::getDefaultMaterial()->getUniform("lightColor");
-        materialInstance->updateUniformValue("lightColor", std::make_shared<core::YUniformValue<glm::vec4>>(lightColorUniform, light->getColor()));
-        auto lightDirectionUniform = YLightObject::getDefaultMaterial()->getUniform("lightDirection");
-        materialInstance->updateUniformValue("lightDirection", std::make_shared<core::YUniformValue<glm::vec3>>(lightColorUniform, light->getDirection()));
-        
+        auto lightColorUniform = YLightObject::getDefaultMaterial()->getUniform(uniformLightColorName);
+        materialInstance->updateUniformValue(uniformLightColorName, std::make_shared<core::YUniformValue<glm::vec4>>(lightColorUniform, light->getColor()));
+        auto lightDirectionUniform = YLightObject::getDefaultMaterial()->getUniform(uniformLightDirectionName);
+        materialInstance->updateUniformValue(uniformLightDirectionName, std::make_shared<core::YUniformValue<glm::vec3>>(lightColorUniform, light->getDirection()));
+
         transform.setPosition(light->getPosition());
     }
 
     void YLightObject::draw(const core::YRenderer &renderer) {
+        YObject::draw(renderer);
+        materialInstance->drawModel(transform.getModelMatrix(), lightModel,
+                                    renderer.getCamera()->getCachedViewProjectionMatrix());
     }
 
     std::shared_ptr<core::YMaterial> YLightObject::getDefaultMaterial() {
