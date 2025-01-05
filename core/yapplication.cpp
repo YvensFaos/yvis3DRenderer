@@ -112,21 +112,20 @@ namespace core {
                 glEnable(GL_DEPTH_TEST);
                 glEnable(GL_CULL_FACE);
 
-                //sceneFrameBuffer->getFBO()
-                currentScene->render();
+                currentScene->render(sceneFrameBuffer->getFBO());
 
                 for(const auto& applicationObject : applicationObjects) {
                     applicationObject->update();
                     applicationObject->draw(*renderer);
                 }
-                // sceneFrameBuffer->unbindBuffer();
+                 sceneFrameBuffer->unbindBuffer();
 
-                // glDisable(GL_DEPTH_TEST);
-                // glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-                // glClear(GL_COLOR_BUFFER_BIT);
-                // glDisable(GL_CULL_FACE);
+                 glDisable(GL_DEPTH_TEST);
+                 glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+                 glClear(GL_COLOR_BUFFER_BIT);
+                 glDisable(GL_CULL_FACE);
 
-                // sceneRenderQuad->render(sceneFrameBuffer->getFramebufferTexture());
+                 sceneRenderQuad->render(sceneFrameBuffer->getFramebufferTexture());
             } else {
                 renderer->startFrame();
             }
