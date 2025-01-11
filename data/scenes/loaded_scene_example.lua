@@ -50,7 +50,7 @@ normalFragmentShader = [[
 
     void main()
     {
-        frag_colour = vec4(vectorIn.vNormal, 1.0);
+        frag_colour = vec4(normalize(vectorIn.vNormal), 1.0);
     }
 ]]
 
@@ -163,7 +163,7 @@ scene = {
             name = "greenMonkey",
             model = "monkeyModel",
             pos = { -2.0, 0.5, -4.0 },
-            sca = { 1.0, 1.0, 1.0 },
+            sca = { 0.01, 0.01, 0.01 },
             rot = { 20.0, 0.0, 0.0 },
             material = "simpleColorMaterial",
             uniforms = {
@@ -186,7 +186,7 @@ scene = {
                 colour = { 227.0 / 255, 82.0 / 255, 210.0 / 255, 1.0 }
             },
             pos = { 2.0, 0.5, -4.0 },
-            sca = { 1.0, 1.0, 1.0 },
+            sca = { 0.01, 0.01, 0.01 },
             rot = { 0.0, 0.0, 0.0 },
             behaviors = {
                 {
@@ -202,12 +202,12 @@ scene = {
             material = "normalMaterial",
             uniforms = { },
             pos = { 0.0, 0.5, -2.0 },
-            sca = { 1.0, 1.0, 1.0 },
+            sca = { 0.01, 0.01, 0.01 },
             rot = { 0.0, 0.0, 0.0 },
             behaviors = {
                 {
                     name = "YRotatingBehavior",
-                    rotatingAxis = { 0.1, 1, 0 },
+                    rotatingAxis = { 1, 0, 0 },
                     rotationSpeed = -10
                 }
             }
@@ -245,7 +245,7 @@ scene = {
 }
 
 monkeyModel = {
-    file = "data/models/monkey.fbx"
+    file = "data/models/monkey_.fbx"
 }
 
 camera = {

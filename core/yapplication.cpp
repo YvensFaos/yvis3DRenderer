@@ -33,7 +33,6 @@ namespace core {
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(renderer->getWindow().get(), true);
         ImGui_ImplOpenGL3_Init("#version 400");
-
         frames.resize(maxFrames);
     }
 

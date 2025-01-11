@@ -25,20 +25,19 @@ namespace core {
     void YModel::loadModel(const std::string &path) {
         Assimp::Importer importer;
         const aiScene *scene = importer.ReadFile(
-            path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
-
+            path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             return;
         }
 
         this->directory = path.substr(0, path.find_last_of('/'));
         printf("Loading object: %s\r\nDirectory: %s\r\n", path.c_str(), this->directory.c_str());
-        glm::mat4 parentMat4 = YModel::aiMatrix4x4ToGlm(&scene->mRootNode->mTransformation);
+        const glm::mat4 parentMat4 = YModel::aiMatrix4x4ToGlm(&scene->mRootNode->mTransformation);
         processNode(scene->mRootNode, scene, parentMat4);
     }
 
     void YModel::processNode(const aiNode *node, const aiScene *scene, const glm::mat4 &parentMat4) {
-        glm::mat4 currentTransform = YModel::aiMatrix4x4ToGlm(&node->mTransformation);
+        const glm::mat4 currentTransform = YModel::aiMatrix4x4ToGlm(&node->mTransformation);
         glm::mat4 resulting = parentMat4 * currentTransform;
 
         for (unsigned int i = 0; i < node->mNumMeshes; i++) {
@@ -235,7 +234,7 @@ namespace core {
         this->transform.rotate(rotateTo);
     }
 
-    void YModel::scale(glm::vec3 scaleTo) {
+    void YModel::scale(const glm::vec3 scaleTo) {
         this->transform.scale(scaleTo);
     }
 
@@ -255,8 +254,8 @@ namespace core {
         glm::vec3 min(+999999.0f, +999999.0f, +999999.0f);
         glm::vec3 max(-999999.0f, -999999.0f, -999999.0f);
 
-        for (const auto &meshe: this->meshes) {
-            math::YBoundingBox abb = meshe.getBoundingBox();
+        for (const auto &mesh: this->meshes) {
+            math::YBoundingBox abb = mesh.getBoundingBox();
             min.x = std::min(min.x, abb.getMin().x);
             min.y = std::min(min.y, abb.getMin().y);
             min.z = std::min(min.z, abb.getMin().z);

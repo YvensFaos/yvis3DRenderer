@@ -212,8 +212,6 @@ namespace core {
     }
 
     void YInstanceMesh::setupInstanceBO() {
-        // constexpr auto sizeOfMat4 = sizeof(glm::mat4);
-
         glBindVertexArray(this->getVAO());
 
         glGenBuffers(1, &this->IBO);

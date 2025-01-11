@@ -149,8 +149,8 @@ namespace scenes {
                             if (luaHandler.getTableFromTable("behaviors")) {
                                 auto numberOfBehaviors = luaHandler.getLength();
                                 printf("%d behaviors found!\n", numberOfBehaviors);
-                                for (int i = 1; i <= numberOfBehaviors; ++i) {
-                                    if (luaHandler.getTableFromTable(i)) {
+                                for (int j = 1; j <= numberOfBehaviors; ++j) {
+                                    if (luaHandler.getTableFromTable(j)) {
                                         auto behavior = behaviors::YGenerateBehavior::GenerateFromLuaTable(luaHandler, *renderObject);
                                         renderObject->addBehavior(behavior);
                                     }
@@ -174,7 +174,6 @@ namespace scenes {
             printf("\n\nLoading camera information...");
             utils::YLuaHelper::setupCameraPosition("camera", camera, luaHandler);
             printf(" complete!\n");
-
             loaded = true;
         } else {
             loaded = false;
