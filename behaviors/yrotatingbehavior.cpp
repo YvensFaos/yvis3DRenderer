@@ -4,6 +4,7 @@
 
 #include "yrotatingbehavior.h"
 
+#include "../core/yapplication.h"
 #include "../core/ytransform.h"
 
 behaviors::YRotatingBehavior::YRotatingBehavior(core::YTransform &transform, const glm::vec3 axis,
@@ -13,5 +14,6 @@ behaviors::YRotatingBehavior::YRotatingBehavior(core::YTransform &transform, con
 }
 
 void behaviors::YRotatingBehavior::update() {
-    transform.rotate(rotationSpeed * rotatingAxis);
+    const auto deltaTime = core::YApplication::getDeltaTime();
+    transform.rotate(rotationSpeed * rotatingAxis * deltaTime);
 }

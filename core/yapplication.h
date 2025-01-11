@@ -35,6 +35,8 @@ namespace core {
         int currentFramesIndex;
         std::vector<std::shared_ptr<view::YObjectUI> > viewObjects;
         std::vector<std::shared_ptr<elements::YObject> > applicationObjects;
+        static float fps;
+        static float deltaTime;
 
     public:
         YApplication(float width, float height, const std::string &title);
@@ -46,6 +48,10 @@ namespace core {
         ~YApplication();
 
         void run();
+
+        static float getFPS();
+
+        static float getDeltaTime();
 
     private:
         void setCurrentScene(std::shared_ptr<scenes::YLoadedScene> scene);

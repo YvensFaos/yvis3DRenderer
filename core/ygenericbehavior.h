@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include <string>
 
 namespace core {
     class YGenericBehavior {
@@ -16,5 +17,7 @@ namespace core {
         YGenericBehavior &operator=(const YGenericBehavior &) = delete;
 
         virtual void update() {};
+
+        virtual std::string toString() const { return "YGenericBehavior"; }
     };
 }

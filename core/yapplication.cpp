@@ -18,6 +18,9 @@
 #include "../elements/ylightobject.h"
 
 namespace core {
+    float YApplication::fps = 0.0f;
+    float YApplication::deltaTime = 0.0f;
+
     YApplication::YApplication(float width, float height, const std::string &title) : maxFrames(100),
         currentFramesIndex(0) {
         renderer = std::make_shared<YRenderer>(width, height, title);
@@ -47,6 +50,7 @@ namespace core {
             ImGui::NewFrame();
 
             ImGui::Begin("YApplication");
+
             static char fpsLabel[32];
             snprintf(fpsLabel, 32, "FPS [%6.3f]", renderer->getFPS());
             ImGui::PlotLines(fpsLabel, &frames[0], maxFrames, 0, nullptr, 0.0f, 100.0f, ImVec2(300, 30));
@@ -81,8 +85,8 @@ namespace core {
                     }
                 }
             }
-
             ImGui::End();
+
             const bool loadedScene = currentScene != nullptr;
 
             if (loadedScene) {
@@ -133,9 +137,19 @@ namespace core {
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             renderer->finishFrame();
             frames[currentFramesIndex] = renderer->getFPS();
+            fps = renderer->getFPS();
+            deltaTime = renderer->getDeltaTime();
             currentFramesIndex = (currentFramesIndex + 1) % maxFrames;
         } while (renderer->isRunning());
         renderer->closeRenderer();
+    }
+
+    float YApplication::getFPS() {
+        return fps;
+    }
+
+    float YApplication::getDeltaTime() {
+        return deltaTime;
     }
 
     void YApplication::setCurrentScene(std::shared_ptr<scenes::YLoadedScene> scene) {

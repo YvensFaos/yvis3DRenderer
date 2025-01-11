@@ -27,3 +27,15 @@ core::YTransform& elements::YObject::getTransform() {
 void elements::YObject::addBehavior(std::shared_ptr<core::YGenericBehavior> behavior) {
     behaviors.emplace_back(std::move(behavior));
 }
+
+int elements::YObject::getBehaviorCount() const {
+    return static_cast<int>(behaviors.size());
+}
+
+std::vector<std::shared_ptr<core::YGenericBehavior>>::iterator elements::YObject::getBehaviorIterator() {
+    return behaviors.begin();
+}
+
+std::vector<std::shared_ptr<core::YGenericBehavior>>::iterator elements::YObject::getBehaviorEndIterator() {
+    return behaviors.end();
+}

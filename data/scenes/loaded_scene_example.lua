@@ -26,23 +26,6 @@ basicVertexShader = [[
     }
 ]]
 
-lightVertexShader = [[
-   #version 400
-   layout (location = 0) in vec3 vertex;
-
-    out vectorOut {
-        vec3 vPosition;
-    } vectorOut;
-
-   uniform mat4 model;
-   uniform mat4 viewProjection;
-   void main() {
-       vectorOut.vPosition = vec3(model * vec4(vertex, 1.0));
-       vec4 vecOut = vec4(vectorOut.vPosition, 1.0);
-       gl_Position = viewProjection * vecOut;
-   }
-]]
-
 colorFragmentShader = [[
     #version 400
 
@@ -55,17 +38,22 @@ colorFragmentShader = [[
     }
 ]]
 
-lightObjectFragmentShader = [[
+normalFragmentShader = [[
     #version 400
 
-    uniform vec4 lightColor;
+    in vectorOut {
+        vec3 vPosition;
+        vec3 vNormal;
+        vec2 vUv;
+    } vectorIn;
     out vec4 frag_colour;
 
     void main()
     {
-      frag_colour = lightColor;
+        frag_colour = vec4(vectorIn.vNormal, 1.0);
     }
 ]]
+
 
 lightFragmentShader = [[
     #version 400
@@ -164,9 +152,9 @@ scene = {
             supportLight = true
         },
         {
-            name = "lightObjectMaterial",
-            vertexShader = "lightVertexShader",
-            fragmentShader = "lightObjectFragmentShader",
+            name = "normalMaterial",
+            vertexShader = "basicVertexShader",
+            fragmentShader = "normalFragmentShader",
             supportLight = false
         }
     },
@@ -185,7 +173,7 @@ scene = {
                 {
                     name = "YRotatingBehavior",
                     rotatingAxis = { 0, 1, 0 },
-                    rotationSpeed = 0.1
+                    rotationSpeed = 8.5
                 }
             }
         }
@@ -200,22 +188,27 @@ scene = {
             pos = { 2.0, 0.5, -4.0 },
             sca = { 1.0, 1.0, 1.0 },
             rot = { 0.0, 0.0, 0.0 },
+            behaviors = {
+                {
+                    name = "YRotatingBehavior",
+                    rotatingAxis = { 1, 0, 0.2 },
+                    rotationSpeed = -15
+                }
+            }
         },
         {
             name = "purpleMonkey",
             model = "monkeyModel",
-            material = "lightMaterial",
-            uniforms = {
-                colour = { 172.0 / 255, 21.0 / 255, 214.0 / 255, 1.0 }
-            },
+            material = "normalMaterial",
+            uniforms = { },
             pos = { 0.0, 0.5, -2.0 },
             sca = { 1.0, 1.0, 1.0 },
             rot = { 0.0, 0.0, 0.0 },
             behaviors = {
                 {
                     name = "YRotatingBehavior",
-                    rotatingAxis = { 0, 1, 0 },
-                    rotationSpeed = -0.1
+                    rotatingAxis = { 0.1, 1, 0 },
+                    rotationSpeed = -10
                 }
             }
         }

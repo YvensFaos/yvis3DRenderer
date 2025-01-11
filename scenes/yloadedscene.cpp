@@ -68,9 +68,6 @@ namespace scenes {
                         auto vertexShader = luaHandler.getGlobalString(vertexShaderName);
                         auto fragmentShaderName = luaHandler.getStringFromTable("fragmentShader");
                         auto fragmentShader = luaHandler.getGlobalString(fragmentShaderName);
-                        printf("%s\nVertex Shader[%s]:\n%s\n\nFragment Shader[%s]:\n%s\n\n", materialName.c_str(),
-                               vertexShaderName.c_str(), vertexShader.c_str(), fragmentShaderName.c_str(),
-                               fragmentShader.c_str());
                         auto supportLight = luaHandler.getBoolFromTable("supportLight");
 
                         if (!materials.contains(materialName)) {

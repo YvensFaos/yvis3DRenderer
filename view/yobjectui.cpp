@@ -7,6 +7,7 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "../core/ygenericbehavior.h"
 #include "../elements/yobject.h"
 
 namespace view {
@@ -19,6 +20,12 @@ namespace view {
         ImGui::SeparatorText(selfObject->getIdentifier().c_str());
         if (ImGui::InputFloat4("Pos", glm::value_ptr(objectPosition))) {
             selfObject->getTransform().setPosition(objectPosition);
+        }
+        ImGui::Text("Behaviors: %d", selfObject->getBehaviorCount());
+        auto begin = selfObject->getBehaviorIterator();
+        while(begin != selfObject->getBehaviorEndIterator()) {
+            ImGui::Text("%s", (*begin)->toString().c_str());
+            ++begin;
         }
     }
 

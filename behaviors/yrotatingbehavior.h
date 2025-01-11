@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include <string>
 #include <glm/vec3.hpp>
 #include "../core/ygenericbehavior.h"
 
@@ -22,5 +23,7 @@ namespace behaviors {
         ~YRotatingBehavior() override = default;
 
         void update() override;
+
+        [[nodiscard]] std::string toString() const override { return "YRotatingBehavior"; }
     };
 }

@@ -62,11 +62,11 @@ namespace core {
 
         [[nodiscard]] std::shared_ptr<GLFWwindow> getWindow() const;
 
-        int getWidth() const;
+        [[nodiscard]] int getWidth() const;
 
-        int getHeight() const;
+        [[nodiscard]] int getHeight() const;
 
-        float getFPS() const;
+        [[nodiscard]] float getFPS() const;
 
         static void setCullFaces(bool activate);
 

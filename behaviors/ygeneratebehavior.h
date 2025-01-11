@@ -16,7 +16,8 @@ namespace core {
 
 namespace behaviors {
     class YGenerateBehavior {
-        public:
-        static std::shared_ptr<core::YGenericBehavior> GenerateFromLuaTable(const LuaHandler& handler, elements::YRenderObject& renderObject);
+    public:
+        static std::shared_ptr<core::YGenericBehavior> GenerateFromLuaTable(
+            const LuaHandler &handler, elements::YRenderObject &renderObject);
     };
 } // behaviors

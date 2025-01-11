@@ -34,5 +34,11 @@ namespace elements {
         core::YTransform &getTransform();
 
         void addBehavior(std::shared_ptr<core::YGenericBehavior> behavior);
+
+        [[nodiscard]] int getBehaviorCount() const;
+
+        std::vector<std::shared_ptr<core::YGenericBehavior> >::iterator getBehaviorIterator();
+
+        std::vector<std::shared_ptr<core::YGenericBehavior> >::iterator getBehaviorEndIterator();
     };
 }
