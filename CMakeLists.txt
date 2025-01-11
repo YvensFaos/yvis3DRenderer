@@ -80,6 +80,11 @@ add_executable(yvis3Drenderer main.cpp
         elements/ylightobject.cpp
         elements/ylightobject.h
         core/yuniformvalues.cpp
+        core/ygenericbehavior.h
+        behaviors/YRotatingBehavior.cpp
+        behaviors/YRotatingBehavior.h
+        behaviors/ygeneratebehavior.cpp
+        behaviors/ygeneratebehavior.h
 )
 
 add_custom_command(

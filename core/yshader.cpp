@@ -106,7 +106,7 @@ namespace core {
                 } else if (type == "sampler2D") {
                     uniforms.emplace_back(std::make_shared<YUniform>(uniformName, YUniformType::SAMPLER2D));
                 } else {
-                    printf("Custom uniform type found: %s\n.", type.c_str());
+                    printf("Custom uniform type found: %s.\n", type.c_str());
                     uniforms.emplace_back(std::make_shared<YUniform>(uniformName, YUniformType::CUSTOM));
                 }
             }

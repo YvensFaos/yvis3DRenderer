@@ -3,6 +3,8 @@
 //
 
 #include "yloadedscene.h"
+
+#include "../behaviors/ygeneratebehavior.h"
 #include "../utils/yluahelper.h"
 #include "../core/ymaterialinstance.h"
 #include "../core/ylightuniform.h"
@@ -66,7 +68,7 @@ namespace scenes {
                         auto vertexShader = luaHandler.getGlobalString(vertexShaderName);
                         auto fragmentShaderName = luaHandler.getStringFromTable("fragmentShader");
                         auto fragmentShader = luaHandler.getGlobalString(fragmentShaderName);
-                        printf("%s\nVertex Shader[%s]: %s\n\nFragment Shader[%s]: %s\n\n", materialName.c_str(),
+                        printf("%s\nVertex Shader[%s]:\n%s\n\nFragment Shader[%s]:\n%s\n\n", materialName.c_str(),
                                vertexShaderName.c_str(), vertexShader.c_str(), fragmentShaderName.c_str(),
                                fragmentShader.c_str());
                         auto supportLight = luaHandler.getBoolFromTable("supportLight");
@@ -106,7 +108,7 @@ namespace scenes {
 
                             auto materialName = luaHandler.getStringFromTable("material");
                             auto yMaterial = materials[materialName];
-                            if(yMaterial == nullptr) {
+                            if (yMaterial == nullptr) {
                                 printf("Error! Material %s not found!\n\n", materialName.c_str());
                                 luaHandler.popTable();
                                 continue;
@@ -145,6 +147,21 @@ namespace scenes {
                             renderObject->transform.setPosition(modelPosition);
                             renderObject->transform.scale(modelScale);
                             renderObject->transform.rotate(modelRotation);
+
+                            printf("Getting behaviors...");
+                            if (luaHandler.getTableFromTable("behaviors")) {
+                                auto numberOfBehaviors = luaHandler.getLength();
+                                printf("%d behaviors found!\n", numberOfBehaviors);
+                                for (int i = 1; i <= numberOfBehaviors; ++i) {
+                                    if (luaHandler.getTableFromTable(i)) {
+                                        auto behavior = behaviors::YGenerateBehavior::GenerateFromLuaTable(luaHandler, *renderObject);
+                                        renderObject->addBehavior(behavior);
+                                    }
+                                }
+                                luaHandler.popTable();
+                            } else {
+                                printf("0 behaviors found!\n");
+                            }
 
                             printf("Complete!\n");
 

@@ -8,9 +8,7 @@
 
 namespace core {
     class YModel;
-
     class YRenderer;
-
     class YMaterialInstance;
 }
 

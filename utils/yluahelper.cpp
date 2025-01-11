@@ -327,12 +327,13 @@ namespace utils {
     }
 
     glm::vec3 YLuaHelper::readVec3FromTable(const std::string &identifier, const LuaHandler &luaHandler) {
-        luaHandler.loadTable(identifier);
         glm::vec3 value(0, 0, 0);
-        value.x = luaHandler.getNumberFromTable(1);
-        value.y = luaHandler.getNumberFromTable(2);
-        value.z = luaHandler.getNumberFromTable(3);
-        luaHandler.popTable();
+        if(luaHandler.loadTable(identifier)) {
+            value.x = luaHandler.getNumberFromTable(1);
+            value.y = luaHandler.getNumberFromTable(2);
+            value.z = luaHandler.getNumberFromTable(3);
+            luaHandler.popTable();
+        }
         return value;
     }
 

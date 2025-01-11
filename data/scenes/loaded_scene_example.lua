@@ -180,9 +180,16 @@ scene = {
             material = "simpleColorMaterial",
             uniforms = {
                 colour = { 33.0 / 255, 217.0 / 255, 82.0 / 255, 1.0 }
+            },
+            behaviors = {
+                {
+                    name = "YRotatingBehavior",
+                    rotatingAxis = { 0, 1, 0 },
+                    rotationSpeed = 0.1
+                }
             }
         }
-        ,
+    ,
         {
             name = "pinkMonkey",
             model = "monkeyModel",
@@ -204,6 +211,13 @@ scene = {
             pos = { 0.0, 0.5, -2.0 },
             sca = { 1.0, 1.0, 1.0 },
             rot = { 0.0, 0.0, 0.0 },
+            behaviors = {
+                {
+                    name = "YRotatingBehavior",
+                    rotatingAxis = { 0, 1, 0 },
+                    rotationSpeed = -0.1
+                }
+            }
         }
     },
     lights = {

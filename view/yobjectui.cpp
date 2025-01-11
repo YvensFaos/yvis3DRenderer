@@ -2,7 +2,7 @@
 // Created by Yvens Serpa on 01/01/2025.
 //
 
-#include "YObjectUI.h"
+#include "yobjectui.h"
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>

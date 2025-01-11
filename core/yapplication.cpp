@@ -12,7 +12,7 @@
 #include "yframebuffer.h"
 #include "yrenderquad.h"
 #include "../scenes/yloadedscene.h"
-#include "../view/YObjectUI.h"
+#include "../view/yobjectui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "../elements/ylightobject.h"
