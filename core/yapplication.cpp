@@ -41,7 +41,6 @@ namespace core {
     }
 
     void YApplication::run() {
-        // Render
         do {
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -74,9 +73,10 @@ namespace core {
 
                     auto index = 1;
                     char lightObjectLabel[32];
-                    while(lightIterator != lightEndIterator) {
+                    while (lightIterator != lightEndIterator) {
                         snprintf(lightObjectLabel, 32, "lightObject[%i]", index++);
-                        applicationObjects.push_back(std::make_shared<elements::YLightObject>(lightObjectLabel, *lightIterator));
+                        applicationObjects.push_back(
+                            std::make_shared<elements::YLightObject>(lightObjectLabel, *lightIterator));
                         ++lightIterator;
                     }
                 }
@@ -88,7 +88,7 @@ namespace core {
             if (loadedScene) {
                 ImGui::Begin(currentScene->getFileName().c_str());
 
-                for (const auto& viewObject: viewObjects) {
+                for (const auto &viewObject: viewObjects) {
                     ImGui::PushID(viewObject->getIdentifier().c_str());
                     viewObject->render();
                     ImGui::PopID();
@@ -114,18 +114,18 @@ namespace core {
 
                 currentScene->render(sceneFrameBuffer->getFBO());
 
-                for(const auto& applicationObject : applicationObjects) {
+                for (const auto &applicationObject: applicationObjects) {
                     applicationObject->update();
                     applicationObject->draw(*renderer);
                 }
-                 sceneFrameBuffer->unbindBuffer();
+                sceneFrameBuffer->unbindBuffer();
 
-                 glDisable(GL_DEPTH_TEST);
-                 glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-                 glClear(GL_COLOR_BUFFER_BIT);
-                 glDisable(GL_CULL_FACE);
+                glDisable(GL_DEPTH_TEST);
+                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT);
+                glDisable(GL_CULL_FACE);
 
-                 sceneRenderQuad->render(sceneFrameBuffer->getFramebufferTexture());
+                sceneRenderQuad->render(sceneFrameBuffer->getFramebufferTexture());
             } else {
                 renderer->startFrame();
             }

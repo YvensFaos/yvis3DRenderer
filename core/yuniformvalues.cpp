@@ -51,9 +51,7 @@ namespace core {
     YUniformValue<glm::vec4>::YUniformValue(const std::shared_ptr<YUniform> &uniform, const glm::vec4 &value)
         : YBaseUniformValue(
               uniform), value(value) {
-
         streamUniformValue = [&]() {
-//            printf("Stream uniform %s %d %f %f %f %f.\n", uniform->getUniformName().c_str(), uniform->uniformLocation, this->value.x, this->value.y, this->value.z, this->value.w);
             glUniform4f(uniform->uniformLocation, this->value.x, this->value.y, this->value.z, this->value.w);
         };
     }

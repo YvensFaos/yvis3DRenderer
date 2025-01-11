@@ -39,8 +39,7 @@ namespace core {
         }
 
         void updateValue(const YBaseUniformValue & another) override {
-            const auto* derived = dynamic_cast<const YUniformValue*>(&another);
-            if (derived) {
+            if (const auto* derived = dynamic_cast<const YUniformValue*>(&another)) {
                 printf("Updating value from %s.\n", uniform->uniformName.c_str());
                 set(derived->get());
             }

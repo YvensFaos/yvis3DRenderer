@@ -186,7 +186,7 @@ scene = {
         {
             name = "pinkMonkey",
             model = "monkeyModel",
-            material = "simpleColorMaterial",
+            material = "lightMaterial",
             uniforms = {
                 colour = { 227.0 / 255, 82.0 / 255, 210.0 / 255, 1.0 }
             },
@@ -205,29 +205,6 @@ scene = {
             sca = { 1.0, 1.0, 1.0 },
             rot = { 0.0, 0.0, 0.0 },
         }
-        ,
-        {
-            name = "lightModelTest_1",
-            model = "lightModel",
-            material = "lightObjectMaterial",
-            uniforms = {
-                lightColor = { 1.0, 0.0, 0.0, 1.0 }
-            },
-            pos = { 0.0, 0.0, 4.0 },
-            sca = { 0.01, 0.01, 0.01 },
-            rot = { 0.0, 0.0, 0.0 },
-        },
-        {
-            name = "lightModelTest_2",
-            model = "lightModel",
-            material = "lightObjectMaterial",
-            uniforms = {
-                lightColor = { 0.1, 0.4, 0.3, 1.0 },
-            },
-            pos = { 2.0, 0.5, -1.0 },
-            sca = { 0.01, 0.01, 0.01 },
-            rot = { 0.0, 0.0, 0.0 },
-        }
     },
     lights = {
         {
@@ -238,18 +215,16 @@ scene = {
             intensity = 100.0,
             specularPower = 128.0,
             directional = true
-        }
-        ,
+        },
         {
-            pos = { 2.0, 0.5, -2.0 },
+            pos = { 0.25, 0.5, -2.0 },
             dir = { 0.0, 0.0, -1.0 },
             up = { 0.0, 1.0, 0.0 },
             colour = { 0.1, 0.4, 0.3, 1.0 },
             intensity = 400.0,
             specularPower = 32.0,
             directional = false
-        }
-        ,
+        },
         {
             pos = { 0.0, 2.0, 0.0 },
             dir = { 0.0, -1.0, 0.0 },
@@ -264,10 +239,6 @@ scene = {
 
 monkeyModel = {
     file = "data/models/monkey.fbx"
-}
-
-lightModel = {
-    file = "data/models/tetrahedron_.fbx"
 }
 
 camera = {
