@@ -52,9 +52,9 @@ namespace core {
             static char fpsLabel[32];
             snprintf(fpsLabel, 32, "FPS [%6.3f]", renderer->getFPS());
             ImGui::PlotLines(fpsLabel, &frames[0], maxFrames, 0, nullptr, 0.0f, 100.0f, ImVec2(300, 30));
-            static char sceneName[196] = "data/scenes/tri_light_scene.lua";
-
+            static char sceneName[196] = "data/scenes/loaded_scene_example.lua";
             auto sceneTextName = currentScene != nullptr ? std::string(sceneName) : "No scene loaded.";
+
             ImGui::Text("%s", sceneTextName.c_str());
             ImGui::InputTextWithHint("Scene", "", sceneName, IM_ARRAYSIZE(sceneName));
             if (ImGui::Button("Load Example Scene")) {
@@ -76,6 +76,7 @@ namespace core {
 
                     auto index = 1;
                     char lightObjectLabel[32];
+                    applicationObjects.clear();
                     while (lightIterator != lightEndIterator) {
                         snprintf(lightObjectLabel, 32, "lightObject[%i]", index++);
                         applicationObjects.push_back(
