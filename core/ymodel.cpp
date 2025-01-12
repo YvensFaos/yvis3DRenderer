@@ -25,7 +25,7 @@ namespace core {
     void YModel::loadModel(const std::string &path) {
         Assimp::Importer importer;
         const aiScene *scene = importer.ReadFile(
-            path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
+            path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             return;
         }
@@ -38,7 +38,7 @@ namespace core {
 
     void YModel::processNode(const aiNode *node, const aiScene *scene, const glm::mat4 &parentMat4) {
         const glm::mat4 currentTransform = YModel::aiMatrix4x4ToGlm(&node->mTransformation);
-        glm::mat4 resulting = parentMat4 * currentTransform;
+        const glm::mat4 resulting = parentMat4 * currentTransform;
 
         for (unsigned int i = 0; i < node->mNumMeshes; i++) {
             aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];

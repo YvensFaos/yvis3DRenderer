@@ -47,13 +47,13 @@ namespace core {
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
-
             ImGui::Begin("YApplication");
 
             static char fpsLabel[32];
             snprintf(fpsLabel, 32, "FPS [%6.3f]", renderer->getFPS());
             ImGui::PlotLines(fpsLabel, &frames[0], maxFrames, 0, nullptr, 0.0f, 100.0f, ImVec2(300, 30));
-            static char sceneName[196] = "data/scenes/loaded_scene_example.lua";
+            static char sceneName[196] = "data/scenes/tri_light_scene.lua";
+
             auto sceneTextName = currentScene != nullptr ? std::string(sceneName) : "No scene loaded.";
             ImGui::Text("%s", sceneTextName.c_str());
             ImGui::InputTextWithHint("Scene", "", sceneName, IM_ARRAYSIZE(sceneName));
@@ -101,8 +101,12 @@ namespace core {
                 const auto camera = renderer->getCamera();
                 auto pos = camera->getPos();
                 auto dir = camera->getDir();
-                ImGui::InputFloat3("Pos", glm::value_ptr(pos));
-                ImGui::InputFloat3("Dir", glm::value_ptr(dir));
+                if(ImGui::InputFloat3("Pos", glm::value_ptr(pos))) {
+                    camera->setPos(pos);
+                }
+                if(ImGui::InputFloat3("Dir", glm::value_ptr(dir))) {
+                    camera->setDir(dir);
+                }
                 if (ImGui::Button("Print to Console")) {
                     camera->logToConsole();
                 }

@@ -91,10 +91,11 @@ namespace scenes {
                     if (luaHandler.getTableFromTable(i)) {
                         auto modelName = luaHandler.getStringFromTable("name");
                         auto model = luaHandler.getStringFromTable("model");
-                        printf("\nLoading model named %s.\n", model.c_str());
+                        printf("\nLoading model named: %s.\n", model.c_str());
 
                         if (luaHandler.loadTable(model)) {
                             auto modelFile = luaHandler.getStringFromTable("file");
+                            printf("\nLoading model file: %s.\n", modelFile.c_str());
                             luaHandler.popTable();
 
                             if (!models.contains(modelFile)) {
