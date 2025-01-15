@@ -10,10 +10,16 @@
 #include "../core/ymaterial.h"
 #include "../elements/yrenderobject.h"
 
+namespace elements {
+    struct YFog;
+}
+
 namespace scenes {
     class YLoadedScene final : public core::YScene {
         int numPointLights;
         int numDirectionalLights;
+        bool hasFog;
+        std::shared_ptr<elements::YFog> fog;
         std::vector<std::shared_ptr<elements::YObject> > objects;
         std::vector<std::shared_ptr<core::YLight> > lights;
         std::unordered_map<std::string, std::shared_ptr<core::YMaterial> > materials;

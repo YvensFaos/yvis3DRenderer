@@ -19,6 +19,6 @@ elements::YRenderObject::YRenderObject(const std::string &identifier, std::share
 
 void elements::YRenderObject::draw(const core::YRenderer &renderer) {
     YObject::draw(renderer);
-    materialInstance->drawModel(transform.getModelMatrix(), model,
+    materialInstance->drawModel(renderer.getCamera(), transform.getModelMatrix(), model,
                                 renderer.getCamera()->getCachedViewProjectionMatrix());
 }

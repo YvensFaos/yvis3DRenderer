@@ -4,14 +4,14 @@
 
 #include "ylightuniform.h"
 
-#include "ylight.h"
-#include "yuniform.h"
+#include "../ylight.h"
+#include "../yuniform.h"
 
-namespace core {
+namespace core::uniforms {
     YLightUniform::YLightUniform(const int lightIndex, const GLuint shaderProgramme, const std::shared_ptr<core::YLight> &light,
-        const std::shared_ptr<core::YUniform>& uniform):
-    YBaseUniformValue(uniform), lightIndex(lightIndex), light(light) {
-        char uniformName[64];
+                                 const std::shared_ptr<core::YUniform>& uniform):
+        YBaseUniformValue(uniform), lightIndex(lightIndex), light(light) {
+        static char uniformName[64];
         snprintf(uniformName, 64, "%s.", uniform->uniformName.c_str());
         std::string buffer;
 
@@ -55,4 +55,4 @@ namespace core {
     std::shared_ptr<core::YLight> YLightUniform::getLight() const {
         return light;
     }
-} // core
+}

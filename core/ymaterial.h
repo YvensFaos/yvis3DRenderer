@@ -37,6 +37,8 @@ namespace core {
 
         [[nodiscard]] core::YUniform* getUniform(const std::string &uniformName) const;
 
+        std::shared_ptr<YUniform> createCustomUniform(const std::string &uniformName, YUniformType type);
+
         [[nodiscard]] bool doesSupportLight() const;
 
         void setSupportLight(bool newSupportLight);

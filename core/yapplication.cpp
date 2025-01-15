@@ -91,7 +91,6 @@ namespace core {
 
             if (loadedScene) {
                 ImGui::Begin(currentScene->getFileName().c_str());
-
                 for (const auto &viewObject: viewObjects) {
                     ImGui::PushID(viewObject->getIdentifier().c_str());
                     viewObject->render();

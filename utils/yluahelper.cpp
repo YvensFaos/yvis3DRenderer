@@ -299,20 +299,11 @@ namespace utils {
     }
 
     elements::YFog YLuaHelper::loadFogFromTable(const std::string &identifier, const LuaHandler &luaHandler) {
-        luaHandler.loadTable(identifier);
-        const float maxDist = luaHandler.getNumberFromTable("maxDist");
-        const float minDist = luaHandler.getNumberFromTable("minDist");
+        return loadFog(identifier, luaHandler, false);
+    }
 
-        glm::vec4 color;
-        luaHandler.getTableFromTable("color");
-        color.x = luaHandler.getNumberFromTable(1);
-        color.y = luaHandler.getNumberFromTable(2);
-        color.z = luaHandler.getNumberFromTable(3);
-        color.w = luaHandler.getNumberFromTable(4);
-        luaHandler.popTable();
-        luaHandler.popTable();
-
-        return {maxDist, minDist, color};
+    elements::YFog YLuaHelper::loadFogFromTableInTable(const std::string &identifier, const LuaHandler &luaHandler) {
+        return loadFog(identifier, luaHandler, true);
     }
 
     glm::vec4 YLuaHelper::readVec4FromTable(const std::string &identifier, const LuaHandler &luaHandler) {
@@ -328,7 +319,7 @@ namespace utils {
 
     glm::vec3 YLuaHelper::readVec3FromTable(const std::string &identifier, const LuaHandler &luaHandler) {
         glm::vec3 value(0, 0, 0);
-        if(luaHandler.loadTable(identifier)) {
+        if (luaHandler.loadTable(identifier)) {
             value.x = luaHandler.getNumberFromTable(1);
             value.y = luaHandler.getNumberFromTable(2);
             value.z = luaHandler.getNumberFromTable(3);
@@ -360,6 +351,20 @@ namespace utils {
         }
 
         return result;
+    }
+
+    elements::YFog YLuaHelper::loadFog(const std::string &identifier, const LuaHandler &luaHandler, bool fromTable) {
+        float maxDist = -1;
+        float minDist = -1;
+        glm::vec4 color;
+
+        if ((fromTable) ? luaHandler.getTableFromTable(identifier) : luaHandler.loadTable(identifier)) {
+            maxDist = luaHandler.getNumberFromTable("maxDist");
+            minDist = luaHandler.getNumberFromTable("minDist");
+            color = readVec4FromTableInTable("color", luaHandler);
+            luaHandler.popTable();
+        }
+        return {maxDist, minDist, color};
     }
 
     glm::vec2 YLuaHelper::readVec2FromTableInTable(const std::string &identifier, const LuaHandler &luaHandler) {

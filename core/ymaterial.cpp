@@ -79,6 +79,16 @@ namespace core {
         return nullptr;
     }
 
+    std::shared_ptr<YUniform> YMaterial::createCustomUniform(const std::string &uniformName, YUniformType type) {
+        auto newUniform = std::make_shared<YUniform>(uniformName, type);
+        if(const auto uniformLocation = glGetUniformLocation(shaderProgram, uniformName.c_str()); uniformLocation != -1) {
+            newUniform->setUniformLocation(uniformLocation);
+            uniforms.insert(uniforms.end(), newUniform);
+            return newUniform;
+        }
+        return nullptr;
+    }
+
     bool YMaterial::doesSupportLight() const {
         return supportLight;
     }

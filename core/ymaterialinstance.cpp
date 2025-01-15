@@ -6,76 +6,79 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+#include "ycamera.h"
 #include "ymaterial.h"
 #include "yuniformvalue.h"
 #include "../utils/yluahelper.h"
 #include "../utils/yglhelper.h"
 
 namespace core {
-    YMaterialInstance::YMaterialInstance(const std::shared_ptr<YMaterial> &material) : material(material),
-                                                                                       modelUniformLocation(-1),
-                                                                                       viewProjectionUniformLocation(
-                                                                                               -1),
-                                                                                       numberDirectionLightsLocation(
-                                                                                               -1),
-                                                                                       numberPointLightsLocation(-1),
-                                                                                       numberPointLights(-1),
-                                                                                       numberDirectionLights(-1) {
+    YMaterialInstance::YMaterialInstance(const std::shared_ptr<YMaterial> &material) : modelUniformLocation(-1),
+        viewProjectionUniformLocation(
+            -1),
+        numberPointLightsLocation(-1),
+        numberDirectionLightsLocation(
+            -1),
+        cameraPositionUniformLocation(-1),
+        numberPointLights(-1),
+        numberDirectionLights(-1),
+        material(material) {
         auto uniformsIterator = material->getUniformsIterator();
 
         while (uniformsIterator != material->getUniformsEndIterator()) {
             const auto identifier = (*uniformsIterator)->getUniformName();
             if (getModelUniformLocation(material, uniformsIterator, identifier)) continue;
             if (getViewProjectionUniformLocation(material, uniformsIterator, identifier)) continue;
+            if (getCameraPositionUniformLocation(material, uniformsIterator, identifier)) continue;
             if (getNumberPointLightsUniformLocation(material, uniformsIterator, identifier)) continue;
             if (getNumberDirectionLightsUniformLocation(material, uniformsIterator, identifier)) continue;
             switch ((*uniformsIterator)->getType()) {
                 case INT: {
                     uniformValues.push_back(std::make_shared<YUniformValue<int> >(*uniformsIterator, 0));
                 }
-                    break;
+                break;
                 case FLOAT: {
                     uniformValues.push_back(std::make_shared<YUniformValue<float> >(*uniformsIterator, 0.0f));
                 }
-                    break;
+                break;
                 case VEC2: {
                     uniformValues.push_back(
-                            std::make_shared<YUniformValue<glm::vec2> >(*uniformsIterator, glm::vec2(0.0f)));
+                        std::make_shared<YUniformValue<glm::vec2> >(*uniformsIterator, glm::vec2(0.0f)));
                 }
-                    break;
+                break;
                 case VEC3: {
                     uniformValues.push_back(
-                            std::make_shared<YUniformValue<glm::vec3> >(*uniformsIterator, glm::vec3(0.0f)));
+                        std::make_shared<YUniformValue<glm::vec3> >(*uniformsIterator, glm::vec3(0.0f)));
                 }
-                    break;
+                break;
                 case VEC4: {
                     uniformValues.push_back(
-                            std::make_shared<YUniformValue<glm::vec4> >(*uniformsIterator, glm::vec4(0.0f)));
+                        std::make_shared<YUniformValue<glm::vec4> >(*uniformsIterator, glm::vec4(0.0f)));
                 }
-                    break;
+                break;
                 case MAT3: {
                     uniformValues.push_back(
-                            std::make_shared<YUniformValue<glm::mat3> >(*uniformsIterator, glm::mat3(0.0f)));
+                        std::make_shared<YUniformValue<glm::mat3> >(*uniformsIterator, glm::mat3(0.0f)));
                 }
-                    break;
+                break;
                 case MAT4: {
                     uniformValues.push_back(
-                            std::make_shared<YUniformValue<glm::mat4> >(*uniformsIterator, glm::mat4(0.0f)));
+                        std::make_shared<YUniformValue<glm::mat4> >(*uniformsIterator, glm::mat4(0.0f)));
                 }
-                    break;
+                break;
                 case BOOL: {
                     uniformValues.push_back(std::make_shared<YUniformValue<bool> >(*uniformsIterator, false));
                 }
-                    break;
+                break;
                 case SAMPLER2D: {
                     uniformValues.push_back(std::make_shared<YUniformValue<int> >(*uniformsIterator, -1));
                 }
-                    break;
+                break;
                 case CUSTOM: {
                     printf("Custom uniform found: %s.\nSkip Uniform Value generation.\n",
                            identifier.c_str());
                 }
-                    break;
+                break;
             }
             ++uniformsIterator;
         }
@@ -83,12 +86,13 @@ namespace core {
 
     YMaterialInstance::YMaterialInstance(const std::shared_ptr<YMaterial> &material,
                                          const std::string &materialTableName,
-                                         const LuaHandler &luaHandler) : material(material), modelUniformLocation(-1),
-                                                                         viewProjectionUniformLocation(-1),
-                                                                         numberDirectionLightsLocation(-1),
+                                         const LuaHandler &luaHandler) : modelUniformLocation(-1), viewProjectionUniformLocation(-1),
                                                                          numberPointLightsLocation(-1),
+                                                                            numberDirectionLightsLocation(-1),
+                                                                         cameraPositionUniformLocation(-1),
                                                                          numberPointLights(-1),
-                                                                         numberDirectionLights(-1) {
+                                                                         numberDirectionLights(-1),
+                                                                         material(material) {
         auto uniformsIterator = material->getUniformsIterator();
         if (!luaHandler.getTableFromTable(materialTableName)) {
             printf("Error while reading material table %s. Aborting.\n", materialTableName.c_str());
@@ -101,6 +105,7 @@ namespace core {
 #pragma region unique identifiers
             if (getModelUniformLocation(material, uniformsIterator, identifier)) continue;
             if (getViewProjectionUniformLocation(material, uniformsIterator, identifier)) continue;
+            if (getCameraPositionUniformLocation(material, uniformsIterator, identifier)) continue;
             if (getNumberPointLightsUniformLocation(material, uniformsIterator, identifier)) continue;
             if (getNumberDirectionLightsUniformLocation(material, uniformsIterator, identifier)) continue;
 #pragma endregion
@@ -110,57 +115,57 @@ namespace core {
                     auto value = luaHandler.getIntegerFromTable(identifier);
                     uniformValues.push_back(std::make_shared<YUniformValue<int> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case FLOAT: {
                     auto value = luaHandler.getNumberFromTable(identifier);
                     uniformValues.push_back(std::make_shared<YUniformValue<float> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case VEC2: {
                     auto value = utils::YLuaHelper::readVec2FromTableInTable(identifier,
                                                                              luaHandler);
                     uniformValues.push_back(std::make_shared<YUniformValue<glm::vec2> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case VEC3: {
                     auto value = utils::YLuaHelper::readVec3FromTableInTable(identifier,
                                                                              luaHandler);
                     uniformValues.push_back(std::make_shared<YUniformValue<glm::vec3> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case VEC4: {
                     auto value = utils::YLuaHelper::readVec4FromTableInTable(identifier,
                                                                              luaHandler);
                     uniformValues.push_back(std::make_shared<YUniformValue<glm::vec4> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case MAT3: {
                     auto value = utils::YLuaHelper::readMat3FromTableInTable(identifier,
                                                                              luaHandler);
                     uniformValues.push_back(std::make_shared<YUniformValue<glm::mat3> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case MAT4: {
                     auto value = utils::YLuaHelper::readMat4FromTableInTable(identifier,
                                                                              luaHandler);
                     uniformValues.push_back(std::make_shared<YUniformValue<glm::mat4> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case BOOL: {
                     const auto value = luaHandler.getIntegerFromTable(identifier);
                     uniformValues.push_back(std::make_shared<YUniformValue<bool> >(*uniformsIterator, value != 0));
                 }
-                    break;
+                break;
                 case SAMPLER2D: {
                     auto value = luaHandler.getIntegerFromTable(identifier);
                     uniformValues.push_back(std::make_shared<YUniformValue<int> >(*uniformsIterator, value));
                 }
-                    break;
+                break;
                 case CUSTOM: {
                     printf("Custom uniform found: %s.\nSkip Uniform Value generation.\n",
                            identifier.c_str());
                 }
-                    break;
+                break;
             }
             ++uniformsIterator;
         }
@@ -168,8 +173,8 @@ namespace core {
         luaHandler.popTable();
     }
 
-    void YMaterialInstance::drawModel(const std::shared_ptr<YModel> &model, const glm::mat4 &viewProjection) const {
-        drawModel(model->getModelMatrix(), model, viewProjection);
+    void YMaterialInstance::drawModel(const std::shared_ptr<YCamera>& camera, const std::shared_ptr<YModel> &model, const glm::mat4 &viewProjection) const {
+        drawModel(camera, model->getModelMatrix(), model, viewProjection);
     }
 
     void YMaterialInstance::addUniformValue(const std::shared_ptr<YBaseUniformValue> &uniformValue) {
@@ -185,7 +190,8 @@ namespace core {
         this->numberDirectionLights = numberDirectionalLights;
     }
 
-    void YMaterialInstance::drawModel(const glm::mat4 &modelMatrix, const std::shared_ptr<YModel> &model,
+    void YMaterialInstance::drawModel(const std::shared_ptr<YCamera>& camera,
+                const glm::mat4 &modelMatrix, const std::shared_ptr<YModel> &model,
                                       const glm::mat4 &viewProjection) const {
         const auto program = material->getProgram();
         glUseProgram(program);
@@ -193,6 +199,7 @@ namespace core {
                            glm::value_ptr(modelMatrix));
         glUniformMatrix4fv(static_cast<int>(viewProjectionUniformLocation), 1, GL_FALSE,
                            glm::value_ptr(viewProjection));
+        glUniform3fv(static_cast<int>(cameraPositionUniformLocation), 1, &camera->getPos()[0]);
 
         if (material->doesSupportLight()) {
             glUniform1i(static_cast<int>(numberPointLightsLocation), numberPointLights);
@@ -222,7 +229,7 @@ namespace core {
 
     bool YMaterialInstance::getViewProjectionUniformLocation(const std::shared_ptr<YMaterial> &yMaterial,
                                                              std::vector<std::shared_ptr<
-                                                                     core::YUniform> >::const_iterator &uniformsIterator,
+                                                                 core::YUniform> >::const_iterator &uniformsIterator,
                                                              const std::string &identifier) {
         if (identifier == "viewProjection") {
             printf("Skipping uniform value generation for the [%s] matrix.\n",
@@ -236,9 +243,25 @@ namespace core {
         return false;
     }
 
+    bool YMaterialInstance::getCameraPositionUniformLocation(const std::shared_ptr<YMaterial> &yMaterial,
+                                                             std::vector<std::shared_ptr<
+                                                                 core::YUniform> >::const_iterator &uniformsIterator,
+                                                             const std::string &identifier) {
+        if (identifier == "cameraPosition") {
+            printf("Skipping uniform value generation for the [%s] cameraPosition.\n",
+                   identifier.c_str());
+            cameraPositionUniformLocation = glGetUniformLocation(yMaterial->getProgram(),
+                                                                 identifier.c_str());
+            utils::YGLHelper::checkGLError();
+            ++uniformsIterator;
+            return true;
+        }
+        return false;
+    }
+
     bool YMaterialInstance::getNumberPointLightsUniformLocation(const std::shared_ptr<YMaterial> &yMaterial,
                                                                 std::vector<std::shared_ptr<
-                                                                        core::YUniform> >::const_iterator &uniformsIterator,
+                                                                    core::YUniform> >::const_iterator &uniformsIterator,
                                                                 const std::string &identifier) {
         if (identifier == "numberPointLights") {
             printf("Skipping uniform value generation for the [%s] numberPointLights.\n",
@@ -254,7 +277,7 @@ namespace core {
 
     bool YMaterialInstance::getNumberDirectionLightsUniformLocation(const std::shared_ptr<YMaterial> &yMaterial,
                                                                     std::vector<std::shared_ptr<
-                                                                            core::YUniform> >::const_iterator &
+                                                                        core::YUniform> >::const_iterator &
                                                                     uniformsIterator, const std::string &identifier) {
         if (identifier == "numberDirectionLights") {
             printf("Skipping uniform value generation for the [%s] numberDirectionLights.\n",
@@ -278,7 +301,7 @@ namespace core {
         auto uniform = findUniform(uniformName);
         if (uniform != nullptr) {
             printf("1 - Uniform %s found.\n", uniformName.c_str());
-            auto derived = std::dynamic_pointer_cast<YUniformValue<glm::vec3>>(uniform);
+            auto derived = std::dynamic_pointer_cast<YUniformValue<glm::vec3> >(uniform);
             if (derived != nullptr) {
                 printf("2 - Updating uniform after successful dynamic_cast.\n");
                 derived->set(uniformValue);
@@ -295,7 +318,7 @@ namespace core {
         auto uniform = findUniform(uniformName);
         if (uniform != nullptr) {
             printf("1 - Uniform %s found.\n", uniformName.c_str());
-            auto derived = std::dynamic_pointer_cast<YUniformValue<glm::vec4>>(uniform);
+            auto derived = std::dynamic_pointer_cast<YUniformValue<glm::vec4> >(uniform);
             if (derived != nullptr) {
                 printf("2 - Updating uniform after successful dynamic_cast.\n");
                 derived->set(uniformValue);
@@ -311,7 +334,7 @@ namespace core {
     YMaterialInstance::findUniform(const std::string &uniformName) {
         const auto found = std::find_if(uniformValues.begin(), uniformValues.end(),
                                         [&uniformName](
-                                                const std::__1::shared_ptr<YBaseUniformValue> &baseUniformValue) -> bool {
+                                    const std::__1::shared_ptr<YBaseUniformValue> &baseUniformValue) -> bool {
                                             return baseUniformValue->getUniformName() == uniformName;
                                         });
         if (found != uniformValues.end()) {
@@ -323,5 +346,4 @@ namespace core {
     std::shared_ptr<core::YMaterial> &YMaterialInstance::getMaterial() {
         return material;
     }
-
 } // core

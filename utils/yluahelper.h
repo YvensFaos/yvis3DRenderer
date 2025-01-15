@@ -72,6 +72,9 @@ namespace utils {
         ///Load a AFog from a table, popping it out of the stack after it finishes reading it.
         static elements::YFog loadFogFromTable(const std::string &identifier, const LuaHandler &luaHandler);
 
+        ///Load a AFog from a table within a table, popping it out of the stack after it finishes reading it.
+        static elements::YFog loadFogFromTableInTable(const std::string &identifier, const LuaHandler &luaHandler);
+
         ///Load a glm::vec4 from 4 consecutive values in a table by the identifier name.
         static glm::vec4 readVec4FromTable(const std::string &identifier, const LuaHandler &luaHandler);
 
@@ -91,5 +94,9 @@ namespace utils {
 
         static std::vector<std::string>
         readListOfStringsFromTable(const std::string &identifier, const LuaHandler &luaHandler);
+
+    private:
+        ///Load a AFog from a table, popping it out of the stack after it finishes reading it.
+        static elements::YFog loadFog(const std::string &identifier, const LuaHandler &luaHandler, bool fromTable);
     };
 } // utils

@@ -7,7 +7,9 @@
 #include "../behaviors/ygeneratebehavior.h"
 #include "../utils/yluahelper.h"
 #include "../core/ymaterialinstance.h"
-#include "../core/ylightuniform.h"
+#include "../core/uniforms/yfoguniform.h"
+#include "../core/uniforms/ylightuniform.h"
+#include "../elements/yfog.h"
 
 namespace scenes {
     YLoadedScene::YLoadedScene(core::YRenderer &renderer, const std::string &file, const int width,
@@ -55,6 +57,16 @@ namespace scenes {
                 }
             }
             luaHandler.popTable();
+
+            printf("\n\nLoading fog information...");
+            fog = std::make_shared<elements::YFog>(utils::YLuaHelper::loadFogFromTableInTable("fog", luaHandler));
+            hasFog = static_cast<bool>(*fog);
+            if(hasFog) {
+                printf("%s", fog->toString().c_str());
+            } else {
+                printf(" fog not found");
+            }
+            printf(" complete!\n");
 
             //Read and generate materials
             if (luaHandler.getTableFromTable("materials")) {
@@ -125,13 +137,20 @@ namespace scenes {
                                     snprintf(buffer, 64, "%s[%d]",
                                              light->getDirectional() ? "directionalLights" : "pointLights", index);
 
-                                    auto yLightUniform = std::make_shared<core::YLightUniform>(
+                                    auto yLightUniform = std::make_shared<core::uniforms::YLightUniform>(
                                         index, yMaterial->getProgram(), light,
                                         std::make_shared<core::YUniform>(buffer, core::YUniformType::CUSTOM));
                                     materialInstance->addUniformValue(yLightUniform);
                                 }
 
                                 materialInstance->updateNumberOfLights(numPointLights, numDirectionalLights);
+                                printf("Complete!\n");
+                            }
+                            if(hasFog) {
+                                printf("\nGenerating fog uniform...");
+                                auto fogUniform = yMaterial->createCustomUniform("sceneFog", core::CUSTOM);
+                                auto fogUniformValue = std::make_shared<core::uniforms::YFogUniform>(yMaterial->getProgram(), fog, fogUniform);
+                                materialInstance->addUniformValue(fogUniformValue);
                                 printf("Complete!\n");
                             }
 

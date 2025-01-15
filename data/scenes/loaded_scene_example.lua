@@ -67,6 +67,12 @@ lightFragmentShader = [[
         bool directional;
     };
 
+    struct Fog {
+        float maxDist;
+        float minDist;
+        vec4 color;
+    };
+
     in vectorOut {
         vec3 vPosition;
         vec3 vNormal;
@@ -81,9 +87,13 @@ lightFragmentShader = [[
     uniform int numberPointLights;
     uniform int numberDirectionLights;
 
+    uniform vec3 cameraPosition;
+
     uniform Light pointLights[10];
     uniform Light directionalLights[10];
     uniform vec4 colour;
+
+    uniform Fog sceneFog;
 
     out vec4 frag_colour;
 
@@ -133,7 +143,11 @@ lightFragmentShader = [[
         vec4 resultantLight = directionalLightResultant + pointLightResultant;
         resultantLight.a = 1.0;
 
-        frag_colour = resultantLight;
+        float distance = length(cameraPosition - vectorIn.vPosition);
+        float fogFactor = (sceneFog.maxDist - distance) / (sceneFog.maxDist - sceneFog.minDist);
+        fogFactor = clamp(fogFactor, 0.0, 1.0);
+
+        frag_colour = mix(sceneFog.color, resultantLight, fogFactor);
     }
 ]]
 
@@ -157,6 +171,11 @@ scene = {
             fragmentShader = "normalFragmentShader",
             supportLight = false
         }
+    },
+    fog = {
+        maxDist = 100.0,
+        minDist =  10.0,
+        color = { 0.1, 0.2, 0.3, 1.0 }
     },
     models = {
         {

@@ -70,8 +70,8 @@ add_executable(yvis3Drenderer main.cpp
         core/ytransform.cpp
         core/ytransform.h
         utils/yglhelper.h
-        core/ylightuniform.cpp
-        core/ylightuniform.h
+        core/uniforms/ylightuniform.cpp
+        core/uniforms/ylightuniform.h
         core/ybaseuniformvalue.h
         core/ybaseuniform.cpp
         core/yapplication.cpp
@@ -86,6 +86,8 @@ add_executable(yvis3Drenderer main.cpp
         behaviors/ygeneratebehavior.cpp
         behaviors/ygeneratebehavior.h
         core/ygenericbehavior.cpp
+        core/uniforms/yfoguniform.cpp
+        core/uniforms/yfoguniform.h
 )
 
 add_custom_command(

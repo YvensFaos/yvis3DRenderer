@@ -11,6 +11,7 @@
 #include "../LuaHandler/luahandler.hpp"
 
 namespace core {
+    class YCamera;
     class YModel;
 
     class YMaterial;
@@ -23,6 +24,7 @@ namespace core {
         GLuint viewProjectionUniformLocation;
         GLuint numberPointLightsLocation;
         GLuint numberDirectionLightsLocation;
+        GLuint cameraPositionUniformLocation;
         int numberPointLights;
         int numberDirectionLights;
         std::shared_ptr<core::YMaterial> material;
@@ -34,10 +36,10 @@ namespace core {
         explicit YMaterialInstance(const std::shared_ptr<YMaterial> &material, const std::string &materialTableName,
                                    const LuaHandler &luaHandler);
 
-        void drawModel(const glm::mat4 &modelMatrix, const std::shared_ptr<YModel> &model,
+        void drawModel(const std::shared_ptr<core::YCamera>& camera, const glm::mat4 &modelMatrix, const std::shared_ptr<YModel> &model,
                        const glm::mat4 &viewProjection) const;
 
-        void drawModel(const std::shared_ptr<YModel> &model, const glm::mat4 &viewProjection) const;
+        void drawModel(const std::shared_ptr<YCamera>& camera, const std::shared_ptr<YModel> &model, const glm::mat4 &viewProjection) const;
 
         void addUniformValue(const std::shared_ptr<YBaseUniformValue> &uniformValue);
 
@@ -59,6 +61,10 @@ namespace core {
                                               std::vector<std::shared_ptr<core::YUniform> >::const_iterator &
                                               uniformsIterator,
                                               const std::string &identifier);
+
+        bool getCameraPositionUniformLocation(const std::shared_ptr<YMaterial> &yMaterial,
+                                     std::vector<std::shared_ptr<core::YUniform> >::const_iterator &uniformsIterator,
+                                     const std::string &identifier);
 
         bool getNumberPointLightsUniformLocation(const std::shared_ptr<YMaterial> &yMaterial,
                                                  std::vector<std::shared_ptr<core::YUniform> >::const_iterator &

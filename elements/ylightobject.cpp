@@ -115,7 +115,7 @@ namespace elements {
 
     void YLightObject::draw(const core::YRenderer &renderer) {
         const auto viewProjection = renderer.getCamera()->getCachedViewProjectionMatrix();
-        materialInstance->drawModel(transform.getModelMatrix(), lightModel, viewProjection);
+        materialInstance->drawModel(renderer.getCamera(), transform.getModelMatrix(), lightModel, viewProjection);
     }
 
     std::shared_ptr<core::YMaterial> YLightObject::getDefaultMaterial() {
