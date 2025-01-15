@@ -24,6 +24,8 @@ namespace behaviors {
 
         void update() override;
 
+        void toUI() override;
+
         [[nodiscard]] std::string toString() const override { return "YRotatingBehavior"; }
     };
 }

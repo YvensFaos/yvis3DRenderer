@@ -85,6 +85,7 @@ add_executable(yvis3Drenderer main.cpp
         behaviors/YRotatingBehavior.h
         behaviors/ygeneratebehavior.cpp
         behaviors/ygeneratebehavior.h
+        core/ygenericbehavior.cpp
 )
 
 add_custom_command(

@@ -23,9 +23,14 @@ namespace view {
         }
         ImGui::Text("Behaviors: %d", selfObject->getBehaviorCount());
         auto begin = selfObject->getBehaviorIterator();
-        while(begin != selfObject->getBehaviorEndIterator()) {
-            ImGui::Text("%s", (*begin)->toString().c_str());
+        static char buffer[196];
+        auto id = 1;
+        while (begin != selfObject->getBehaviorEndIterator()) {
+            snprintf(buffer, 196, "%s:%d-%s", selfObject->getIdentifier().c_str(), ++id, (*begin)->toString().c_str());
+            ImGui::PushID(buffer);
+            (*begin)->toUI();
             ++begin;
+            ImGui::PopID();
         }
     }
 

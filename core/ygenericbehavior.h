@@ -18,6 +18,9 @@ namespace core {
 
         virtual void update() {};
 
+        virtual void toUI();
+
         virtual std::string toString() const { return "YGenericBehavior"; }
     };
+
 }

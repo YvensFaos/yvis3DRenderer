@@ -4,6 +4,9 @@
 
 #include "yrotatingbehavior.h"
 
+#include <imgui.h>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "../core/yapplication.h"
 #include "../core/ytransform.h"
 
@@ -16,4 +19,16 @@ behaviors::YRotatingBehavior::YRotatingBehavior(core::YTransform &transform, con
 void behaviors::YRotatingBehavior::update() {
     const auto deltaTime = core::YApplication::getDeltaTime();
     transform.rotate(rotationSpeed * rotatingAxis * deltaTime);
+}
+
+void behaviors::YRotatingBehavior::toUI() {
+    YGenericBehavior::toUI();
+    auto axis = rotatingAxis;
+    if(ImGui::InputFloat3("Pos", glm::value_ptr(axis))) {
+        rotatingAxis = axis;
+    }
+    auto speed = rotationSpeed;
+    if(ImGui::InputFloat("Speed", &speed)) {
+        rotationSpeed = speed;
+    }
 }
