@@ -113,9 +113,7 @@ namespace scenes {
                             if (!models.contains(modelFile)) {
                                 models.emplace(modelFile, std::make_shared<core::YModel>(modelFile));
                             }
-
                             auto yModel = models[modelFile];
-
                             auto materialName = luaHandler.getStringFromTable("material");
                             auto yMaterial = materials[materialName];
                             if (yMaterial == nullptr) {
@@ -125,7 +123,6 @@ namespace scenes {
                             }
 
                             printf("\n\nGenerating YVRenderObject %s...\n", modelName.c_str());
-
                             auto materialInstance = std::make_shared<core::YMaterialInstance>(yMaterial, "uniforms",
                                 luaHandler);
                             if (materialInstance->doesSupportLight()) {

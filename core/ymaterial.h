@@ -25,7 +25,7 @@ namespace core {
 
         void drawModel(const YModel &model) const;
 
-        GLenum getRenderMode() const;
+        [[nodiscard]] GLenum getRenderMode() const;
 
         void setRenderMode(GLenum mode);
 

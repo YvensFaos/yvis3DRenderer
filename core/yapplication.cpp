@@ -114,13 +114,11 @@ namespace core {
             }
 
             ImGui::Render();
-
             if (loadedScene) {
                 glEnable(GL_DEPTH_TEST);
                 glEnable(GL_CULL_FACE);
 
                 currentScene->render(sceneFrameBuffer->getFBO());
-
                 for (const auto &applicationObject: applicationObjects) {
                     applicationObject->update();
                     applicationObject->draw(*renderer);

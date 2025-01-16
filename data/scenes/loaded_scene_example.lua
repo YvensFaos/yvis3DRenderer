@@ -108,7 +108,14 @@ lightFragmentShader = [[
         vec3 lightDir = normalize(directionV);
         float diff = max(dot(norm, lightDir), 0.0);
         vec3 diffuse =  vec3(colour) * attenuation * diff * pointLights[index].color.rgb;
-        return vec4(diffuse, 1.0);
+
+        vec3 viewDir = normalize(cameraPosition - vectorIn.vPosition);
+        vec3 reflectDir = reflect(-lightDir, vectorIn.vNormal);
+        float inc = max(dot(viewDir, reflectDir), 0.0);
+        float spec = pow(inc, pointLights[index].specularPower);
+        vec3 specular = vec3(colour) * attenuation * vec3(spec);
+
+        return vec4(diffuse + specular, 1.0);
     }
 
     vec4 calculateDirectionalLight(int index, const vec3 norm) {
@@ -120,7 +127,14 @@ lightFragmentShader = [[
         float attenuation = 1.0 / (lightConstant + lightLinear * distance + lightQuadratic * (distance * distance));
         float diff = max(dot(norm, directionalLights[index].direction), 0.0);
         vec3 diffuse =  vec3(colour) * attenuation * diff * directionalLights[index].color.rgb;
-        return vec4(diffuse, 1.0);
+
+        vec3 viewDir = normalize(cameraPosition - vectorIn.vPosition);
+        vec3 reflectDir = reflect(-directionalLights[index].direction, vectorIn.vNormal);
+        float inc = max(dot(viewDir, reflectDir), 0.0);
+        float spec = pow(inc, directionalLights[index].specularPower);
+        vec3 specular = vec3(colour) * attenuation * vec3(spec);
+
+        return vec4(diffuse + specular, 1.0);
     }
 
     void main()
