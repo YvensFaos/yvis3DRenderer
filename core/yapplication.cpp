@@ -10,7 +10,7 @@
 #include "yrenderer.h"
 #include "imgui.h"
 #include "yframebuffer.h"
-#include "yrenderquad.h"
+#include "ycustomrenderquad.h"
 #include "../scenes/yloadedscene.h"
 #include "../view/yobjectui.h"
 #include "backends/imgui_impl_glfw.h"
@@ -25,7 +25,7 @@ namespace core {
         currentFramesIndex(0) {
         renderer = std::make_shared<YRenderer>(width, height, title);
         sceneFrameBuffer = std::make_shared<YFrameBuffer>(width * 2, height * 2);
-        sceneRenderQuad = std::make_shared<YRenderQuad>();
+        sceneRenderQuad = std::make_shared<YCustomRenderQuad>();
 
         ImGui::CreateContext();
         ImGuiIO &io = ImGui::GetIO();

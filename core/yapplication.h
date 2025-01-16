@@ -16,7 +16,7 @@ namespace view {
 
 namespace core {
     class YRenderer;
-    class YRenderQuad;
+    class YCustomRenderQuad;
     class YFrameBuffer;
 }
 
@@ -29,7 +29,7 @@ namespace core {
         std::shared_ptr<YRenderer> renderer;
         std::shared_ptr<scenes::YLoadedScene> currentScene;
         std::shared_ptr<YFrameBuffer> sceneFrameBuffer;
-        std::shared_ptr<YRenderQuad> sceneRenderQuad;
+        std::shared_ptr<YCustomRenderQuad> sceneRenderQuad;
         std::vector<float> frames;
         int maxFrames;
         int currentFramesIndex;

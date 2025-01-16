@@ -50,8 +50,8 @@ add_executable(yvis3Drenderer main.cpp
         scenes/yskyboxscene.h
         core/yframebuffer.cpp
         core/yframebuffer.h
-        core/yrenderquad.cpp
-        core/yrenderquad.h
+        core/ycustomrenderquad.cpp
+        core/ycustomrenderquad.h
         scenes/yedgedetectionscene.cpp
         scenes/yedgedetectionscene.h
         scenes/yloadedscene.cpp
@@ -88,6 +88,8 @@ add_executable(yvis3Drenderer main.cpp
         core/ygenericbehavior.cpp
         core/uniforms/yfoguniform.cpp
         core/uniforms/yfoguniform.h
+        effects/ypostprocess.cpp
+        effects/ypostprocess.h
 )
 
 add_custom_command(

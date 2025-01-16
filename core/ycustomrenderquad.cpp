@@ -2,7 +2,7 @@
 // Created by Yvens Serpa on 19/12/2024.
 //
 
-#include "yrenderquad.h"
+#include "ycustomrenderquad.h"
 
 #include <GL/glew.h>
 
@@ -16,7 +16,7 @@ float quadVertices[] = {
     -1.0f, 0.0f, 1.0f, 0.0f,
 };
 
-std::string core::YRenderQuad::defaultVertexShader =
+std::string core::YCustomRenderQuad::defaultVertexShader =
         "#version 400\n"
         "    layout (location = 0) in vec3 vertex;\n"
         "    layout (location = 1) in vec2 uv;\n"
@@ -27,7 +27,7 @@ std::string core::YRenderQuad::defaultVertexShader =
         "        gl_Position = vec4(vertex, 1.0);\n"
         "    }\n";
 
-std::string core::YRenderQuad::defaultFragmentShader =
+std::string core::YCustomRenderQuad::defaultFragmentShader =
         "#version 400\n"
         "   in vec2 vuv;\n"
         "   uniform sampler2D textureUniform;\n"
@@ -38,23 +38,23 @@ std::string core::YRenderQuad::defaultFragmentShader =
         "       frag_colour = vec4(value.x, value.y, value.z, 1.0);\n"
         "   }\n";
 
-core::YRenderQuad::YRenderQuad() : fragmentShader(0) {
+core::YCustomRenderQuad::YCustomRenderQuad() : fragmentShader(0) {
     initialize(defaultVertexShader, defaultFragmentShader);
 }
 
-core::YRenderQuad::YRenderQuad(const std::string &fragmentShaderText) {
+core::YCustomRenderQuad::YCustomRenderQuad(const std::string &fragmentShaderText) {
     initialize(defaultVertexShader, fragmentShaderText);
 }
 
-core::YRenderQuad::YRenderQuad(const std::string &vertexShaderText, const std::string &fragmentShaderText) {
+core::YCustomRenderQuad::YCustomRenderQuad(const std::string &vertexShaderText, const std::string &fragmentShaderText) {
     initialize(vertexShaderText, fragmentShaderText);
 }
 
-core::YRenderQuad::~YRenderQuad() {
+core::YCustomRenderQuad::~YCustomRenderQuad() {
     glDeleteProgram(programme);
 }
 
-void core::YRenderQuad::render(const GLuint texture, const bool setupProgramme) const {
+void core::YCustomRenderQuad::render(const GLuint texture, const bool setupProgramme) const {
     if (setupProgramme) {
         glUseProgram(programme);
     }
@@ -68,7 +68,7 @@ void core::YRenderQuad::render(const GLuint texture, const bool setupProgramme) 
     glBindVertexArray(0);
 }
 
-void core::YRenderQuad::renderCubeMap(const GLuint cubeMapTexture) const {
+void core::YCustomRenderQuad::renderCubeMap(const GLuint cubeMapTexture) const {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture);
     glUniform1i(static_cast<GLint>(textureUniform), 0);
@@ -78,7 +78,7 @@ void core::YRenderQuad::renderCubeMap(const GLuint cubeMapTexture) const {
     glBindVertexArray(0);
 }
 
-void core::YRenderQuad::render(const std::vector<GLuint> &textures) const {
+void core::YCustomRenderQuad::render(const std::vector<GLuint> &textures) const {
     for (size_t i = 0; i < textures.size(); i++) {
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, textures[i]);
@@ -91,7 +91,7 @@ void core::YRenderQuad::render(const std::vector<GLuint> &textures) const {
     glBindVertexArray(0);
 }
 
-void core::YRenderQuad::initialize(const std::string &vertexShaderText, const std::string &fragmentShaderText) {
+void core::YCustomRenderQuad::initialize(const std::string &vertexShaderText, const std::string &fragmentShaderText) {
     vertexShader = YShader::generateShader(vertexShaderText, GL_VERTEX_SHADER);
     fragmentShader = YShader::generateShader(fragmentShaderText, GL_FRAGMENT_SHADER);
     programme = YShader::generateProgram(vertexShader, fragmentShader);
@@ -108,6 +108,6 @@ void core::YRenderQuad::initialize(const std::string &vertexShaderText, const st
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
 }
 
-GLuint core::YRenderQuad::getProgramme() const {
+GLuint core::YCustomRenderQuad::getProgramme() const {
     return this->programme;
 }

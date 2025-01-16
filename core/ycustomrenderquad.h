@@ -9,7 +9,7 @@
 #include <vector>
 
 namespace core {
-    class YRenderQuad {
+    class YCustomRenderQuad {
     protected:
         GLuint vertexShader{};
         GLuint fragmentShader{};
@@ -22,13 +22,13 @@ namespace core {
         static std::string defaultVertexShader;
         static std::string defaultFragmentShader;
     public:
-        YRenderQuad();
+        YCustomRenderQuad();
 
-        explicit YRenderQuad(const std::string &fragmentShaderText);
+        explicit YCustomRenderQuad(const std::string &fragmentShaderText);
 
-        YRenderQuad(const std::string &vertexShaderText, const std::string &fragmentShaderText);
+        YCustomRenderQuad(const std::string &vertexShaderText, const std::string &fragmentShaderText);
 
-        ~YRenderQuad();
+        ~YCustomRenderQuad();
 
         void render(GLuint texture, bool setupProgramme = true) const;
 

@@ -7,13 +7,13 @@
 #include "../core/yframebuffer.h"
 #include "../core/ylight.h"
 #include "../core/yscene.h"
-#include "../core/yrenderquad.h"
+#include "../core/ycustomrenderquad.h"
 #include "../core/ymodel.h"
 
 namespace scenes {
     class YEdgeDetectionScene final : public core::YScene {
         GLuint shaderProgram;
-        core::YRenderQuad edgeQuad;
+        core::YCustomRenderQuad edgeQuad;
         core::YFrameBuffer edgeBuffer;
         std::vector<core::YModel> models;
         core::YLight light;
