@@ -6,6 +6,7 @@
 #include "../core/ymodel.h"
 #include "../core/ylight.h"
 #include "../core/ycamera.h"
+#include "../core/yinstancemesh.h"
 #include "../elements/yfog.h"
 #include "../LuaHandler/luahandler.hpp"
 

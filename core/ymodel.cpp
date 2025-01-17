@@ -11,6 +11,8 @@
 #include <stb_image.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "ytexture.h"
+
 namespace core {
     YModel::YModel(const std::string &path) : transform(glm::mat4(1.0)) {
         loadModel(path);

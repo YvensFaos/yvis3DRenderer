@@ -90,6 +90,13 @@ add_executable(yvis3Drenderer main.cpp
         core/uniforms/yfoguniform.h
         effects/ypostprocess.cpp
         effects/ypostprocess.h
+        core/yrenderquad.cpp
+        core/yrenderquad.h
+        core/YVertex.h
+        core/ytexture.h
+        core/yinstancemesh.cpp
+        core/yinstancemesh.h
+        core/ytexture.cpp
 )
 
 add_custom_command(

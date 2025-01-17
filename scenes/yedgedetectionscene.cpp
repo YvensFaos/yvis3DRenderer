@@ -40,6 +40,8 @@ namespace scenes {
         uniforms.emplace("lightColorUniform", glGetUniformLocation(shaderProgram, "sceneLight.color"));
         uniforms.emplace("lightIntensityUniform", glGetUniformLocation(shaderProgram, "sceneLight.intensity"));
         uniforms.emplace("lightDirectionalUniform", glGetUniformLocation(shaderProgram, "sceneLight.directional"));
+
+        edgeQuad.setTexture(edgeBuffer.getFramebufferTexture());
     }
 
     void YEdgeDetectionScene::renderImpl() {
@@ -78,7 +80,7 @@ namespace scenes {
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glDisable(GL_CULL_FACE);
-        edgeQuad.render(edgeBuffer.getFramebufferTexture());
+        edgeQuad.render();
 
         for (auto &model: models) {
             model.rotate(glm::vec3(0.0f, 1.0f, 0.0f));

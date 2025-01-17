@@ -4,22 +4,22 @@
 
 #pragma once
 
+#include <memory>
 #include <GL/glew.h>
+
+namespace core {
+    struct YTexture;
+}
 
 namespace core {
     class YFrameBuffer {
     protected:
-        GLfloat width{};
-        GLfloat height{};
-
-        GLuint FBO{};
-        GLuint RBO{};
-        GLuint framebufferTexture{};
-
-        GLuint bufferShowFlag;
-
+        GLfloat width;
+        GLfloat height;
+        GLuint FBO;
+        GLuint RBO;
+        std::shared_ptr<core::YTexture> texture;
         YFrameBuffer();
-
     public:
         YFrameBuffer(GLfloat width, GLfloat height, GLint internalFormat = GL_RGB, GLint format = GL_RGB,
                      GLint type = GL_UNSIGNED_BYTE);
@@ -28,7 +28,9 @@ namespace core {
 
         [[nodiscard]] GLuint getFBO() const;
 
-        [[nodiscard]] GLuint getFramebufferTexture() const;
+        [[nodiscard]] std::shared_ptr<YTexture> getFramebufferTexture() const;
+
+        [[nodiscard]] GLuint getFramebufferTextureId() const;
 
         [[nodiscard]] GLfloat getWidth() const;
 
@@ -36,13 +38,9 @@ namespace core {
 
         void bindBuffer() const;
 
-        void bindBuffer(GLuint showFlag) const;
-
         void setViewport() const;
 
-        void unbindBuffer() const;
-
-        void setBufferShowFlag(GLuint newBufferShowFlag);
+        static void unbindBuffer() ;
 
         void changeTextureParameter(GLint textureParameter, GLint textureParameterValue) const;
 

@@ -26,6 +26,7 @@ namespace core {
         renderer = std::make_shared<YRenderer>(width, height, title);
         sceneFrameBuffer = std::make_shared<YFrameBuffer>(width * 2, height * 2);
         sceneRenderQuad = std::make_shared<YCustomRenderQuad>();
+        sceneRenderQuad->setTexture(sceneFrameBuffer->getFramebufferTexture());
 
         ImGui::CreateContext();
         ImGuiIO &io = ImGui::GetIO();
@@ -130,7 +131,7 @@ namespace core {
                 glClear(GL_COLOR_BUFFER_BIT);
                 glDisable(GL_CULL_FACE);
 
-                sceneRenderQuad->render(sceneFrameBuffer->getFramebufferTexture());
+                sceneRenderQuad->render();
             } else {
                 renderer->startFrame();
             }

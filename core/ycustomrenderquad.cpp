@@ -7,14 +7,7 @@
 #include <GL/glew.h>
 
 #include "yshader.h"
-
-float quadVertices[] = {
-    -1.0f, 1.0f, 0.0f, 0.0f,
-    1.0f, -1.0f, -1.0f, 0.0f,
-    0.0f, 0.0f, 1.0f, 1.0f,
-    0.0f, 1.0f, 1.0f, 1.0f,
-    -1.0f, 0.0f, 1.0f, 0.0f,
-};
+#include "ytexture.h"
 
 std::string core::YCustomRenderQuad::defaultVertexShader =
         "#version 400\n"
@@ -38,29 +31,26 @@ std::string core::YCustomRenderQuad::defaultFragmentShader =
         "       frag_colour = vec4(value.x, value.y, value.z, 1.0);\n"
         "   }\n";
 
-core::YCustomRenderQuad::YCustomRenderQuad() : fragmentShader(0) {
-    initialize(defaultVertexShader, defaultFragmentShader);
+core::YCustomRenderQuad::YCustomRenderQuad() : YRenderQuad() {
+    generateProgram(defaultVertexShader, defaultFragmentShader);
 }
 
-core::YCustomRenderQuad::YCustomRenderQuad(const std::string &fragmentShaderText) {
-    initialize(defaultVertexShader, fragmentShaderText);
+core::YCustomRenderQuad::YCustomRenderQuad(const std::string &fragmentShaderText) : YRenderQuad() {
+    generateProgram(defaultVertexShader, fragmentShaderText);
 }
 
-core::YCustomRenderQuad::YCustomRenderQuad(const std::string &vertexShaderText, const std::string &fragmentShaderText) {
-    initialize(vertexShaderText, fragmentShaderText);
+core::YCustomRenderQuad::YCustomRenderQuad(const std::string &vertexShaderText, const std::string &fragmentShaderText) : YRenderQuad() {
+    generateProgram(vertexShaderText, fragmentShaderText);
 }
 
 core::YCustomRenderQuad::~YCustomRenderQuad() {
     glDeleteProgram(programme);
 }
 
-void core::YCustomRenderQuad::render(const GLuint texture, const bool setupProgramme) const {
-    if (setupProgramme) {
-        glUseProgram(programme);
-    }
-
+void core::YCustomRenderQuad::render() const {
+    glUseProgram(programme);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture->id);
     glUniform1i(static_cast<GLint>(textureUniform), 0);
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -68,44 +58,11 @@ void core::YCustomRenderQuad::render(const GLuint texture, const bool setupProgr
     glBindVertexArray(0);
 }
 
-void core::YCustomRenderQuad::renderCubeMap(const GLuint cubeMapTexture) const {
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture);
-    glUniform1i(static_cast<GLint>(textureUniform), 0);
-    glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-    glBindVertexArray(0);
-}
-
-void core::YCustomRenderQuad::render(const std::vector<GLuint> &textures) const {
-    for (size_t i = 0; i < textures.size(); i++) {
-        glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_2D, textures[i]);
-        std::string textureName("textureUniform" + std::to_string(i));
-        glUniform1i(glGetUniformLocation(programme, textureName.c_str()), static_cast<GLint>(i));
-    }
-
-    glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glBindVertexArray(0);
-}
-
-void core::YCustomRenderQuad::initialize(const std::string &vertexShaderText, const std::string &fragmentShaderText) {
+void core::YCustomRenderQuad::generateProgram(const std::string &vertexShaderText, const std::string &fragmentShaderText) {
     vertexShader = YShader::generateShader(vertexShaderText, GL_VERTEX_SHADER);
     fragmentShader = YShader::generateShader(fragmentShaderText, GL_FRAGMENT_SHADER);
     programme = YShader::generateProgram(vertexShader, fragmentShader);
     textureUniform = glGetUniformLocation(programme, "textureUniform");
-
-    glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &quadVBO);
-    glBindVertexArray(quadVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
 }
 
 GLuint core::YCustomRenderQuad::getProgramme() const {

@@ -8,19 +8,20 @@
 #include <string>
 #include <vector>
 
+#include "yrenderquad.h"
+
 namespace core {
-    class YCustomRenderQuad {
+    class YCustomRenderQuad final : public YRenderQuad {
     protected:
         GLuint vertexShader{};
         GLuint fragmentShader{};
         GLuint programme{};
 
         GLuint textureUniform{};
-        GLuint quadVAO{};
-        GLuint quadVBO{};
 
         static std::string defaultVertexShader;
         static std::string defaultFragmentShader;
+
     public:
         YCustomRenderQuad();
 
@@ -28,18 +29,13 @@ namespace core {
 
         YCustomRenderQuad(const std::string &vertexShaderText, const std::string &fragmentShaderText);
 
-        ~YCustomRenderQuad();
+        ~YCustomRenderQuad() override;
 
-        void render(GLuint texture, bool setupProgramme = true) const;
-
-        void renderCubeMap(GLuint cubeMapTexture) const;
-
-        void render(const std::vector<GLuint> &textures) const;
+        void render() const override;
 
         [[nodiscard]] GLuint getProgramme() const;
 
-    protected:
-        void initialize(const std::string &vertexShaderText, const std::string &fragmentShaderText);
+    private:
+        void generateProgram(const std::string &vertexShaderText, const std::string &fragmentShaderText);
     };
 }
-
