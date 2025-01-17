@@ -97,6 +97,8 @@ add_executable(yvis3Drenderer main.cpp
         core/yinstancemesh.cpp
         core/yinstancemesh.h
         core/ytexture.cpp
+        core/ymaterialrenderquad.cpp
+        core/ymaterialrenderquad.h
 )
 
 add_custom_command(

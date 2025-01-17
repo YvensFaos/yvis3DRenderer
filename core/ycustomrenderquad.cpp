@@ -31,15 +31,18 @@ std::string core::YCustomRenderQuad::defaultFragmentShader =
         "       frag_colour = vec4(value.x, value.y, value.z, 1.0);\n"
         "   }\n";
 
-core::YCustomRenderQuad::YCustomRenderQuad() : YRenderQuad() {
+core::YCustomRenderQuad::YCustomRenderQuad() : vertexShader(-1), fragmentShader(-1), programme(-1), textureUniform(-1) {
     generateProgram(defaultVertexShader, defaultFragmentShader);
 }
 
-core::YCustomRenderQuad::YCustomRenderQuad(const std::string &fragmentShaderText) : YRenderQuad() {
+core::YCustomRenderQuad::YCustomRenderQuad(const std::string &fragmentShaderText) : vertexShader(-1),
+    fragmentShader(-1), programme(-1), textureUniform(-1) {
     generateProgram(defaultVertexShader, fragmentShaderText);
 }
 
-core::YCustomRenderQuad::YCustomRenderQuad(const std::string &vertexShaderText, const std::string &fragmentShaderText) : YRenderQuad() {
+core::YCustomRenderQuad::YCustomRenderQuad(const std::string &vertexShaderText,
+                                           const std::string &fragmentShaderText) : vertexShader(-1),
+    fragmentShader(-1), programme(-1), textureUniform(-1) {
     generateProgram(vertexShaderText, fragmentShaderText);
 }
 
@@ -58,7 +61,8 @@ void core::YCustomRenderQuad::render() const {
     glBindVertexArray(0);
 }
 
-void core::YCustomRenderQuad::generateProgram(const std::string &vertexShaderText, const std::string &fragmentShaderText) {
+void core::YCustomRenderQuad::generateProgram(const std::string &vertexShaderText,
+                                              const std::string &fragmentShaderText) {
     vertexShader = YShader::generateShader(vertexShaderText, GL_VERTEX_SHADER);
     fragmentShader = YShader::generateShader(fragmentShaderText, GL_FRAGMENT_SHADER);
     programme = YShader::generateProgram(vertexShader, fragmentShader);

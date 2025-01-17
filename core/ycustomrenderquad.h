@@ -6,18 +6,16 @@
 
 #include <GL/glew.h>
 #include <string>
-#include <vector>
 
 #include "yrenderquad.h"
 
 namespace core {
     class YCustomRenderQuad final : public YRenderQuad {
     protected:
-        GLuint vertexShader{};
-        GLuint fragmentShader{};
-        GLuint programme{};
-
-        GLuint textureUniform{};
+        GLuint vertexShader;
+        GLuint fragmentShader;
+        GLuint programme;
+        GLuint textureUniform;
 
         static std::string defaultVertexShader;
         static std::string defaultFragmentShader;

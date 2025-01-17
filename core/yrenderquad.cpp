@@ -7,7 +7,7 @@
 #include "ytexture.h"
 
 namespace core {
-    YRenderQuad::YRenderQuad() : texture(std::make_shared<YTexture>()) {
+    YRenderQuad::YRenderQuad() : texture(nullptr) {
         initialize();
     }
 

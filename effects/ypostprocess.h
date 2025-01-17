@@ -7,23 +7,17 @@
 #include <vector>
 
 namespace core {
-    class YRenderQuad;
-}
-
-namespace core {
-    struct YBaseUniformValue;
+    class YMaterialRenderQuad;
     class YMaterial;
 }
 
 namespace effects {
 
 class YPostProcess {
-    std::shared_ptr<core::YMaterial> material;
-    std::shared_ptr<core::YRenderQuad> renderQuad;
-    std::vector<std::shared_ptr<core::YBaseUniformValue> > uniformValues;
+    std::vector<std::shared_ptr<core::YMaterialRenderQuad>> renderQuads;
 
     public:
-        explicit YPostProcess(float width, float height, const std::shared_ptr<core::YMaterial> &material);
+        explicit YPostProcess(std::vector<std::shared_ptr<core::YMaterial>> materials);
 };
 
 } // effects
