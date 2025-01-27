@@ -31,7 +31,7 @@ namespace core {
         closeRenderer();
     }
 
-    void YRenderer::changeClearColor(glm::vec4 newClearColor) {
+    void YRenderer::changeClearColor(const glm::vec4 newClearColor) {
         this->clearColor.r = newClearColor.r;
         this->clearColor.g = newClearColor.g;
         this->clearColor.b = newClearColor.b;

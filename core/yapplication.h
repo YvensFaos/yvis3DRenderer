@@ -6,6 +6,10 @@
 #include <memory>
 #include <vector>
 
+namespace effects {
+    class YPostProcess;
+}
+
 namespace elements {
     class YObject;
 }
@@ -35,6 +39,7 @@ namespace core {
         int currentFramesIndex;
         std::vector<std::shared_ptr<view::YObjectUI> > viewObjects;
         std::vector<std::shared_ptr<elements::YObject> > applicationObjects;
+        std::vector<std::shared_ptr<effects::YPostProcess> > postProcesses;
         static float fps;
         static float deltaTime;
 

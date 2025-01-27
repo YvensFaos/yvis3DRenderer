@@ -11,6 +11,7 @@
 #include "imgui.h"
 #include "yframebuffer.h"
 #include "ycustomrenderquad.h"
+#include "../effects/ypostprocess.h"
 #include "../scenes/yloadedscene.h"
 #include "../view/yobjectui.h"
 #include "backends/imgui_impl_glfw.h"
@@ -130,6 +131,11 @@ namespace core {
                 glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
                 glDisable(GL_CULL_FACE);
+
+                //Execute post-processing
+                for (const auto &postProcess: postProcesses) {
+                    postProcess->render();
+                }
 
                 sceneRenderQuad->render();
             } else {

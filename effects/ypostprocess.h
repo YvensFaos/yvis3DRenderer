@@ -17,7 +17,9 @@ class YPostProcess {
     std::vector<std::shared_ptr<core::YMaterialRenderQuad>> renderQuads;
 
     public:
-        explicit YPostProcess(std::vector<std::shared_ptr<core::YMaterial>> materials);
+        explicit YPostProcess(const std::vector<std::shared_ptr<core::YMaterial>>& materials);
+
+    virtual void render();
 };
 
 } // effects

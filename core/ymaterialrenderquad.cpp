@@ -5,7 +5,9 @@
 #include "ymaterialrenderquad.h"
 
 namespace core {
-    YMaterialRenderQuad::YMaterialRenderQuad(const std::shared_ptr<YMaterial> &material) : material(material) { }
+    YMaterialRenderQuad::YMaterialRenderQuad(const std::shared_ptr<YMaterial> &material) : material(material) {
+
+    }
 
     YMaterialRenderQuad::~YMaterialRenderQuad() {
     }
